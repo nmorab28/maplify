@@ -32,3 +32,4 @@ Ejecuta el script de empaquetado para regenerar los archivos autocontenidos.
 - El script embebe `xlsx.full.min.js` directamente en `Maplify.html`.
 - Las imágenes de `fuente/img/` se convierten a Base64 dentro de `Manual.html`.
 - Los archivos generados van a la raíz del proyecto, no a `fuente/`.
+

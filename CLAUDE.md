@@ -13,3 +13,4 @@
   Commits según las reglas de AGENTS.md.
 - No hagas `git push`, `git merge` ni operaciones destructivas sin
   aprobación explícita del usuario.
+

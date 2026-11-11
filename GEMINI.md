@@ -15,3 +15,4 @@
   Commits según las reglas de AGENTS.md.
 - No hagas `git push` ni `git merge` sin aprobación explícita.
 - Para operaciones de red (push, pull, fetch), usa `BypassSandbox: true`.
+
