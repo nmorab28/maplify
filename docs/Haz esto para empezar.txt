@@ -49,7 +49,7 @@ PASO 3. ABRE MAPLIFY (EL PROGRAMA)
      "Laboratorio libre" se desbloquea cuando la termines.
   3. Cuando el programa te pida los archivos, elige estos:
 
-       Paso 1 (Elegir plano) ..... Plano.jfif.jpeg
+       Paso 1 (Elegir plano) ..... ejemplos/Plano.jfif.jpeg
        Paso 2 (Elegir Excel) ..... Relevamiento_WiFi_Limpio.xlsx
 
   4. Sigue lo que dice la barra azul de arriba.
@@ -76,13 +76,11 @@ QUÉ HAY EN LA CARPETA
 
   Manual.html ...................... El manual. Ábrelo primero.
   Maplify.html ..................... Maplify, el programa del mapa.
-  Plano.jfif.jpeg .................. El plano del local (paso 1).
-  Relevamiento_WiFi_Limpio.xlsx .... Las mediciones (paso 2).
-  Excel de prueba (datos
-  imaginarios).xlsx ................ Datos inventados para practicar
-                                     en el Laboratorio libre.
-
-  Puntos de medicion.jfif.jpeg ..... Plano viejo. NO lo uses.
-  Carpeta "fuente" ................. Código del programa. Solo para
-                                     quien lo vaya a modificar. No
-                                     la necesitas para usarlo.
+  Carpeta "docs/" .................. Documentación y presentaciones.
+  Carpeta "ejemplos/" .............. Planos y archivos Excel de prueba:
+    - Plano.jfif.jpeg .............. El plano del local (paso 1).
+    - Excel de prueba (datos
+      imaginarios).xlsx ............ Datos para practicar en Laboratorio.
+    - Puntos de medicion.jfif.jpeg . Plano de referencia.
+  Carpeta "fuente/" ................ Código fuente del programa. Solo para
+                                     quien lo vaya a modificar.
