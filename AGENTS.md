@@ -73,3 +73,4 @@ Línea de asunto ≤ 72 caracteres. Cuerpo opcional con viñetas.
   cambios del código fuente.
 - Commits siguen Conventional Commits.
 - El cambio tiene un PR revisado antes de llegar a `main`.
+
