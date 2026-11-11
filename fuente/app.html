@@ -1,0 +1,2292 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maplify · Mapa de señal WiFi</title>
+<style>
+  :root {
+    --fondo: #eef1f5;
+    --superficie: #ffffff;
+    --tinta: #1c2733;
+    --tinta-suave: #566473;
+    --borde: #d5dbe3;
+    --acento: #1f5fbf;
+    --acento-oscuro: #174a96;
+    --acento-claro: #eef4fd;
+    --ok: #1a7f46;
+    --ok-claro: #e7f5ec;
+    --error: #b3261e;
+    --bloqueado: #9aa5b1;
+    --resalte: #fff4d6;
+    --oro: #f2b705;
+    --oro-oscuro: #b88a00;
+    --marino: #16304f;
+    --mision: #1f5fbf;
+    --mision-oscuro: #174a96;
+    --lab: #5b3cc4;
+    --lab-oscuro: #47309c;
+  }
+  body.modo-laboratorio { --acento: var(--lab); --acento-oscuro: var(--lab-oscuro); --acento-claro: #f1edfc; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--fondo);
+    color: var(--tinta);
+    font: 15px/1.4 "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  }
+  [hidden] { display: none !important; }
+  button { font: inherit; }
+
+  /* ================= PANTALLA DE INICIO ================= */
+  .inicio { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 18px; text-align: center; }
+  .ondas { position: relative; width: 150px; height: 100px; margin-bottom: 6px; }
+  .ondas span { position: absolute; left: 50%; transform: translateX(-50%); border: 8px solid; border-color: var(--mision) transparent transparent transparent; border-radius: 50%; animation: onda 2.2s ease-in-out infinite; }
+  .ondas span:nth-child(1) { width: 34px; height: 34px; bottom: -5px; }
+  .ondas span:nth-child(2) { width: 78px; height: 78px; bottom: -27px; animation-delay: .25s; }
+  .ondas span:nth-child(3) { width: 122px; height: 122px; bottom: -49px; animation-delay: .5s; }
+  .ondas span:nth-child(4) { width: 166px; height: 166px; bottom: -71px; animation-delay: .75s; }
+  .ondas i { position: absolute; left: 50%; bottom: -7px; transform: translateX(-50%); width: 16px; height: 16px; border-radius: 50%; background: var(--mision); }
+  @keyframes onda { 0%, 100% { opacity: .2; } 40% { opacity: 1; } }
+  .inicio h1 { font-size: clamp(32px, 5vw, 48px); margin: 8px 0 4px; }
+  .inicio h1.marca { font-size: clamp(48px, 8vw, 76px); letter-spacing: -0.02em; line-height: 1.15; margin: 8px 0 10px; color: var(--marino); }
+  .marca span, .marca-panel span { background: linear-gradient(90deg, #1f5fbf 0%, #5b3cc4 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .panel h1.marca-panel { font-size: 24px; letter-spacing: -0.01em; color: var(--marino); }
+  .marca-panel small { font-size: 14px; font-weight: 600; color: var(--tinta-suave); letter-spacing: 0; }
+  .inicio .lema { font-size: 18px; color: var(--tinta-suave); margin: 0 0 6px; }
+  .franja { display: flex; gap: 5px; justify-content: center; margin: 4px 0 26px; }
+  .franja span { width: 30px; height: 8px; border-radius: 99px; }
+
+  .modos { display: grid; grid-template-columns: repeat(2, minmax(0, 380px)); gap: 22px; justify-content: center; width: 100%; }
+  .modo {
+    position: relative; background: var(--superficie); border-radius: 20px; padding: 0 0 20px; text-align: left; overflow: hidden;
+    border: 3px solid transparent; box-shadow: 0 10px 28px rgba(20, 30, 45, .12); display: flex; flex-direction: column; transition: transform .15s, box-shadow .15s;
+  }
+  .modo:not(.cerrado):hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(20, 30, 45, .16); }
+  .modo.mision { border-color: var(--mision); }
+  .modo.lab { border-color: var(--lab); }
+  .modo.cerrado { border-color: var(--borde); }
+  .modo .ilustracion { height: 170px; display: grid; place-items: center; }
+  .modo.mision .ilustracion { background: #e8f0fc; }
+  .modo.lab .ilustracion { background: #efeafc; }
+  .modo.cerrado .ilustracion { filter: grayscale(1); opacity: .5; }
+  .modo .contenido { padding: 16px 20px 0; flex: 1; display: flex; flex-direction: column; }
+  .modo .etiqueta { display: inline-block; align-self: flex-start; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; margin-bottom: 8px; }
+  .modo.mision .etiqueta { background: #e8f0fc; color: var(--mision-oscuro); }
+  .modo.lab .etiqueta { background: #efeafc; color: var(--lab-oscuro); }
+  .modo.cerrado .etiqueta { background: #e9edf2; color: var(--tinta-suave); }
+  .modo h2 { margin: 0 0 6px; font-size: 24px; }
+  .modo p.desc { margin: 0 0 12px; color: var(--tinta-suave); font-size: 15px; }
+  .modo ul { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 8px; flex: 1; }
+  .modo li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
+  .modo li b { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; color: #fff; }
+  .modo.mision li b { background: var(--mision); }
+  .modo.lab li b { background: var(--lab); }
+  .modo.cerrado li b { background: var(--bloqueado); }
+  .modo .entrar {
+    border: 0; border-radius: 12px; padding: 13px; font-weight: 700; font-size: 17px; color: #fff; cursor: pointer; width: 100%;
+  }
+  .modo.mision .entrar { background: var(--mision); box-shadow: 0 4px 0 var(--mision-oscuro); }
+  .modo.lab .entrar { background: var(--lab); box-shadow: 0 4px 0 var(--lab-oscuro); }
+  .modo .entrar:active { transform: translateY(3px); box-shadow: none; }
+  .modo.cerrado .entrar { background: #c7cfd8; box-shadow: none; cursor: not-allowed; color: #4b5866; }
+  .modo .sello { position: absolute; top: 14px; right: 14px; background: var(--ok); color: #fff; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 99px; box-shadow: 0 2px 6px rgba(0, 0, 0, .2); }
+  .modo .candado { position: absolute; top: 58px; left: 50%; transform: translateX(-50%); font-size: 44px; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .25)); }
+  .entrar:focus-visible, .boton:focus-visible, .fila:focus-visible, .chip-modo:focus-visible { outline: 3px solid #8db7f0; outline-offset: 2px; }
+
+  .anim-mira { transform-origin: 160px 70px; animation: girar 6s linear infinite; }
+  .anim-latido { transform-origin: 160px 70px; animation: latidoSvg 1.4s ease-in-out infinite; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @keyframes latidoSvg { 50% { transform: scale(1.12); opacity: .55; } }
+  .anim-mancha { animation: respirar 3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes respirar { 50% { transform: scale(1.08); } }
+
+  /* ================= PROGRAMA ================= */
+  .app { display: grid; grid-template-columns: 370px 1fr; height: 100vh; }
+  .panel { background: var(--superficie); border-right: 1px solid var(--borde); overflow-y: auto; padding: 0 18px 20px; }
+  .cabecera-panel { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 -18px 8px; padding: 10px 18px; position: sticky; top: 0; background: var(--superficie); z-index: 2; border-bottom: 1px solid var(--borde); }
+  .boton-inicio { border: 1.5px solid var(--borde); background: #fff; border-radius: 9px; padding: 5px 11px; cursor: pointer; font-weight: 600; color: var(--tinta); }
+  .boton-inicio:hover { border-color: var(--acento); color: var(--acento); }
+  .chip-modo { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; padding: 5px 12px; border-radius: 99px; background: var(--acento-claro); color: var(--acento-oscuro); border: 1.5px solid var(--acento); }
+  .panel h1 { font-size: 20px; margin: 4px 0 2px; }
+  .panel .intro { margin: 0 0 10px; color: var(--tinta-suave); font-size: 14px; }
+
+  .pasos { list-style: none; margin: 0; padding: 0; }
+  .paso { display: grid; grid-template-columns: 30px 1fr; gap: 10px; padding: 11px 0; border-top: 1px solid var(--borde); }
+  .num { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--acento); color: #fff; font-weight: 700; }
+  .paso.hecho .num { background: var(--ok); }
+  .paso.bloqueado .num { background: var(--bloqueado); }
+  #paso1.hecho .ayuda, #paso2.hecho .ayuda { display: none; }
+  .paso.bloqueado h2, .paso.bloqueado .ayuda { color: var(--bloqueado); }
+  .paso h2 { font-size: 16px; margin: 3px 0 2px; }
+  .ayuda { margin: 0 0 8px; color: var(--tinta-suave); font-size: 13.5px; }
+
+  .boton { display: inline-block; border: 0; border-radius: 7px; padding: 9px 15px; font: inherit; font-weight: 600; background: var(--acento); color: #fff; cursor: pointer; }
+  .boton:hover { background: var(--acento-oscuro); }
+  .boton.secundario { background: #fff; color: var(--acento); box-shadow: inset 0 0 0 1.5px var(--acento); }
+  .boton.secundario:hover { background: var(--acento-claro); }
+  .boton:disabled { background: var(--bloqueado); color: #fff; box-shadow: none; cursor: not-allowed; }
+  .boton.ancho { display: block; width: 100%; }
+  .campo-archivo { position: relative; display: inline-block; }
+  .campo-archivo input { position: absolute; inset: 0; opacity: 0; width: 100%; cursor: pointer; font-size: 0; }
+  .campo-archivo:focus-within .boton { outline: 3px solid #8db7f0; outline-offset: 2px; }
+
+  .archivo { margin: 6px 0 0; font-size: 13px; color: var(--ok); overflow-wrap: anywhere; }
+  .mensaje-error { margin: 6px 0 0; font-size: 13.5px; color: var(--error); }
+  .faltan { margin: 7px 0 0; font-size: 13.5px; color: var(--tinta-suave); }
+
+  .progreso { font-weight: 600; font-size: 14px; margin: 0 0 4px; }
+  .barra-progreso { height: 8px; border-radius: 99px; background: var(--borde); overflow: hidden; margin: 0 0 8px; }
+  .barra-progreso span { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .lista .ancho-doble { grid-column: 1 / -1; }
+  .fila { width: 100%; text-align: left; font: inherit; font-size: 14px; display: flex; align-items: center; gap: 7px; padding: 5px 8px; border-radius: 6px; cursor: pointer; border: 1px solid var(--borde); background: #fff; color: var(--tinta); }
+  .fila:hover { border-color: var(--acento); }
+  .fila .marca { width: 16px; text-align: center; font-weight: 700; color: var(--bloqueado); }
+  .fila.ubicado .marca { color: var(--ok); }
+  .fila .id { font-weight: 700; min-width: 30px; }
+  .fila .valor { margin-left: auto; color: var(--tinta-suave); font-size: 13px; white-space: nowrap; }
+  .fila.activo { background: var(--resalte); border-color: #e0a400; box-shadow: inset 0 0 0 1px #e0a400; }
+  .fila.fija { cursor: default; }
+  .fila.fija:hover { border-color: var(--borde); }
+  .fila.excluido { background: #f4f5f7; color: var(--tinta-suave); cursor: default; border-style: dashed; }
+  .fila.excluido:hover { border-color: var(--borde); }
+  .nota-excluido { font-size: 12.5px; white-space: normal; }
+
+  .escenario { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-width: 0; height: 100vh; }
+  .instruccion { background: var(--acento); color: #fff; font-size: 18px; font-weight: 600; padding: 12px 20px; min-height: 52px; transition: background .2s; }
+  .instruccion.exito { background: var(--ok); }
+  .instruccion.alerta { background: var(--error); }
+  .aviso { display: block; font-size: 14.5px; font-weight: 400; margin-top: 2px; }
+  .pista-lugar { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 15px; font-weight: 600; background: rgba(255, 255, 255, .18); padding: 3px 10px; border-radius: 8px; }
+  .estimada { background: var(--oro); color: #3a2a00; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 99px; }
+  .lienzo { position: relative; min-height: 0; min-width: 0; padding: 12px; display: grid; place-items: center; overflow: hidden; }
+  canvas#plano { display: none; background: #fff; box-shadow: 0 1px 6px rgba(20, 30, 45, .25); touch-action: none; }
+  .vacio { color: var(--tinta-suave); font-size: 17px; text-align: center; max-width: 420px; }
+  .vacio .icono-vacio { font-size: 46px; display: block; margin-bottom: 6px; }
+
+  .objetivo { position: absolute; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; }
+  .objetivo .aro { position: absolute; inset: 0; border: 4px dashed var(--oro); border-radius: 50%; animation: girarAro 5s linear infinite; }
+  .objetivo .halo { position: absolute; inset: -4px; border-radius: 50%; background: rgba(242, 183, 5, .18); animation: halo 1.3s ease-in-out infinite; }
+  .objetivo .rotulo { position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); background: var(--oro); color: #3a2a00; font-weight: 700; font-size: 13px; padding: 2px 9px; border-radius: 7px; white-space: nowrap; box-shadow: 0 2px 5px rgba(0, 0, 0, .25); }
+  .objetivo .rotulo::after { content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--oro); }
+  @keyframes girarAro { to { transform: rotate(360deg); } }
+  @keyframes halo { 50% { transform: scale(1.25); opacity: .35; } }
+  .marca-fallo { position: absolute; transform: translate(-50%, -50%); color: var(--error); font-size: 34px; font-weight: 900; pointer-events: none; z-index: 3; text-shadow: 0 0 3px #fff, 0 0 6px #fff; animation: desvanecer 1.2s forwards; }
+  @keyframes desvanecer { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); } 70% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.9); } }
+  .acierto { position: absolute; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; border: 4px solid var(--ok); pointer-events: none; z-index: 2; animation: acierto .7s ease-out forwards; }
+  @keyframes acierto { to { transform: translate(-50%, -50%) scale(2.2); opacity: 0; } }
+  .sacudir { animation: sacudir .35s; }
+  @keyframes sacudir { 25%, 75% { transform: translateX(-6px); } 50% { transform: translateX(6px); } }
+
+  .leyenda { background: var(--superficie); border-top: 1px solid var(--borde); padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; font-size: 13.5px; }
+  .leyenda strong { font-size: 14px; }
+  .item-leyenda { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .color { width: 18px; height: 18px; border-radius: 4px; border: 1px solid rgba(0, 0, 0, .25); }
+  .item-leyenda small { color: var(--tinta-suave); font-size: 12.5px; }
+  .explicacion { flex-basis: 100%; color: var(--tinta-suave); font-size: 12.5px; }
+
+  /* ================= HERRAMIENTAS DEL LABORATORIO ================= */
+  .solo-lab { display: none; }
+  body.modo-laboratorio .solo-lab { display: block; }
+  body.modo-laboratorio li.solo-lab { display: grid; }
+  .selectores { margin-top: 10px; background: var(--acento-claro); border-radius: 10px; padding: 10px 12px; }
+  .selectores label, .etiqueta-campo { display: block; font-size: 13px; font-weight: 600; color: var(--tinta-suave); margin: 0 0 4px; }
+  .selectores select, .campo-vista select { width: 100%; font: inherit; font-size: 14px; padding: 6px 8px; border: 1.5px solid var(--borde); border-radius: 8px; background: #fff; color: var(--tinta); }
+  .segmentado { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; background: #fff; border: 1.5px solid var(--borde); border-radius: 9px; padding: 3px; margin-top: 4px; }
+  .segmentado button { border: 0; background: none; border-radius: 6px; padding: 6px 4px; font-weight: 700; cursor: pointer; color: var(--tinta-suave); }
+  .segmentado button[aria-pressed="true"] { background: var(--acento); color: #fff; }
+  .nota-banda { font-size: 12.5px; color: var(--tinta-suave); margin: 6px 0 0; }
+  .boton-chico { border: 1.5px dashed var(--acento); background: #fff; color: var(--acento); border-radius: 8px; padding: 4px 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin: 0 0 8px; }
+  .boton-chico:hover { background: var(--acento-claro); }
+  .campo-vista { margin-bottom: 10px; }
+  .resumen { margin: 6px 0 10px; }
+  .resumen .barra-apilada { display: flex; height: 14px; border-radius: 7px; overflow: hidden; gap: 2px; background: #fff; }
+  .resumen .barra-apilada span { display: block; height: 100%; }
+  .resumen ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 3px; font-size: 13px; }
+  .resumen li { display: flex; align-items: center; gap: 7px; }
+  .resumen li b { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .resumen .destacado { font-size: 13.5px; font-weight: 600; margin: 0 0 6px; }
+  .herramientas { display: grid; gap: 6px; }
+  .herramientas .boton { text-align: left; }
+
+  .tooltip { position: absolute; z-index: 4; pointer-events: none; background: var(--marino); color: #fff; font-size: 13px; line-height: 1.35; padding: 6px 10px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, .3); white-space: nowrap; transform: translate(14px, -50%); }
+  .tooltip strong { font-size: 15px; }
+  .tooltip .muestra-color { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: 0; border: 1px solid rgba(255, 255, 255, .6); }
+  .detalle { position: absolute; top: 12px; right: 12px; z-index: 5; width: min(340px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto; background: #fff; border-radius: 14px; box-shadow: 0 10px 30px rgba(20, 30, 45, .3); padding: 14px 16px; font-size: 13.5px; }
+  .detalle h3 { margin: 0 0 2px; font-size: 20px; }
+  .detalle .sub { color: var(--tinta-suave); margin: 0 0 8px; }
+  .detalle table { width: 100%; border-collapse: collapse; margin: 4px 0 10px; }
+  .detalle th, .detalle td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--borde); }
+  .detalle th { font-size: 12px; color: var(--tinta-suave); }
+  .detalle td.cifra, .detalle th.cifra { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .detalle tr.resaltada td { background: var(--acento-claro); font-weight: 700; }
+  .detalle h4 { margin: 8px 0 2px; font-size: 14px; }
+  .cerrar { position: absolute; top: 8px; right: 8px; border: 0; background: none; font-size: 18px; cursor: pointer; color: var(--tinta-suave); width: 30px; height: 30px; border-radius: 50%; }
+  .cerrar:hover { background: var(--fondo); }
+
+  .ventana.ancha { width: min(1040px, 100%); max-height: calc(100vh - 32px); overflow: auto; text-align: left; padding: 24px 26px; position: relative; }
+  .ventana.ancha h2 { font-size: 24px; margin: 0 0 4px; }
+  .comparacion { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+  .comparacion figure { margin: 0; }
+  .comparacion canvas { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(20, 30, 45, .2); display: block; }
+  .comparacion figcaption { margin-top: 8px; font-size: 14px; }
+  .comparacion figcaption strong { font-size: 17px; display: block; }
+  .conclusion { background: var(--acento-claro); border-radius: 12px; padding: 12px 16px; margin-top: 14px; font-size: 14.5px; }
+  .conclusion p { margin: 4px 0; }
+  .grafica-canales { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 10px; }
+  .grafica-canales h3 { margin: 0 0 8px; font-size: 17px; }
+  .fila-canal { display: grid; grid-template-columns: 74px 1fr 24px; align-items: center; gap: 8px; font-size: 13.5px; margin-bottom: 5px; }
+  .fila-canal .barra { height: 16px; border-radius: 0 4px 4px 0; background: #85b7eb; min-width: 2px; }
+  .fila-canal.sisclub .barra { background: var(--acento); }
+  .fila-canal.fuera .barra { background: #fd8d3c; }
+  .fila-canal .cuantas { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .fila-canal small { display: block; font-size: 11.5px; color: var(--tinta-suave); line-height: 1.1; }
+  .ajustes { display: grid; gap: 12px; margin-top: 12px; }
+  .ajustes .fila { display: grid; grid-template-columns: 1fr 120px; gap: 12px; align-items: center; }
+  .ajustes .fila small { display: block; color: var(--tinta-suave); font-size: 12.5px; }
+  .ajustes input[type=number] { font: inherit; padding: 6px 8px; border: 1.5px solid var(--borde); border-radius: 8px; width: 100%; }
+  .ajustes input[type=range] { width: 100%; accent-color: var(--acento); }
+  .ajustes .acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .routers { margin-top: 14px; border-top: 1px dashed var(--borde); padding-top: 12px; }
+  .routers-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .routers small { font-weight: 400; }
+  .lista-routers { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+  .lista-routers li { display: flex; align-items: center; gap: 8px; background: var(--acento-claro); border-radius: 8px; padding: 5px 8px; font-size: 14px; }
+  .lista-routers .icono-router { flex: none; width: 26px; height: 26px; border-radius: 7px; background: #3b1f8f; color: #fff; display: grid; place-items: center; font-size: 13px; }
+  .lista-routers b { min-width: 26px; }
+  .lista-routers input { flex: 1; min-width: 0; font: inherit; font-size: 13.5px; padding: 4px 6px; border: 1px solid var(--borde); border-radius: 6px; background: #fff; }
+  .lista-routers button { border: 0; background: none; cursor: pointer; font-size: 16px; padding: 2px 4px; border-radius: 6px; }
+  .lista-routers button:hover { background: #fff; }
+  .escala-plano { margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; background: var(--acento-claro); border-radius: 8px; padding: 6px 10px; }
+  .escala-plano .boton-chico { margin: 0; }
+  .escala-plano.alerta { background: var(--resalte); border: 1.5px solid var(--oro); font-weight: 600; }
+  .escala-plano.alerta .boton-chico { background: var(--oro); color: #3a2a00; border: 0; }
+  .marca-calibracion { position: absolute; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: var(--oro); border: 3px solid var(--marino); z-index: 3; pointer-events: none; }
+
+  /* ================= CELEBRACIÓN ================= */
+  .capa { position: fixed; inset: 0; background: rgba(10, 18, 28, .6); display: none; place-items: center; z-index: 50; padding: 16px; }
+  .capa.abierta { display: grid; animation: aparecer .25s; }
+  @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+  .ventana { background: #fff; border-radius: 22px; padding: 28px 30px; width: min(460px, 100%); text-align: center; box-shadow: 0 20px 50px rgba(0, 0, 0, .3); animation: subir .35s cubic-bezier(.3, 1.4, .5, 1); }
+  @keyframes subir { from { transform: translateY(30px) scale(.95); } to { transform: none; } }
+  .ventana .grande { font-size: 60px; line-height: 1; }
+  .ventana h2 { font-size: 28px; margin: 8px 0 6px; }
+  .ventana p { color: var(--tinta-suave); margin: 0 0 8px; }
+  .desbloqueo { display: flex; align-items: center; gap: 12px; text-align: left; background: #f1edfc; border: 2px solid var(--lab); border-radius: 14px; padding: 12px 14px; margin: 14px 0 4px; }
+  .desbloqueo .icono { font-size: 30px; }
+  .desbloqueo strong { color: var(--lab-oscuro); }
+  .ventana .botones { display: grid; gap: 10px; margin-top: 16px; }
+  .ventana .boton-mision { background: var(--mision); }
+  .ventana .boton-lab { background: var(--lab); }
+  .ventana .boton-lab:hover { background: var(--lab-oscuro); }
+  .confeti { position: fixed; top: -20px; width: 10px; height: 15px; z-index: 60; pointer-events: none; animation: caer linear forwards; }
+  @keyframes caer { to { transform: translateY(110vh) rotate(720deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  }
+  @media (max-width: 860px) {
+    .modos { grid-template-columns: minmax(0, 420px); }
+    .comparacion, .grafica-canales { grid-template-columns: 1fr; }
+    .app { grid-template-columns: 1fr; height: auto; }
+    .panel { border-right: 0; }
+    .escenario { height: 100vh; }
+  }
+</style>
+</head>
+<body class="modo-mision">
+
+<!-- ======================================================= INICIO -->
+<section class="inicio" id="inicio">
+  <div class="ondas" aria-hidden="true"><span></span><span></span><span></span><span></span><i></i></div>
+  <h1 class="marca">Map<span>lify</span></h1>
+  <p class="lema">Mapas de señal WiFi: descubre dónde llega bien el WiFi y dónde no.</p>
+  <div class="franja" aria-hidden="true"><span style="background:#1a9850"></span><span style="background:#7fc95a"></span><span style="background:#ffdf2e"></span><span style="background:#fd8d3c"></span><span style="background:#d7191c"></span></div>
+
+  <div class="modos">
+    <article class="modo mision" id="tarjetaMision">
+      <div class="ilustracion" aria-hidden="true">
+        <svg width="320" height="140" viewBox="0 0 320 140">
+          <rect x="60" y="14" width="200" height="112" rx="4" fill="#fff" stroke="#16304f" stroke-width="3"/>
+          <path d="M60 60 H130 V14 M130 90 V126 M190 14 V60 H260 M130 90 H205" fill="none" stroke="#16304f" stroke-width="2.5"/>
+          <circle cx="96" cy="38" r="11" fill="#16304f" stroke="#fff" stroke-width="3"/><text x="96" y="42" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" font-family="Segoe UI, Arial">P1</text>
+          <circle cx="225" cy="100" r="11" fill="#16304f" stroke="#fff" stroke-width="3"/><text x="225" y="104" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" font-family="Segoe UI, Arial">P2</text>
+          <circle class="anim-latido" cx="160" cy="70" r="24" fill="rgba(242,183,5,.25)"/>
+          <circle class="anim-mira" cx="160" cy="70" r="20" fill="none" stroke="#f2b705" stroke-width="4" stroke-dasharray="7 6"/>
+          <rect x="142" y="30" width="36" height="17" rx="5" fill="#f2b705"/><text x="160" y="43" font-size="11" font-weight="700" fill="#3a2a00" text-anchor="middle" font-family="Segoe UI, Arial">P3</text>
+          <path d="M196 96 l12 4 -5 3 6 7 -3 3 -6 -7 -3 5 z" fill="#1c2733" stroke="#fff" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <span class="sello" id="selloMision" hidden>✓ Completada</span>
+      <div class="contenido">
+        <span class="etiqueta">Paso 1 · Para empezar</span>
+        <h2>🎯 Misión guiada</h2>
+        <p class="desc">Te mostramos dónde va cada punto con un círculo amarillo. No te puedes equivocar.</p>
+        <ul>
+          <li><b>1</b><span>Sube el plano y el Excel del local.</span></li>
+          <li><b>2</b><span>Haz clic dentro del círculo amarillo de cada punto.</span></li>
+          <li><b>3</b><span>Genera tu mapa y desbloquea el Laboratorio.</span></li>
+        </ul>
+        <button type="button" class="entrar" id="entrarMision">Empezar la misión →</button>
+      </div>
+    </article>
+
+    <article class="modo lab" id="tarjetaLab">
+      <div class="ilustracion" aria-hidden="true">
+        <svg width="320" height="140" viewBox="0 0 320 140">
+          <defs><clipPath id="recorteLab"><rect x="60" y="14" width="200" height="112" rx="4"/></clipPath></defs>
+          <g clip-path="url(#recorteLab)">
+            <rect x="60" y="14" width="200" height="112" fill="#fff"/>
+            <circle class="anim-mancha" cx="110" cy="55" r="60" fill="#7fc95a" opacity=".85"/>
+            <circle class="anim-mancha" cx="215" cy="95" r="44" fill="#ffdf2e" opacity=".9" style="animation-delay:.6s"/>
+            <circle class="anim-mancha" cx="232" cy="108" r="22" fill="#fd8d3c" style="animation-delay:1.1s"/>
+            <circle class="anim-mancha" cx="100" cy="48" r="24" fill="#1a9850" style="animation-delay:.3s"/>
+          </g>
+          <rect x="60" y="14" width="200" height="112" rx="4" fill="none" stroke="#16304f" stroke-width="3"/>
+          <path d="M60 60 H130 V14 M130 90 V126 M190 14 V60 H260 M130 90 H205" fill="none" stroke="#16304f" stroke-width="2.5" opacity=".75"/>
+          <circle cx="100" cy="48" r="11" fill="#16304f" stroke="#fff" stroke-width="3"/><text x="100" y="52" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" font-family="Segoe UI, Arial">P1</text>
+          <circle cx="232" cy="108" r="11" fill="#16304f" stroke="#fff" stroke-width="3"/><text x="232" y="112" font-size="10" font-weight="700" fill="#fff" text-anchor="middle" font-family="Segoe UI, Arial">P2</text>
+          <path d="M150 75 h30 M174 69 l6 6 -6 6 M156 69 l-6 6 6 6" fill="none" stroke="#5b3cc4" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="candado" id="candadoLab" aria-hidden="true">🔒</span>
+      <div class="contenido">
+        <span class="etiqueta" id="etiquetaLab">Paso 2 · Cuando termines la misión</span>
+        <h2>🧪 Laboratorio libre</h2>
+        <p class="desc">Tú decides dónde va cada punto. Experimenta y mira cómo cambia el mapa.</p>
+        <ul>
+          <li><b>1</b><span>Ubica los puntos donde quieras, sin círculos de ayuda.</span></li>
+          <li><b>2</b><span>Arrastra un punto y vuelve a generar: compara los mapas.</span></li>
+          <li><b>3</b><span>Prueba con otro plano y otro Excel.</span></li>
+        </ul>
+        <button type="button" class="entrar" id="entrarLab">Entrar al laboratorio →</button>
+      </div>
+    </article>
+  </div>
+
+</section>
+
+<!-- ======================================================= PROGRAMA -->
+<div class="app" id="app" hidden>
+  <aside class="panel">
+    <div class="cabecera-panel">
+      <button type="button" class="boton-inicio" id="volverInicio">⌂ Inicio</button>
+      <span class="chip-modo" id="chipModo"></span>
+    </div>
+    <h1 class="marca-panel">Map<span>lify</span> <small>· mapa de señal WiFi</small></h1>
+    <p class="intro" id="introModo"></p>
+
+    <ol class="pasos">
+      <li class="paso" id="paso1">
+        <span class="num">1</span>
+        <div>
+          <h2>Sube el plano</h2>
+          <p class="ayuda" id="ayudaPlano"></p>
+          <span class="campo-archivo">
+            <span class="boton">Elegir plano</span>
+            <input type="file" id="inputPlano" accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-label="Elegir la imagen del plano">
+          </span>
+          <p class="archivo" id="nombrePlano"></p>
+          <p class="mensaje-error" id="errorPlano" role="alert"></p>
+          <div class="escala-plano solo-lab" id="escalaPlano" hidden>
+            <span id="textoEscalaPlano"></span>
+            <button type="button" class="boton-chico" id="botonCalibrar">📏 Calibrar</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="paso" id="paso2">
+        <span class="num">2</span>
+        <div>
+          <h2>Sube el Excel</h2>
+          <p class="ayuda" id="ayudaExcel"></p>
+          <span class="campo-archivo">
+            <span class="boton">Elegir Excel</span>
+            <input type="file" id="inputExcel" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-label="Elegir el archivo de Excel">
+          </span>
+          <p class="archivo" id="nombreExcel"></p>
+          <p class="mensaje-error" id="errorExcel" role="alert"></p>
+          <div class="selectores solo-lab" id="selectores" hidden>
+            <label for="selectorRed">Red que quieres ver</label>
+            <select id="selectorRed"></select>
+            <span class="etiqueta-campo" style="margin-top:8px">Banda</span>
+            <div class="segmentado" id="selectorBanda" role="group" aria-label="Banda"></div>
+            <p class="nota-banda" id="notaBanda"></p>
+          </div>
+        </div>
+      </li>
+
+      <li class="paso bloqueado" id="paso3">
+        <span class="num">3</span>
+        <div>
+          <h2>Ubica los puntos</h2>
+          <p class="ayuda" id="ayudaUbicar">Primero sube el plano y el Excel.</p>
+          <p class="progreso" id="progreso"></p>
+          <div class="barra-progreso" id="barraProgreso" hidden><span></span></div>
+          <button type="button" class="boton-chico" id="autoUbicar" hidden>📍 Ubicarlos automáticamente</button>
+          <ul class="lista" id="lista"></ul>
+          <div class="routers solo-lab" id="cajaRouters" hidden>
+            <div class="routers-cabecera">
+              <span class="etiqueta-campo" style="margin:0">📡 Routers <small>(opcional)</small></span>
+              <button type="button" class="boton-chico" id="agregarRouter" style="margin:0">+ Agregar router</button>
+            </div>
+            <p class="nota-banda" id="notaRouters">Marca dónde están los routers. Son una referencia: no cambian el mapa.</p>
+            <ul class="lista-routers" id="listaRouters"></ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="paso bloqueado" id="paso4">
+        <span class="num">4</span>
+        <div>
+          <h2>Genera el mapa</h2>
+          <button type="button" class="boton ancho" id="botonGenerar" disabled>Generar mapa</button>
+          <p class="faltan" id="faltan"></p>
+          <button type="button" class="boton secundario ancho" id="botonDescargar" style="margin-top:8px" disabled>Descargar imagen (PNG)</button>
+        </div>
+      </li>
+
+      <li class="paso bloqueado solo-lab" id="paso5">
+        <span class="num">5</span>
+        <div>
+          <h2>Analiza el mapa</h2>
+          <p class="ayuda" id="ayudaAnalizar">Se activa cuando generes el mapa.</p>
+          <div id="analisis" hidden>
+            <div class="campo-vista">
+              <label class="etiqueta-campo" for="selectorVista">¿Qué quieres ver en el mapa?</label>
+              <select id="selectorVista">
+                <option value="senal">📶 Fuerza de la señal (dBm)</option>
+                <option value="requisitos">✅ Qué se puede hacer (requisitos)</option>
+                <option value="snr">🔊 SNR estimada (señal / ruido)</option>
+                <option value="redes">📡 Cantidad de redes que se oyen</option>
+              </select>
+            </div>
+            <div class="resumen" id="resumen"></div>
+            <div class="herramientas">
+              <button type="button" class="boton secundario" id="botonComparar">⇆ Comparar 2.4 y 5 GHz</button>
+              <button type="button" class="boton secundario" id="botonCanales">📊 Análisis de canales</button>
+              <button type="button" class="boton secundario" id="botonAjustes">⚙ Ajustes del mapa</button>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </aside>
+
+  <main class="escenario">
+    <div class="instruccion" id="instruccion" aria-live="polite"></div>
+    <div class="lienzo" id="lienzo">
+      <p class="vacio" id="vacio"><span class="icono-vacio" aria-hidden="true">🏠</span>Aquí aparecerá tu plano.</p>
+      <canvas id="plano" aria-label="Plano del local"></canvas>
+      <div class="objetivo" id="objetivo" hidden aria-hidden="true"><span class="halo"></span><span class="aro"></span><span class="rotulo"></span></div>
+      <div class="tooltip" id="tooltip" hidden></div>
+      <div class="detalle" id="detalle" hidden role="dialog" aria-label="Detalle del punto"></div>
+    </div>
+    <footer class="leyenda" id="leyenda"></footer>
+  </main>
+</div>
+
+<!-- ======================================================= MISIÓN CUMPLIDA -->
+<div class="capa" id="capaMision">
+  <div class="ventana" role="dialog" aria-modal="true" aria-labelledby="tituloMision">
+    <div class="grande" aria-hidden="true">🎯</div>
+    <h2 id="tituloMision">¡Misión cumplida!</h2>
+    <p>Ubicaste los 13 puntos y generaste tu primer mapa de señal WiFi.</p>
+    <div class="desbloqueo" id="avisoDesbloqueo">
+      <span class="icono" aria-hidden="true">🔓</span>
+      <span><strong>¡Desbloqueaste el Laboratorio libre!</strong><br>Ahí puedes mover los puntos y ver cómo cambia el mapa.</span>
+    </div>
+    <div class="botones">
+      <button type="button" class="boton boton-mision" id="verMapa">Ver mi mapa y descargarlo</button>
+      <button type="button" class="boton boton-lab" id="irLab">Ir al Laboratorio 🧪</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================= LABORATORIO: VENTANAS -->
+<div class="capa" id="capaComparar">
+  <div class="ventana ancha" role="dialog" aria-modal="true" aria-labelledby="tituloComparar">
+    <button type="button" class="cerrar" data-cerrar aria-label="Cerrar">✕</button>
+    <h2 id="tituloComparar">⇆ 2.4 GHz frente a 5 GHz</h2>
+    <p style="margin:0;color:var(--tinta-suave)" id="subComparar"></p>
+    <div id="cuerpoComparar"></div>
+  </div>
+</div>
+
+<div class="capa" id="capaCanales">
+  <div class="ventana ancha" role="dialog" aria-modal="true" aria-labelledby="tituloCanales">
+    <button type="button" class="cerrar" data-cerrar aria-label="Cerrar">✕</button>
+    <h2 id="tituloCanales">📊 Análisis de canales</h2>
+    <p style="margin:0;color:var(--tinta-suave)">Cuántas redes distintas usan cada canal, en todos los puntos medidos. Si muchas redes comparten canal, se estorban entre sí (interferencia).</p>
+    <div id="cuerpoCanales"></div>
+  </div>
+</div>
+
+<div class="capa" id="capaAjustes">
+  <div class="ventana ancha" style="width:min(560px,100%)" role="dialog" aria-modal="true" aria-labelledby="tituloAjustes">
+    <button type="button" class="cerrar" data-cerrar aria-label="Cerrar">✕</button>
+    <h2 id="tituloAjustes">⚙ Ajustes del mapa</h2>
+    <p style="margin:0;color:var(--tinta-suave)">Cambia los valores supuestos del cálculo. El mapa se recalcula al guardar. La escala del plano está en el paso 1.</p>
+    <div class="ajustes">
+      <div class="fila"><label for="ajSinCobertura">Señal cuando la red no aparece<small>Se usa en los puntos donde se midió la banda pero la red no salió (por ejemplo, P14).</small></label><input type="number" id="ajSinCobertura" min="-110" max="-60" step="1"></div>
+      <div class="fila"><label for="ajRuido24">Ruido supuesto en 2.4 GHz (dBm)<small>No se midió. Valor típico en interiores: −90.</small></label><input type="number" id="ajRuido24" min="-110" max="-70" step="1"></div>
+      <div class="fila"><label for="ajRuido5">Ruido supuesto en 5 GHz (dBm)<small>No se midió. Valor típico en interiores: −95.</small></label><input type="number" id="ajRuido5" min="-110" max="-70" step="1"></div>
+      <div class="fila"><label for="ajRadio">Distancia máxima para colorear (m)<small>Más lejos de toda medición, el mapa queda sin color.</small></label><input type="number" id="ajRadio" min="1" max="30" step="0.5"></div>
+      <div class="fila"><label for="ajOpacidad">Transparencia del mapa<small>Hacia la derecha se ven más los colores; hacia la izquierda, el plano.</small></label><input type="range" id="ajOpacidad" min="30" max="100" step="5"></div>
+      <div class="acciones">
+        <button type="button" class="boton" id="guardarAjustes">Guardar</button>
+        <button type="button" class="boton secundario" id="restablecerAjustes">Volver a los valores iniciales</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ------------------------------------------------------------------
+   AJUSTES DEL MAPA
+   ------------------------------------------------------------------ */
+const CONFIG = {
+  RED: 'SISCLUB',
+  BANDA: '5 GHz',
+  SIN_COBERTURA_DBM: -90,   // valor si se escaneó la banda y la red no apareció
+  POTENCIA_IDW: 2,          // cuanto mayor, más pesan los puntos cercanos
+  ANCHO_LOCAL_M: 13,
+  FRACCION_ANCHO_PLANO: 0.78, // parte del ancho de la imagen que ocupa el local
+  RADIO_MAXIMO_M: 4,        // más lejos que esto de toda medición, no se colorea
+  OPACIDAD_MAPA: 0.8,
+  RADIO_TOQUE_PX: 16
+};
+
+const ESCALA = [
+  { desde: -50,       color: '#1a9850', nombre: 'Excelente',         rango: '−50 o mejor' },
+  { desde: -60,       color: '#7fc95a', nombre: 'Buena',            rango: '−51 a −60' },
+  { desde: -70,       color: '#ffdf2e', nombre: 'Aceptable',        rango: '−61 a −70' },
+  { desde: -80,       color: '#fd8d3c', nombre: 'Débil',             rango: '−71 a −80' },
+  { desde: -Infinity, color: '#d7191c', nombre: 'Sin cobertura útil', rango: 'menos de −80' }
+];
+
+/* ------------------------------------------------------------------
+   MISIÓN GUIADA: dónde va cada punto en Plano.jfif.jpeg
+   (x, y entre 0 y 1, medidos sobre la imagen completa)
+   ------------------------------------------------------------------ */
+const GUIA = {
+  P1:  { x: .598,   y: .130,   donde: 'Salón chimenea, en el centro de la sala' },
+  P2:  { x: .6075,  y: .265,   donde: 'Salón chimenea, junto a la puerta de abajo' },
+  P3:  { x: .432,   y: .165,   donde: 'En la Entrada', estimada: true },
+  P4:  { x: .4267,  y: .7125,  donde: 'Final del corredor, junto a la puerta de abajo' },
+  P5:  { x: .43,    y: .40,    donde: 'En el corredor, a la altura de P7' },
+  P6:  { x: .3985,  y: .611,   donde: 'Corredor, parte de abajo, junto a la puerta doble' },
+  P7:  { x: .6866,  y: .4015,  donde: 'En el salón, un poco a la derecha del centro' },
+  P8:  { x: .6866,  y: .619,   donde: 'En el salón, abajo, encima de la Taberna' },
+  P9:  { x: .8707,  y: .2965,  donde: 'Lado derecho del salón, arriba' },
+  P10: { x: .864,   y: .44,    donde: 'Lado derecho del salón, a media altura', estimada: true }, // solo tiene 2.4 GHz
+  P11: { x: .864,   y: .6175,  donde: 'Lado derecho del salón, abajo, cerca de Estación 1' },
+  P12: { x: .606,   y: .695,   donde: 'En el centro de la Taberna', estimada: true },
+  P13: { x: .2023,  y: .4025,  donde: 'En la cocina, en la mitad' },
+  P14: { x: .1956,  y: .57,    donde: 'Afuera de la cocina, junto a su puerta de abajo' }
+};
+// Huella de Plano.jfif.jpeg (ver la función huella). El plano viejo con puntos da 12; una copia del limpio, casi 0.
+const PLANO_MISION = { proporcion: 1792 / 2400, maxDiferencia: 5, huella: [246,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,243,246,244,253,253,253,253,253,254,254,254,254,253,253,253,253,253,253,253,253,253,253,253,253,253,245,244,253,252,251,251,252,252,252,251,252,252,251,251,251,252,252,251,251,251,251,252,252,252,245,244,253,244,231,231,233,233,231,229,229,239,226,233,231,233,232,227,231,232,230,230,236,249,245,244,253,242,234,241,235,219,220,223,228,241,227,242,245,245,246,233,244,247,246,243,237,248,245,244,253,242,237,251,239,228,227,224,220,214,232,249,226,204,237,237,250,253,253,248,240,248,245,244,253,242,238,251,244,241,243,236,236,251,227,246,223,221,231,236,248,253,253,248,240,248,245,244,253,242,238,251,239,248,251,233,226,238,222,237,239,250,242,235,230,244,253,246,236,248,245,245,253,242,237,251,239,248,251,235,229,238,226,235,233,244,237,234,233,243,253,247,236,247,245,244,253,244,238,250,239,246,252,239,241,247,240,252,251,250,251,253,253,253,253,250,238,246,245,245,253,244,222,241,239,242,252,238,241,247,241,253,253,253,253,253,248,243,253,249,240,248,245,244,253,241,220,241,241,237,252,238,240,246,241,253,253,253,253,253,249,246,253,248,239,248,245,244,253,243,231,247,251,251,251,240,240,246,241,253,253,253,253,253,253,253,253,249,239,247,245,245,253,242,237,251,242,239,237,236,240,246,241,253,253,253,253,253,247,243,253,249,239,247,245,245,253,243,238,251,238,215,226,242,242,250,247,253,253,253,253,253,249,247,253,250,239,246,245,245,253,241,236,251,251,216,231,247,247,252,252,253,253,253,253,253,253,253,253,248,238,247,245,244,253,243,237,250,252,224,231,242,240,253,253,252,250,247,252,253,252,251,253,248,239,247,245,245,253,244,237,243,246,250,240,242,240,253,253,253,252,251,252,253,241,234,253,249,237,246,245,244,253,250,248,252,230,235,241,241,239,250,247,253,253,253,253,253,253,253,253,250,238,246,245,245,253,250,250,253,230,229,229,239,239,246,240,253,253,253,253,253,253,253,253,249,239,247,245,245,253,250,250,253,248,248,246,243,248,246,214,215,214,215,215,215,209,240,253,244,235,248,245,244,253,250,250,253,253,253,251,246,250,248,226,253,253,253,253,253,236,253,253,249,241,248,245,245,253,250,249,251,251,251,247,233,238,249,238,250,235,211,222,243,240,226,224,231,238,248,246,245,253,251,248,248,248,246,238,241,237,238,232,243,243,243,241,240,227,234,247,239,233,248,246,245,253,253,253,253,253,252,241,251,249,248,249,249,249,248,249,249,245,240,251,242,239,251,246,245,253,253,253,253,253,252,247,244,253,253,253,232,210,213,238,253,236,252,248,244,252,253,246,245,253,253,253,253,253,253,252,244,246,253,253,252,249,250,252,253,251,244,242,252,253,253,246,245,253,253,253,253,253,253,253,252,244,239,250,251,250,250,251,246,238,247,253,253,253,253,245,245,253,253,253,253,253,253,253,253,253,251,245,242,240,241,244,247,252,254,253,253,253,253,245,245,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,245,245,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245,245] };
+const CLAVE_MISION = 'mapa-wifi-mision-cumplida';
+
+const TEXTOS = {
+  mision: {
+    chip: '🎯 Misión guiada',
+    intro: 'Sigue los pasos en orden. Te mostramos dónde va cada punto.',
+    plano: 'Elige Plano.jfif.jpeg (el plano limpio del local).',
+    excel: 'Elige Relevamiento_WiFi_Limpio.xlsx.',
+    ubicar: 'Toca un punto de la lista y haz clic dentro del círculo amarillo.'
+  },
+  laboratorio: {
+    chip: '🧪 Laboratorio libre',
+    intro: 'Aquí tú decides dónde va cada punto. Experimenta sin miedo.',
+    plano: 'La imagen del lugar (JPG o PNG), sin puntos marcados.',
+    excel: 'El archivo .xlsx con las mediciones.',
+    ubicar: 'Toca un punto de la lista y haz clic en el plano. Si uno quedó mal, arrástralo.'
+  }
+};
+
+/* ------------------------------------------------------------------
+   DATOS DEL PROGRAMA
+   ------------------------------------------------------------------ */
+const estado = {
+  modo: 'mision',     // 'mision' o 'laboratorio'
+  plano: null,        // imagen cargada
+  puntos: [],         // { id, numero, tipo, valor, x, y } con x, y entre 0 y 1
+  activo: null,       // punto que se ubicará con el próximo clic
+  mapa: null,         // lienzo con los colores ya calculados
+  mapaVencido: false, // se movió un punto después de generar
+  arrastre: null,
+  aviso: '',
+  alerta: false,
+  // Laboratorio
+  lecturas: [],       // todas las filas útiles del Excel
+  red: CONFIG.RED,    // red que se dibuja
+  banda: '5ghz',      // banda que se dibuja (normalizada)
+  bandas: [],         // [{ clave, nombre }] presentes en el Excel
+  redes: [],          // nombres de red, de la más vista a la menos vista
+  posiciones: {},     // { P1: { x, y } }: la ubicación es la misma en todas las bandas
+  vista: 'senal',     // senal, requisitos, snr o redes
+  resumen: null,      // porcentaje del área en cada color
+  yaGenerado: false,  // en el Laboratorio el mapa se recalcula solo después del primer «Generar»
+  planoReconocido: false,
+  pxPorMetro: null,   // escala calibrada (píxeles de la imagen por metro)
+  calibrando: null,
+  routers: [],          // [{ id: 'R1', x, y, nombre }] solo como referencia visual
+  ubicandoRouter: false,
+  ajustes: null
+};
+const AJUSTES_INICIALES = () => ({ sinCobertura: CONFIG.SIN_COBERTURA_DBM, ruido: { '2.4ghz': -90, '5ghz': -95 }, radio: CONFIG.RADIO_MAXIMO_M, opacidad: CONFIG.OPACIDAD_MAPA });
+estado.ajustes = AJUSTES_INICIALES();
+
+const $ = id => document.getElementById(id);
+const lienzoPlano = $('plano');
+const esMision = () => estado.modo === 'mision';
+
+const normalizar = texto => String(texto ?? '')
+  .trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+const textoDbm = v => (v < 0 ? '−' : '') + Math.abs(Math.round(v));
+const puntosUsados = () => estado.puntos.filter(p => p.tipo !== 'excluido');
+const estaUbicado = p => p.x !== null;
+const siguientePendiente = () => puntosUsados().find(p => !estaUbicado(p)) || null;
+const misionCumplida = () => { try { return localStorage.getItem(CLAVE_MISION) === 'si'; } catch { return false; } };
+const marcarMision = () => { try { localStorage.setItem(CLAVE_MISION, 'si'); } catch {} };
+
+/* ------------------------------------------------------------------
+   LECTURA DEL EXCEL Y VALOR DE CADA PUNTO
+   ------------------------------------------------------------------ */
+const COLUMNAS = {
+  punto: t => t === 'punto',
+  banda: t => t === 'banda',
+  ssid:  t => t === 'ssid',
+  senal: t => t.startsWith('nivel senal')
+};
+// Columnas que pueden faltar: si están, el Laboratorio muestra más análisis.
+const COLUMNAS_OPCIONALES = {
+  canal: t => t === 'canal',
+  bssid: t => t.startsWith('bssid'),
+  seguridad: t => t === 'seguridad'
+};
+
+// Busca, en cualquier hoja, la tabla que tenga todas las columnas necesarias.
+function buscarTabla(libro) {
+  for (const nombre of libro.SheetNames) {
+    const filas = XLSX.utils.sheet_to_json(libro.Sheets[nombre], { header: 1, defval: null });
+    for (let i = 0; i < Math.min(filas.length, 15); i++) {
+      const titulos = filas[i].map(normalizar);
+      const indices = {};
+      for (const clave in COLUMNAS) indices[clave] = titulos.findIndex(COLUMNAS[clave]);
+      if (Object.values(indices).every(n => n >= 0)) {
+        for (const clave in COLUMNAS_OPCIONALES) indices[clave] = titulos.findIndex(COLUMNAS_OPCIONALES[clave]);
+        return { filas: filas.slice(i + 1), indices };
+      }
+    }
+  }
+  return null;
+}
+
+// Convierte la tabla en lecturas limpias: { numero, banda, red, dbm, ... }.
+function extraerLecturas({ filas, indices }) {
+  const lecturas = [];
+  const celda = (fila, clave) => indices[clave] >= 0 ? fila[indices[clave]] : null;
+  for (const fila of filas) {
+    const coincide = String(fila[indices.punto] ?? '').match(/\d+/);
+    const dbm = Number(fila[indices.senal]);
+    if (!coincide || fila[indices.senal] === null || !Number.isFinite(dbm)) continue;
+    const canal = Number(celda(fila, 'canal'));
+    lecturas.push({
+      numero: Number(coincide[0]),
+      banda: normalizar(fila[indices.banda]).replace(/\s/g, ''),
+      bandaTexto: String(fila[indices.banda] ?? '').trim(),
+      red: normalizar(fila[indices.ssid]),
+      redTexto: String(fila[indices.ssid] ?? '').trim() || '(sin nombre)',
+      dbm,
+      canal: Number.isFinite(canal) && canal > 0 ? canal : null,
+      bssid: celda(fila, 'bssid') ? String(celda(fila, 'bssid')).trim() : null,
+      seguridad: celda(fila, 'seguridad') ? String(celda(fila, 'seguridad')).trim() : null
+    });
+  }
+  return lecturas;
+}
+
+// Aplica la regla del proyecto: banda sin escanear = excluido,
+// red ausente = sin cobertura, y si hay lecturas, la mejor señal.
+function calcularPuntos(lecturas, red, banda) {
+  const redBuscada = normalizar(red);
+  const bandaBuscada = normalizar(banda).replace(/\s/g, '');
+  const numeros = [...new Set(lecturas.map(l => l.numero))].sort((a, b) => a - b);
+
+  return numeros.map(numero => {
+    const deLaBanda = lecturas.filter(l => l.numero === numero && l.banda === bandaBuscada);
+    const deLaRed = deLaBanda.filter(l => l.red === redBuscada);
+    let tipo = 'medido';
+    let valor = null;
+    if (deLaBanda.length === 0) tipo = 'excluido';
+    else if (deLaRed.length === 0) { tipo = 'asignado'; valor = estado.ajustes.sinCobertura; }
+    else valor = Math.max(...deLaRed.map(l => l.dbm));
+    return { id: 'P' + numero, numero, tipo, valor, x: null, y: null };
+  });
+}
+
+/* ------------------------------------------------------------------
+   INTERPOLACIÓN IDW (Inverse Distance Weighting)
+   El valor de un lugar es el promedio de todas las mediciones, donde
+   cada una pesa 1 / distancia^potencia: las cercanas influyen más.
+   ------------------------------------------------------------------ */
+function idw(x, y, muestras, potencia) {
+  let sumaPesos = 0;
+  let sumaValores = 0;
+  let minimaDistancia2 = Infinity;
+
+  for (const m of muestras) {
+    const dx = x - m.x;
+    const dy = y - m.y;
+    const distancia2 = dx * dx + dy * dy;
+    if (distancia2 === 0) return { valor: m.valor, distancia: 0 };
+    if (distancia2 < minimaDistancia2) minimaDistancia2 = distancia2;
+    const peso = 1 / Math.pow(distancia2, potencia / 2);
+    sumaPesos += peso;
+    sumaValores += peso * m.valor;
+  }
+  return { valor: sumaValores / sumaPesos, distancia: Math.sqrt(minimaDistancia2) };
+}
+
+/* ------------------------------------------------------------------
+   VISTAS DEL MAPA (el Laboratorio puede cambiar de vista; la misión usa «senal»)
+   ------------------------------------------------------------------ */
+const ESCALAS = {
+  senal: {
+    titulo: 'Calidad de la señal', unidad: 'dBm', items: ESCALA,
+    explicar: () => `Red: ${nombreRed()} ${nombreBanda()}. Los dBm miden la fuerza de la señal: entre más cerca de 0, mejor. Sin color: no hay mediciones cerca.`
+  },
+  requisitos: {
+    titulo: 'Qué se puede hacer', unidad: 'dBm',
+    items: [
+      { desde: -67,       color: '#1a9850', nombre: 'Llamadas y video',      rango: '−67 o mejor' },
+      { desde: -70,       color: '#7fc95a', nombre: 'Datos y redes sociales', rango: '−68 a −70' },
+      { desde: -75,       color: '#ffdf2e', nombre: 'Navegación básica',      rango: '−71 a −75' },
+      { desde: -Infinity, color: '#d7191c', nombre: 'No apto',                rango: 'menos de −75' }
+    ],
+    explicar: () => `Red: ${nombreRed()} ${nombreBanda()}. Umbrales de referencia de la industria: −67 dBm para llamadas y video, −70 para datos y −75 para conexión básica.`
+  },
+  snr: {
+    titulo: 'SNR estimada', unidad: 'dB',
+    items: [
+      { desde: 25,        color: '#1a9850', nombre: 'Excelente', rango: '25 dB o más' },
+      { desde: 20,        color: '#7fc95a', nombre: 'Buena',     rango: '20 a 24 dB' },
+      { desde: 15,        color: '#ffdf2e', nombre: 'Regular',   rango: '15 a 19 dB' },
+      { desde: -Infinity, color: '#d7191c', nombre: 'Mala',      rango: 'menos de 15 dB' }
+    ],
+    explicar: () => `SNR = señal − ruido. El ruido no se midió: se supone ${textoDbm(ruidoActual())} dBm, un valor típico en interiores para ${nombreBanda()}. Es una estimación.`
+  },
+  redes: {
+    titulo: 'Redes que se oyen', unidad: 'redes',
+    items: [
+      { desde: 8,         color: '#0c447c', nombre: 'Mucha congestión', rango: '8 o más redes' },
+      { desde: 6,         color: '#3b78c2', nombre: 'Congestión media', rango: '6 a 7 redes' },
+      { desde: 4,         color: '#85b7eb', nombre: 'Poca',             rango: '4 a 5 redes' },
+      { desde: -Infinity, color: '#d6e6f7', nombre: 'Muy poca',         rango: '3 o menos' }
+    ],
+    explicar: () => `Cuántas redes distintas se oyen en ${nombreBanda()} en cada lugar. Más redes en el aire significa más competencia por el canal.`
+  }
+};
+const escalaActual = () => ESCALAS[estado.vista].items;
+const nombreBanda = (clave = estado.banda) => (estado.bandas.find(b => b.clave === clave) || {}).nombre || CONFIG.BANDA;
+const nombreRed = () => estado.redes.find(r => normalizar(r) === normalizar(estado.red))
+  || (normalizar(estado.red) === normalizar(CONFIG.RED) ? CONFIG.RED : estado.red);
+const ruidoActual = (banda = estado.banda) => estado.ajustes.ruido[banda] ?? -95;
+const contarRedes = (numero, banda) => new Set(estado.lecturas.filter(l => l.numero === numero && l.banda === banda).map(l => l.red)).size;
+
+// Valor que aporta un punto según la vista elegida.
+function valorParaVista(p, banda = estado.banda, vista = estado.vista) {
+  if (vista === 'snr') return p.valor - ruidoActual(banda);
+  if (vista === 'redes') return contarRedes(p.numero, banda);
+  return p.valor;
+}
+function textoValorVista(valor, vista = estado.vista) {
+  if (vista === 'snr') return Math.round(valor) + ' dB';
+  if (vista === 'redes') return String(Math.round(valor));
+  return textoDbm(valor);
+}
+
+function clasificar(valor, escala = escalaActual()) {
+  const redondeado = Math.round(valor);
+  return escala.find(banda => redondeado >= banda.desde);
+}
+
+function colorRGB(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return [n >> 16, (n >> 8) & 255, n & 255];
+}
+
+const pixelesPorMetro = () => estado.pxPorMetro || (estado.plano.naturalWidth * CONFIG.FRACCION_ANCHO_PLANO) / CONFIG.ANCHO_LOCAL_M;
+const muestrasActuales = (puntos = puntosUsados(), banda = estado.banda, vista = estado.vista) =>
+  puntos.map(p => ({ x: p.x * estado.plano.naturalWidth, y: p.y * estado.plano.naturalHeight, valor: valorParaVista(p, banda, vista), id: p.id }));
+
+// Calcula una cuadrícula de colores del tamaño proporcional al plano.
+// Devuelve el lienzo y cuánta área quedó de cada color.
+function calcularMapa(muestras = muestrasActuales(), escala = escalaActual()) {
+  const ancho = estado.plano.naturalWidth;
+  const alto = estado.plano.naturalHeight;
+  const paso = Math.max(1, Math.round(Math.max(ancho, alto) / 600));
+  const columnas = Math.ceil(ancho / paso);
+  const filas = Math.ceil(alto / paso);
+  const radioMaximo = estado.ajustes.radio * pixelesPorMetro();
+  const colores = new Map(escala.map(b => [b, colorRGB(b.color)]));
+  const conteo = new Map(escala.map(b => [b, 0]));
+  let coloreados = 0;
+
+  const lienzo = document.createElement('canvas');
+  lienzo.width = columnas;
+  lienzo.height = filas;
+  const ctx = lienzo.getContext('2d');
+  const imagen = ctx.createImageData(columnas, filas);
+
+  for (let fila = 0; fila < filas; fila++) {
+    for (let columna = 0; columna < columnas; columna++) {
+      const r = idw((columna + 0.5) * paso, (fila + 0.5) * paso, muestras, CONFIG.POTENCIA_IDW);
+      if (r.distancia > radioMaximo) continue;
+      const banda = clasificar(r.valor, escala);
+      const [rojo, verde, azul] = colores.get(banda);
+      conteo.set(banda, conteo.get(banda) + 1);
+      coloreados++;
+      const i = (fila * columnas + columna) * 4;
+      imagen.data[i] = rojo;
+      imagen.data[i + 1] = verde;
+      imagen.data[i + 2] = azul;
+      imagen.data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(imagen, 0, 0);
+  const resumen = escala.map(b => ({ ...b, porcentaje: coloreados ? conteo.get(b) / coloreados * 100 : 0 }));
+  return { lienzo, resumen };
+}
+
+/* ------------------------------------------------------------------
+   DIBUJO
+   ------------------------------------------------------------------ */
+function dibujarMarcador(ctx, punto, cx, cy, radio, activo, conValor) {
+  ctx.save();
+  if (activo) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, radio * 1.45, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(224, 164, 0, .45)';
+    ctx.fill();
+  }
+  ctx.beginPath();
+  ctx.arc(cx, cy, radio, 0, Math.PI * 2);
+  ctx.fillStyle = '#16304f';
+  ctx.fill();
+  ctx.lineWidth = radio * 0.16;
+  ctx.strokeStyle = '#fff';
+  ctx.stroke();
+
+  ctx.fillStyle = '#fff';
+  ctx.font = `700 ${radio * 0.8}px "Segoe UI", Arial, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(punto.id, cx, cy + radio * 0.04);
+
+  if (conValor) {
+    const texto = typeof conValor === 'string' ? conValor : textoDbm(punto.valor);
+    ctx.font = `700 ${radio * 0.78}px "Segoe UI", Arial, sans-serif`;
+    const ancho = ctx.measureText(texto).width + radio * 0.6;
+    const alto = radio * 1.05;
+    const top = cy + radio * 1.08;
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#16304f';
+    ctx.lineWidth = radio * 0.08;
+    ctx.beginPath();
+    ctx.rect(cx - ancho / 2, top, ancho, alto);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#16304f';
+    ctx.fillText(texto, cx, top + alto / 2 + radio * 0.03);
+  }
+  ctx.restore();
+}
+
+// Dibuja plano + mapa + marcadores. Las opciones permiten dibujar otra banda (para comparar).
+function dibujarEscena(ctx, ancho, alto, radio, opciones = {}) {
+  const { mapa = estado.mapa, puntos = puntosUsados(), banda = estado.banda, vista = estado.vista, activo = estado.activo } = opciones;
+  ctx.drawImage(estado.plano, 0, 0, ancho, alto);
+  if (mapa) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.globalAlpha = estado.ajustes.opacidad;
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(mapa, 0, 0, ancho, alto);
+    ctx.restore();
+  }
+  // Los routers van debajo: si coinciden con un punto, el dato medido queda visible.
+  for (const r of estado.routers) dibujarRouter(ctx, r, r.x * ancho, r.y * alto, radio);
+  for (const p of puntos) {
+    if (estaUbicado(p)) {
+      const etiqueta = mapa ? textoValorVista(valorParaVista(p, banda, vista), vista) : false;
+      dibujarMarcador(ctx, p, p.x * ancho, p.y * alto, radio, p === activo, etiqueta);
+    }
+  }
+}
+
+// Ícono de router: cuadro morado con ondas WiFi y su nombre debajo.
+function dibujarRouter(ctx, router, cx, cy, radio) {
+  const lado = radio * 2.1;
+  ctx.save();
+  ctx.fillStyle = '#3b1f8f';
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = radio * 0.16;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(cx - lado / 2, cy - lado / 2, lado, lado, radio * 0.45);
+  else ctx.rect(cx - lado / 2, cy - lado / 2, lado, lado);
+  ctx.fill();
+  ctx.stroke();
+  // Ondas WiFi
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = radio * 0.15;
+  const base = cy + lado * 0.26;
+  for (const k of [0.32, 0.56, 0.8]) {
+    ctx.beginPath();
+    ctx.arc(cx, base, lado * k * 0.62, Math.PI * 1.25, Math.PI * 1.75);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.arc(cx, base, radio * 0.14, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  // Nombre
+  const texto = router.nombre ? `${router.id} · ${router.nombre}` : router.id;
+  ctx.font = `700 ${radio * 0.72}px "Segoe UI", Arial, sans-serif`;
+  const ancho = ctx.measureText(texto).width + radio * 0.7;
+  const alto = radio * 1.05;
+  const top = cy + lado / 2 + radio * 0.25;
+  ctx.fillStyle = '#3b1f8f';
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(cx - ancho / 2, top, ancho, alto, alto / 2);
+  else ctx.rect(cx - ancho / 2, top, ancho, alto);
+  ctx.fill();
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(texto, cx, top + alto / 2 + radio * 0.03);
+  ctx.restore();
+}
+
+// Radio del círculo amarillo de la misión, en píxeles de pantalla.
+const radioObjetivo = anchoCss => Math.max(20, anchoCss * 0.042);
+
+function redibujar() {
+  if (!estado.plano) return;
+  const contenedor = $('lienzo');
+  const estilos = getComputedStyle(contenedor);
+  const disponibleX = contenedor.clientWidth - parseFloat(estilos.paddingLeft) - parseFloat(estilos.paddingRight);
+  const disponibleY = contenedor.clientHeight - parseFloat(estilos.paddingTop) - parseFloat(estilos.paddingBottom);
+  const escala = Math.min(disponibleX / estado.plano.naturalWidth, disponibleY / estado.plano.naturalHeight);
+  const anchoCss = Math.max(1, Math.floor(estado.plano.naturalWidth * escala));
+  const altoCss = Math.max(1, Math.floor(estado.plano.naturalHeight * escala));
+  const densidad = window.devicePixelRatio || 1;
+
+  lienzoPlano.style.width = anchoCss + 'px';
+  lienzoPlano.style.height = altoCss + 'px';
+  lienzoPlano.width = Math.round(anchoCss * densidad);
+  lienzoPlano.height = Math.round(altoCss * densidad);
+  dibujarEscena(lienzoPlano.getContext('2d'), lienzoPlano.width, lienzoPlano.height, 14 * densidad);
+  ubicarObjetivo();
+}
+
+// Muestra el círculo amarillo sobre el lugar del punto activo (solo en la misión).
+function ubicarObjetivo() {
+  const objetivo = $('objetivo');
+  const guia = esMision() && estado.activo && !estaUbicado(estado.activo) ? GUIA[estado.activo.id] : null;
+  if (!guia || lienzoPlano.style.display === 'none') { objetivo.hidden = true; return; }
+  const ancho = lienzoPlano.offsetWidth;
+  const alto = lienzoPlano.offsetHeight;
+  const diametro = radioObjetivo(ancho) * 2;
+  objetivo.hidden = false;
+  objetivo.style.width = objetivo.style.height = diametro + 'px';
+  objetivo.style.left = (lienzoPlano.offsetLeft + guia.x * ancho) + 'px';
+  objetivo.style.top = (lienzoPlano.offsetTop + guia.y * alto) + 'px';
+  objetivo.querySelector('.rotulo').textContent = estado.activo.id + ' va aquí';
+}
+
+/* ------------------------------------------------------------------
+   INTERFAZ
+   ------------------------------------------------------------------ */
+const PISTAS_VISTA = {
+  senal: '¡Mapa listo! Pasa el mouse por el plano para ver la señal, o toca un punto para ver su detalle.',
+  requisitos: 'Verde oscuro: ahí funcionan bien las llamadas y el video. Rojo: no sirve ni para navegar.',
+  snr: 'SNR estimada: cuánto sobresale la señal sobre el ruido. Más de 25 dB es excelente.',
+  redes: 'Entre más oscuro, más redes compiten en el aire en ese lugar.'
+};
+
+function textoInstruccion() {
+  if (!estado.plano) return 'Empieza por el paso 1: sube la imagen del plano.';
+  if (estado.calibrando) {
+    return estado.calibrando.primero
+      ? '📏 Ahora haz clic en el otro extremo de esa distancia.'
+      : '📏 Calibrar escala: haz clic en un extremo de una distancia que conozcas (por ejemplo, el ancho de una pared).';
+  }
+  if (estado.ubicandoRouter) return '📡 Haz clic en el plano donde está el router.';
+  if (!estado.puntos.length) return 'Muy bien. Ahora sube el archivo de Excel (paso 2).';
+  if (estado.activo) {
+    if (esMision()) return `Haz clic dentro del círculo amarillo para ubicar ${estado.activo.id}.`;
+    return estaUbicado(estado.activo)
+      ? `Haz clic en el nuevo lugar de ${estado.activo.id}.`
+      : `Haz clic en el plano donde se midió ${estado.activo.id}.`;
+  }
+  if (estado.mapa) {
+    return esMision()
+      ? '¡Listo! Verde es buena señal y rojo es falta de señal. Ya puedes descargar la imagen.'
+      : PISTAS_VISTA[estado.vista];
+  }
+  if (estado.mapaVencido) return 'Moviste un punto. Oprime «Generar mapa» otra vez.';
+  return esMision() ? '¡Todos los puntos están en su lugar! Oprime «Generar mapa».' : 'Todos los puntos están ubicados. Oprime «Generar mapa».';
+}
+
+function pintarLista() {
+  const lista = $('lista');
+  lista.replaceChildren();
+  const excluidos = estado.puntos.filter(p => p.tipo === 'excluido');
+  for (const p of [...puntosUsados(), ...excluidos]) {
+    const li = document.createElement('li');
+    const boton = document.createElement('button');
+    boton.type = 'button';
+    boton.className = 'fila';
+
+    const marca = document.createElement('span');
+    marca.className = 'marca';
+    const id = document.createElement('span');
+    id.className = 'id';
+    id.textContent = p.id;
+    boton.append(marca, id);
+
+    if (p.tipo === 'excluido') {
+      li.className = 'ancho-doble';
+      boton.classList.add('excluido');
+      boton.disabled = true;
+      marca.textContent = '–';
+      const nota = document.createElement('span');
+      nota.className = 'nota-excluido';
+      nota.textContent = `Sin medición en ${nombreBanda()}, no se ubica`;
+      boton.append(nota);
+    } else {
+      if (estaUbicado(p)) boton.classList.add('ubicado');
+      if (p === estado.activo) boton.classList.add('activo');
+      if (esMision() && estaUbicado(p)) { boton.classList.add('fija'); boton.title = `${p.id} ya está en su lugar`; }
+      marca.textContent = estaUbicado(p) ? '✓' : '○';
+      const valor = document.createElement('span');
+      valor.className = 'valor';
+      valor.textContent = textoDbm(p.valor) + ' dBm';
+      boton.append(valor);
+      if (p.tipo === 'asignado') boton.title = `${nombreRed()} no apareció aquí: se toma como sin cobertura`;
+      boton.addEventListener('click', () => seleccionarPunto(p));
+    }
+    li.append(boton);
+    lista.append(li);
+  }
+}
+
+function actualizarInterfaz() {
+  const hayPlano = Boolean(estado.plano);
+  const hayPuntos = estado.puntos.length > 0;
+  const listos = hayPlano && hayPuntos;
+  const usados = puntosUsados();
+  const faltantes = usados.filter(p => !estaUbicado(p));
+  const completo = listos && faltantes.length === 0;
+
+  $('paso1').classList.toggle('hecho', hayPlano);
+  $('paso2').classList.toggle('hecho', hayPuntos);
+  $('paso3').classList.toggle('bloqueado', !listos);
+  $('paso3').classList.toggle('hecho', completo);
+  $('paso4').classList.toggle('bloqueado', !completo);
+  $('paso4').classList.toggle('hecho', Boolean(estado.mapa));
+
+  $('ayudaUbicar').textContent = listos ? TEXTOS[estado.modo].ubicar : 'Primero sube el plano y el Excel.';
+  $('progreso').textContent = listos ? `Ubicados: ${usados.length - faltantes.length} de ${usados.length}` : '';
+  $('barraProgreso').hidden = !listos;
+  $('barraProgreso').firstChild.style.width = listos ? ((usados.length - faltantes.length) / usados.length * 100) + '%' : '0';
+
+  if (listos) pintarLista(); else $('lista').replaceChildren();
+
+  $('botonGenerar').disabled = !completo;
+  $('faltan').textContent = !listos ? 'Se activa cuando ubiques todos los puntos.'
+    : faltantes.length ? 'Te faltan: ' + faltantes.map(p => p.id).join(', ')
+    : '';
+  $('botonDescargar').disabled = !estado.mapa;
+
+  const instruccion = $('instruccion');
+  instruccion.textContent = textoInstruccion();
+  instruccion.classList.toggle('exito', Boolean(estado.mapa) && !estado.activo);
+  instruccion.classList.toggle('alerta', estado.alerta);
+  const guia = esMision() && estado.activo && !estaUbicado(estado.activo) ? GUIA[estado.activo.id] : null;
+  if (guia && !estado.alerta) {
+    const pista = document.createElement('span');
+    pista.className = 'pista-lugar';
+    pista.textContent = '📍 ' + guia.donde;
+    if (guia.estimada) {
+      const etiqueta = document.createElement('span');
+      etiqueta.className = 'estimada';
+      etiqueta.textContent = 'ubicación estimada';
+      pista.append(etiqueta);
+    }
+    instruccion.append(document.createElement('br'), pista);
+  }
+  if (estado.aviso) {
+    const aviso = document.createElement('span');
+    aviso.className = 'aviso';
+    aviso.textContent = estado.aviso;
+    instruccion.append(aviso);
+  }
+
+  lienzoPlano.style.display = hayPlano ? 'block' : 'none';
+  $('vacio').style.display = hayPlano ? 'none' : 'block';
+  lienzoPlano.style.cursor = (estado.calibrando || estado.ubicandoRouter) ? 'crosshair' : !listos ? 'not-allowed' : estado.activo ? 'crosshair' : 'default';
+  if (!esMision()) actualizarLaboratorio(listos);
+  pintarLeyenda();
+  redibujar();
+  if (!hayPlano) $('objetivo').hidden = true;
+}
+
+function pintarLeyenda() {
+  const leyenda = $('leyenda');
+  leyenda.replaceChildren();
+  const vista = ESCALAS[estado.vista];
+  const titulo = document.createElement('strong');
+  titulo.textContent = vista.titulo;
+  leyenda.append(titulo);
+  for (const banda of vista.items) {
+    const item = document.createElement('span');
+    item.className = 'item-leyenda';
+    const color = document.createElement('span');
+    color.className = 'color';
+    color.style.background = banda.color;
+    const nombre = document.createElement('span');
+    nombre.textContent = banda.nombre;
+    const rango = document.createElement('small');
+    rango.textContent = banda.rango;
+    item.append(color, nombre, rango);
+    leyenda.append(item);
+  }
+  const explicacion = document.createElement('span');
+  explicacion.className = 'explicacion';
+  explicacion.textContent = vista.explicar();
+  leyenda.append(explicacion);
+}
+
+/* ------------------------------------------------------------------
+   UBICAR Y MOVER PUNTOS
+   ------------------------------------------------------------------ */
+function invalidarMapa() {
+  if (estado.mapa) {
+    estado.mapa = null;
+    estado.mapaVencido = true;
+  }
+}
+
+function seleccionarPunto(punto) {
+  if (esMision() && estaUbicado(punto)) return; // en la misión los puntos ubicados quedan fijos
+  estado.aviso = '';
+  estado.alerta = false;
+  estado.activo = estado.activo === punto && estaUbicado(punto) ? siguientePendiente() : punto;
+  actualizarInterfaz();
+}
+
+function colocarPunto(punto, x, y) {
+  punto.x = x;
+  punto.y = y;
+  estado.posiciones[punto.id] = { x, y };
+  invalidarMapa();
+  estado.activo = siguientePendiente();
+  estado.aviso = '';
+  estado.alerta = false;
+  // En el Laboratorio, si ya se había generado y este era el último punto, se recalcula solo.
+  if (!esMision() && estado.yaGenerado && !estado.activo) generarMapa();
+  actualizarInterfaz();
+  // Mantiene a la vista lo que la persona debe hacer después.
+  const destino = document.querySelector('.fila.activo') || $('paso4');
+  destino.scrollIntoView({ block: 'nearest' });
+}
+
+function posicionEvento(evento) {
+  const caja = lienzoPlano.getBoundingClientRect();
+  const limitar = n => Math.min(1, Math.max(0, n));
+  return {
+    x: limitar((evento.clientX - caja.left) / caja.width),
+    y: limitar((evento.clientY - caja.top) / caja.height),
+    cssX: evento.clientX - caja.left,
+    cssY: evento.clientY - caja.top,
+    ancho: caja.width,
+    alto: caja.height
+  };
+}
+
+function marcadorEn(pos) {
+  let mejor = null;
+  let mejorDistancia = CONFIG.RADIO_TOQUE_PX;
+  for (const p of puntosUsados()) {
+    if (!estaUbicado(p)) continue;
+    const distancia = Math.hypot(p.x * pos.ancho - pos.cssX, p.y * pos.alto - pos.cssY);
+    if (distancia <= mejorDistancia) { mejor = p; mejorDistancia = distancia; }
+  }
+  return mejor;
+}
+
+// Efectos sobre el plano: ✕ roja al fallar y onda verde al acertar.
+function efectoEnPlano(clase, pos, texto) {
+  const e = document.createElement('span');
+  e.className = clase;
+  if (texto) e.textContent = texto;
+  e.style.left = (lienzoPlano.offsetLeft + pos.cssX) + 'px';
+  e.style.top = (lienzoPlano.offsetTop + pos.cssY) + 'px';
+  $('lienzo').append(e);
+  setTimeout(() => e.remove(), 1300);
+}
+
+function clicMision(pos) {
+  const punto = estado.activo;
+  if (!punto) return;
+  const guia = GUIA[punto.id];
+  const distancia = Math.hypot(guia.x * pos.ancho - pos.cssX, guia.y * pos.alto - pos.cssY);
+  if (distancia <= radioObjetivo(pos.ancho) * 1.15) {
+    efectoEnPlano('acierto', { cssX: guia.x * pos.ancho, cssY: guia.y * pos.alto });
+    colocarPunto(punto, guia.x, guia.y);
+  } else {
+    efectoEnPlano('marca-fallo', pos, '✕');
+    estado.alerta = true;
+    estado.aviso = `Ahí no va ${punto.id}. Haz clic dentro del círculo amarillo que se mueve.`;
+    actualizarInterfaz();
+    const instruccion = $('instruccion');
+    instruccion.classList.remove('sacudir'); void instruccion.offsetWidth; instruccion.classList.add('sacudir');
+    clearTimeout(clicMision.temporizador);
+    clicMision.temporizador = setTimeout(() => { estado.alerta = false; estado.aviso = ''; actualizarInterfaz(); }, 2200);
+  }
+}
+
+lienzoPlano.addEventListener('pointerdown', evento => {
+  if (!estado.plano) return;
+  const pos = posicionEvento(evento);
+  if (estado.calibrando) { clicCalibrar(pos); return; } // se puede calibrar antes de subir el Excel
+  if (!esMision()) {
+    if (estado.ubicandoRouter) { agregarRouterEn(pos); return; }
+    const router = routerEn(pos);
+    if (router) {
+      estado.arrastre = { router, movido: false, inicioX: pos.cssX, inicioY: pos.cssY };
+      lienzoPlano.setPointerCapture(evento.pointerId);
+      return;
+    }
+  }
+  if (!estado.puntos.length) return;
+  if (esMision()) { clicMision(pos); return; }
+  const marcador = marcadorEn(pos);
+
+  if (marcador && marcador !== estado.activo) {
+    estado.arrastre = { punto: marcador, movido: false, inicioX: pos.cssX, inicioY: pos.cssY };
+    lienzoPlano.setPointerCapture(evento.pointerId);
+  } else if (estado.activo) {
+    colocarPunto(estado.activo, pos.x, pos.y);
+  }
+});
+
+lienzoPlano.addEventListener('pointermove', evento => {
+  if (esMision()) return;
+  const pos = posicionEvento(evento);
+  const arrastre = estado.arrastre;
+  if (arrastre && arrastre.router) {
+    if (Math.hypot(pos.cssX - arrastre.inicioX, pos.cssY - arrastre.inicioY) > 3) arrastre.movido = true;
+    if (arrastre.movido) {
+      arrastre.router.x = pos.x;
+      arrastre.router.y = pos.y;
+      $('tooltip').hidden = true;
+      redibujar();
+    }
+  } else if (arrastre) {
+    if (Math.hypot(pos.cssX - arrastre.inicioX, pos.cssY - arrastre.inicioY) > 3) arrastre.movido = true;
+    if (arrastre.movido) {
+      arrastre.punto.x = pos.x;
+      arrastre.punto.y = pos.y;
+      estado.posiciones[arrastre.punto.id] = { x: pos.x, y: pos.y };
+      invalidarMapa();
+      $('tooltip').hidden = true;
+      redibujar();
+    }
+  } else if (estado.plano) {
+    const router = routerEn(pos);
+    const encima = !router && estado.puntos.length ? marcadorEn(pos) : null;
+    lienzoPlano.style.cursor = (router || encima) ? 'pointer' : (estado.activo || estado.calibrando || estado.ubicandoRouter) ? 'crosshair' : 'default';
+    if (router) mostrarTipRouter(pos, router);
+    else if (estado.puntos.length) mostrarValorEn(pos, encima);
+    else $('tooltip').hidden = true;
+  }
+});
+lienzoPlano.addEventListener('pointerleave', () => { $('tooltip').hidden = true; });
+
+function terminarArrastre() {
+  const arrastre = estado.arrastre;
+  if (!arrastre) return;
+  estado.arrastre = null;
+  if (arrastre.router) {
+    estado.aviso = arrastre.movido ? `Moviste el router ${arrastre.router.id}.` : '';
+    actualizarInterfaz();
+    return;
+  }
+  if (arrastre.movido) {
+    estado.aviso = `Moviste ${arrastre.punto.id}.`;
+  } else if (estado.activo) {
+    estado.aviso = `Ese lugar ya tiene ${arrastre.punto.id}. Haz clic un poco al lado.`;
+  } else {
+    mostrarDetalle(arrastre.punto);
+    estado.aviso = '';
+  }
+  actualizarInterfaz();
+}
+lienzoPlano.addEventListener('pointerup', terminarArrastre);
+lienzoPlano.addEventListener('pointercancel', terminarArrastre);
+
+/* ------------------------------------------------------------------
+   CARGA DE ARCHIVOS
+   ------------------------------------------------------------------ */
+const hayPuntosUbicados = () => estado.puntos.some(estaUbicado);
+
+// "Huella" de una imagen: una miniatura en grises de 24 × 32 cuadros.
+// Sirve para reconocer el plano de la misión aunque se haya copiado o renombrado.
+function huella(imagen) {
+  const c = document.createElement('canvas');
+  c.width = 24;
+  c.height = 32;
+  const ctx = c.getContext('2d', { willReadFrequently: true });
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(imagen, 0, 0, c.width, c.height);
+  const datos = ctx.getImageData(0, 0, c.width, c.height).data;
+  const grises = [];
+  for (let i = 0; i < datos.length; i += 4) grises.push(Math.round((datos[i] + datos[i + 1] + datos[i + 2]) / 3));
+  return grises;
+}
+const diferenciaHuella = (a, b) => a.reduce((suma, v, i) => suma + Math.abs(v - b[i]), 0) / a.length;
+
+function errorPlanoMision(imagen) {
+  const proporcion = imagen.naturalWidth / imagen.naturalHeight;
+  if (Math.abs(proporcion - PLANO_MISION.proporcion) > 0.01) {
+    return 'Para la misión usa Plano.jfif.jpeg, el plano limpio del local. En el Laboratorio puedes usar cualquier plano.';
+  }
+  if (diferenciaHuella(huella(imagen), PLANO_MISION.huella) > PLANO_MISION.maxDiferencia) {
+    return 'Ese no es el plano de la misión (puede ser el que ya tiene puntos marcados). Usa Plano.jfif.jpeg, el plano limpio.';
+  }
+  return '';
+}
+
+$('inputPlano').addEventListener('change', evento => {
+  const archivo = evento.target.files[0];
+  evento.target.value = '';
+  if (!archivo) return;
+  $('errorPlano').textContent = '';
+
+  if (!['image/jpeg', 'image/png'].includes(archivo.type)) {
+    $('errorPlano').textContent = 'Ese archivo no es una imagen JPG o PNG. Elige la imagen del plano.';
+    return;
+  }
+  if (hayPuntosUbicados() && !confirm('Si cambias el plano se borrarán los puntos que ya ubicaste. ¿Continuar?')) return;
+
+  const imagen = new Image();
+  imagen.onload = () => {
+    const problema = errorPlanoMision(imagen);
+    if (esMision() && problema) { $('errorPlano').textContent = problema; return; }
+    estado.planoReconocido = !problema;
+    estado.plano = imagen;
+    estado.mapa = null;
+    estado.mapaVencido = false;
+    estado.yaGenerado = false;
+    estado.pxPorMetro = null;
+    estado.posiciones = {};
+    estado.routers = [];
+    estado.ubicandoRouter = false;
+    estado.aviso = '';
+    estado.alerta = false;
+    cerrarDetalle();
+    for (const p of estado.puntos) { p.x = null; p.y = null; }
+    estado.activo = siguientePendiente();
+    $('nombrePlano').textContent = '✓ ' + archivo.name;
+    actualizarInterfaz();
+  };
+  imagen.onerror = () => {
+    $('errorPlano').textContent = 'No se pudo abrir esa imagen. Prueba con otro archivo JPG o PNG.';
+  };
+  imagen.src = URL.createObjectURL(archivo);
+});
+
+$('inputExcel').addEventListener('change', async evento => {
+  const archivo = evento.target.files[0];
+  evento.target.value = '';
+  if (!archivo) return;
+  $('errorExcel').textContent = '';
+
+  const fallar = mensaje => { $('errorExcel').textContent = mensaje; };
+  if (typeof XLSX === 'undefined') {
+    return fallar('Esta copia del programa está incompleta. Abre el archivo Maplify.html y vuelve a intentarlo.');
+  }
+  let datos;
+  try {
+    datos = await archivo.arrayBuffer();
+  } catch (error) {
+    console.error(error);
+    return fallar('No se pudo abrir el archivo. Si lo tienes abierto en Excel, ciérralo y vuelve a subirlo.');
+  }
+  try {
+    const libro = XLSX.read(datos, { type: 'array' });
+    const tabla = buscarTabla(libro);
+    if (!tabla) return fallar('Este Excel no tiene las columnas de mediciones (Punto, Banda, SSID y Nivel Señal). Revisa que sea el archivo correcto.');
+
+    const lecturas = extraerLecturas(tabla);
+    const eleccion = elegirRedYBanda(lecturas);
+    if (!eleccion) {
+      return fallar(esMision() ? `Este Excel no tiene mediciones de ${CONFIG.RED} en ${CONFIG.BANDA}.` : 'Este Excel no tiene mediciones de señal que se puedan usar.');
+    }
+    const puntos = calcularPuntos(lecturas, eleccion.red, eleccion.banda);
+    if (esMision() && puntos.some(p => p.tipo !== 'excluido' && !GUIA[p.id])) {
+      return fallar('Para la misión usa Relevamiento_WiFi_Limpio.xlsx. En el Laboratorio puedes usar otro Excel.');
+    }
+
+    estado.lecturas = lecturas;
+    estado.red = eleccion.red;
+    estado.banda = eleccion.banda;
+    estado.bandas = bandasDe(lecturas);
+    estado.redes = redesDe(lecturas);
+    // Si se vuelve a subir un Excel, se conservan los puntos ya ubicados.
+    recalcularPuntos();
+    estado.yaGenerado = false;
+    cerrarDetalle();
+    invalidarMapa();
+    estado.aviso = '';
+    estado.alerta = false;
+    estado.activo = siguientePendiente();
+    $('nombreExcel').textContent = `✓ ${archivo.name} (${estado.puntos.length} puntos)`;
+    actualizarInterfaz();
+  } catch (error) {
+    console.error(error);
+    fallar('No se pudo leer ese archivo. Revisa que sea un Excel .xlsx y que no esté dañado.');
+  }
+});
+
+/* ------------------------------------------------------------------
+   GENERAR Y DESCARGAR
+   ------------------------------------------------------------------ */
+function generarMapa() {
+  const r = calcularMapa();
+  estado.mapa = r.lienzo;
+  estado.resumen = r.resumen;
+  estado.mapaVencido = false;
+}
+
+$('botonGenerar').addEventListener('click', () => {
+  estado.activo = null;
+  estado.aviso = '';
+  estado.alerta = false;
+  generarMapa();
+  if (!esMision()) estado.yaGenerado = true;
+  actualizarInterfaz();
+  if (esMision()) setTimeout(celebrarMision, 700);
+});
+
+const tituloMapa = () => ({
+  senal: `Mapa de señal: ${nombreRed()} ${nombreBanda()}`,
+  requisitos: `Qué se puede hacer: ${nombreRed()} ${nombreBanda()}`,
+  snr: `SNR estimada (ruido supuesto ${textoDbm(ruidoActual())} dBm): ${nombreRed()} ${nombreBanda()}`,
+  redes: `Cantidad de redes que se oyen en ${nombreBanda()}`
+})[estado.vista];
+
+function crearImagenFinal() {
+  const ancho = estado.plano.naturalWidth;
+  const alto = estado.plano.naturalHeight;
+  const franja = Math.round(ancho * 0.16);
+  const lienzo = document.createElement('canvas');
+  lienzo.width = ancho;
+  lienzo.height = alto + franja;
+  const ctx = lienzo.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, lienzo.width, lienzo.height);
+
+  const activoPrevio = estado.activo;
+  estado.activo = null;
+  dibujarEscena(ctx, ancho, alto, ancho * 0.021);
+  estado.activo = activoPrevio;
+
+  const margen = ancho * 0.03;
+  const tamano = ancho * 0.016;
+  const fuente = peso => `${peso} ${tamano}px "Segoe UI", Arial, sans-serif`;
+  ctx.fillStyle = '#1c2733';
+  ctx.textBaseline = 'middle';
+  ctx.font = fuente(700);
+  ctx.fillText(tituloMapa(), margen, alto + franja * 0.16);
+
+  const escala = escalaActual();
+  const unidad = ESCALAS[estado.vista].unidad;
+  const anchoItem = (ancho - margen * 2) / escala.length;
+  escala.forEach((banda, i) => {
+    const x = margen + i * anchoItem;
+    const y = alto + franja * 0.32;
+    ctx.fillStyle = banda.color;
+    ctx.fillRect(x, y, tamano * 1.3, tamano * 1.3);
+    ctx.strokeStyle = 'rgba(0,0,0,.3)';
+    ctx.strokeRect(x, y, tamano * 1.3, tamano * 1.3);
+    ctx.fillStyle = '#1c2733';
+    ctx.font = fuente(600);
+    ctx.fillText(banda.nombre, x + tamano * 1.8, y + tamano * 0.1);
+    ctx.font = fuente(400);
+    ctx.fillText(banda.rango + (unidad === 'dBm' ? ' dBm' : ''), x + tamano * 1.8, y + tamano * 1.35);
+  });
+  if (estado.resumen) {
+    ctx.font = fuente(400);
+    ctx.fillStyle = '#566473';
+    const partes = estado.resumen.map(b => `${b.nombre} ${Math.round(b.porcentaje)} %`).join('  ·  ');
+    ctx.fillText('Área con color: ' + partes, margen, alto + franja * 0.74);
+  }
+  ctx.font = fuente(400);
+  ctx.fillStyle = '#566473';
+  if (estado.routers.length) ctx.fillText('R1, R2… = ubicación de los routers (referencia, no cambian el mapa)', margen, alto + franja * 0.9);
+  ctx.textAlign = 'right';
+  ctx.font = fuente(700);
+  ctx.fillStyle = '#5b3cc4';
+  ctx.fillText('Generado con Maplify', ancho - margen, alto + franja * 0.9);
+  ctx.textAlign = 'left';
+  return lienzo;
+}
+
+$('botonDescargar').addEventListener('click', () => {
+  crearImagenFinal().toBlob(blob => {
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(blob);
+    const sufijo = `${nombreRed()}-${nombreBanda()}`.replace(/[^\wÁÉÍÓÚáéíóúñÑ.-]+/g, '');
+    enlace.download = estado.vista === 'senal' ? `maplify-senal-${sufijo}.png` : `maplify-${estado.vista}-${sufijo}.png`;
+    document.body.append(enlace);
+    enlace.click();
+    enlace.remove();
+    setTimeout(() => URL.revokeObjectURL(enlace.href), 10000);
+  }, 'image/png');
+});
+
+/* ------------------------------------------------------------------
+   LABORATORIO: RED, BANDA Y UBICACIONES
+   ------------------------------------------------------------------ */
+const numeroBanda = clave => parseFloat(clave) || 0;
+
+function bandasDe(lecturas) {
+  const mapa = new Map();
+  for (const l of lecturas) if (l.banda && !mapa.has(l.banda)) mapa.set(l.banda, l.bandaTexto || l.banda);
+  return [...mapa].map(([clave, nombre]) => ({ clave, nombre })).sort((a, b) => numeroBanda(a.clave) - numeroBanda(b.clave));
+}
+
+function redesDe(lecturas) {
+  const cuenta = new Map();
+  for (const l of lecturas) {
+    const actual = cuenta.get(l.red) || { nombre: l.redTexto, veces: 0 };
+    actual.veces++;
+    cuenta.set(l.red, actual);
+  }
+  return [...cuenta.values()].sort((a, b) => b.veces - a.veces).map(r => r.nombre);
+}
+
+const tieneMedidas = (lecturas, red, banda) => calcularPuntos(lecturas, red, banda).some(p => p.tipo === 'medido');
+
+// Decide qué red y banda mostrar al cargar el Excel.
+function elegirRedYBanda(lecturas) {
+  const mision = { red: normalizar(CONFIG.RED), banda: normalizar(CONFIG.BANDA).replace(/\s/g, '') };
+  if (esMision()) return tieneMedidas(lecturas, mision.red, mision.banda) ? mision : null;
+  const redes = redesDe(lecturas).map(normalizar);
+  const candidatasRed = [estado.red, mision.red, ...redes].filter((r, i, a) => r && a.indexOf(r) === i && redes.includes(r));
+  const bandas = bandasDe(lecturas).map(b => b.clave);
+  const candidatasBanda = [estado.banda, mision.banda, ...bandas].filter((b, i, a) => b && a.indexOf(b) === i && bandas.includes(b));
+  for (const red of candidatasRed) {
+    for (const banda of candidatasBanda) if (tieneMedidas(lecturas, red, banda)) return { red, banda };
+  }
+  return null;
+}
+
+// Recalcula los valores para la red y banda elegidas, conservando dónde está cada punto.
+function recalcularPuntos() {
+  const puntos = calcularPuntos(estado.lecturas, estado.red, estado.banda);
+  for (const p of puntos) {
+    const pos = estado.posiciones[p.id];
+    if (pos && p.tipo !== 'excluido') { p.x = pos.x; p.y = pos.y; }
+  }
+  estado.puntos = puntos;
+}
+
+function cambiarRedOBanda() {
+  cerrarDetalle();
+  recalcularPuntos();
+  estado.activo = siguientePendiente();
+  estado.aviso = '';
+  if (estado.yaGenerado && !estado.activo) generarMapa();
+  else {
+    estado.mapa = null;
+    if (estado.yaGenerado) estado.aviso = `Para el mapa de ${nombreBanda()} falta ubicar: ${puntosUsados().filter(p => !estaUbicado(p)).map(p => p.id).join(', ')}.`;
+  }
+  actualizarInterfaz();
+}
+
+function actualizarLaboratorio(listos) {
+  pintarEscalaPlano();
+  pintarRouters();
+  const hayExcel = estado.lecturas.length > 0;
+  $('selectores').hidden = !hayExcel;
+  if (hayExcel) pintarSelectores();
+  $('autoUbicar').hidden = !(listos && estado.planoReconocido && puntosUsados().some(p => !estaUbicado(p)));
+  const conMapa = Boolean(estado.mapa);
+  $('paso5').classList.toggle('bloqueado', !conMapa);
+  $('analisis').hidden = !conMapa;
+  $('ayudaAnalizar').hidden = conMapa;
+  $('botonComparar').hidden = estado.bandas.length < 2;
+  $('botonCanales').hidden = !estado.lecturas.some(l => l.canal);
+  $('selectorVista').value = estado.vista;
+  if (conMapa) pintarResumen();
+}
+
+function pintarSelectores() {
+  const select = $('selectorRed');
+  if (select.options.length !== estado.redes.length) {
+    select.replaceChildren(...estado.redes.map(nombre => new Option(nombre, normalizar(nombre))));
+  }
+  select.value = estado.red;
+  const grupo = $('selectorBanda');
+  if (grupo.children.length !== estado.bandas.length) {
+    grupo.replaceChildren(...estado.bandas.map(b => {
+      const boton = document.createElement('button');
+      boton.type = 'button';
+      boton.dataset.banda = b.clave;
+      boton.textContent = b.nombre;
+      boton.addEventListener('click', () => { if (estado.banda !== b.clave) { estado.banda = b.clave; cambiarRedOBanda(); } });
+      return boton;
+    }));
+  }
+  for (const b of grupo.children) b.setAttribute('aria-pressed', String(b.dataset.banda === estado.banda));
+  const excluidos = estado.puntos.filter(p => p.tipo === 'excluido').map(p => p.id);
+  const asignados = estado.puntos.filter(p => p.tipo === 'asignado').map(p => p.id);
+  const notas = [];
+  if (excluidos.length) notas.push(`Sin medición en ${nombreBanda()}: ${excluidos.join(', ')} (no entran al mapa).`);
+  if (asignados.length) notas.push(`${nombreRed()} no apareció en ${asignados.join(', ')}: se toma ${textoDbm(estado.ajustes.sinCobertura)} dBm.`);
+  $('notaBanda').textContent = notas.join(' ');
+}
+
+$('selectorRed').addEventListener('change', e => {
+  const anterior = estado.red;
+  estado.red = e.target.value;
+  if (!tieneMedidas(estado.lecturas, estado.red, estado.banda)) {
+    const otra = estado.bandas.find(b => tieneMedidas(estado.lecturas, estado.red, b.clave));
+    if (!otra) { estado.red = anterior; e.target.value = anterior; return; }
+    estado.banda = otra.clave;
+  }
+  cambiarRedOBanda();
+});
+
+$('autoUbicar').addEventListener('click', () => {
+  for (const [id, g] of Object.entries(GUIA)) estado.posiciones[id] = { x: g.x, y: g.y };
+  recalcularPuntos();
+  estado.activo = siguientePendiente();
+  if (estado.yaGenerado && !estado.activo) generarMapa();
+  const estimadas = Object.entries(GUIA).filter(([, g]) => g.estimada).map(([id]) => id).join(', ');
+  estado.aviso = `Se ubicaron en las posiciones de referencia. ${estimadas} son ubicaciones estimadas.`;
+  actualizarInterfaz();
+});
+
+$('selectorVista').addEventListener('change', e => {
+  estado.vista = e.target.value;
+  cerrarDetalle();
+  if (estado.mapa) generarMapa();
+  actualizarInterfaz();
+});
+
+/* ------------------------------------------------------------------
+   LABORATORIO: RESUMEN, VALOR AL PASAR EL MOUSE Y DETALLE
+   ------------------------------------------------------------------ */
+const DESTACADO = {
+  senal: { cuantos: 2, texto: 'tiene señal buena o excelente' },
+  requisitos: { cuantos: 1, texto: 'sirve para llamadas y video' },
+  snr: { cuantos: 2, texto: 'tiene SNR buena o excelente' },
+  redes: { cuantos: 2, texto: 'tiene congestión media o alta' }
+};
+const porcentajeDestacado = (resumen, vista = estado.vista) =>
+  resumen.slice(0, DESTACADO[vista].cuantos).reduce((s, b) => s + b.porcentaje, 0);
+
+function pintarResumen() {
+  const cont = $('resumen');
+  cont.replaceChildren();
+  if (!estado.resumen) return;
+  const destacado = document.createElement('p');
+  destacado.className = 'destacado';
+  destacado.textContent = `El ${Math.round(porcentajeDestacado(estado.resumen))} % del área con datos ${DESTACADO[estado.vista].texto}.`;
+  const barra = document.createElement('div');
+  barra.className = 'barra-apilada';
+  barra.setAttribute('aria-hidden', 'true');
+  const lista = document.createElement('ul');
+  for (const b of estado.resumen) {
+    if (b.porcentaje > 0) {
+      const s = document.createElement('span');
+      s.style.width = b.porcentaje + '%';
+      s.style.background = b.color;
+      barra.append(s);
+    }
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="color"></span><span></span><b></b>';
+    li.children[0].style.background = b.color;
+    li.children[1].textContent = b.nombre;
+    li.children[2].textContent = Math.round(b.porcentaje) + ' %';
+    lista.append(li);
+  }
+  cont.append(destacado, barra, lista);
+}
+
+function mostrarValorEn(pos, encima) {
+  const tip = $('tooltip');
+  if (esMision() || !estado.mapa || estado.calibrando) { tip.hidden = true; return; }
+  const ancho = estado.plano.naturalWidth, alto = estado.plano.naturalHeight;
+  const muestras = muestrasActuales();
+  const x = pos.x * ancho, y = pos.y * alto;
+  const r = idw(x, y, muestras, CONFIG.POTENCIA_IDW);
+  let cercano = null, mejor = Infinity;
+  for (const m of muestras) { const d = Math.hypot(m.x - x, m.y - y); if (d < mejor) { mejor = d; cercano = m; } }
+  const metros = mejor / pixelesPorMetro();
+  tip.replaceChildren();
+  if (encima) {
+    tip.innerHTML = `<strong></strong><br>Toca para ver qué redes se midieron aquí`;
+    tip.firstChild.textContent = encima.id;
+  } else if (metros > estado.ajustes.radio) {
+    tip.textContent = `Sin datos: a ${metros.toFixed(1)} m de la medición más cercana (${cercano.id})`;
+  } else {
+    const banda = clasificar(r.valor);
+    tip.innerHTML = '<span class="muestra-color"></span><strong></strong> · <span></span><br><small></small>';
+    tip.children[0].style.background = banda.color;
+    tip.children[1].textContent = (estado.vista === 'redes' ? '≈ ' : '') + textoValorVista(r.valor) + (estado.vista === 'senal' || estado.vista === 'requisitos' ? ' dBm' : estado.vista === 'redes' ? ' redes' : '');
+    tip.children[2].textContent = banda.nombre;
+    tip.children[4].textContent = `Estimado · a ${metros.toFixed(1)} m de ${cercano.id}`;
+  }
+  tip.hidden = false;
+  tip.style.left = (lienzoPlano.offsetLeft + pos.cssX) + 'px';
+  tip.style.top = (lienzoPlano.offsetTop + pos.cssY) + 'px';
+  // Si se sale por la derecha, se muestra a la izquierda del cursor.
+  const salir = lienzoPlano.offsetLeft + pos.cssX + tip.offsetWidth + 24 > $('lienzo').clientWidth;
+  tip.style.transform = salir ? 'translate(calc(-100% - 14px), -50%)' : 'translate(14px, -50%)';
+}
+
+function mostrarDetalle(punto) {
+  const caja = $('detalle');
+  const delPunto = estado.lecturas.filter(l => l.numero === punto.numero);
+  const hayCanal = delPunto.some(l => l.canal);
+  const haySeguridad = delPunto.some(l => l.seguridad);
+  caja.replaceChildren();
+  const cerrar = document.createElement('button');
+  cerrar.type = 'button';
+  cerrar.className = 'cerrar';
+  cerrar.setAttribute('aria-label', 'Cerrar el detalle');
+  cerrar.textContent = '✕';
+  cerrar.addEventListener('click', cerrarDetalle);
+  const titulo = document.createElement('h3');
+  titulo.textContent = punto.id + (GUIA[punto.id]?.estimada && estado.planoReconocido ? ' · ubicación estimada' : '');
+  const sub = document.createElement('p');
+  sub.className = 'sub';
+  sub.textContent = punto.tipo === 'asignado'
+    ? `${nombreRed()} no apareció aquí en ${nombreBanda()}: se toma ${textoDbm(punto.valor)} dBm.`
+    : `${nombreRed()} en ${nombreBanda()}: ${textoDbm(punto.valor)} dBm (${clasificar(punto.valor, ESCALA).nombre}).`;
+  caja.append(cerrar, titulo, sub);
+
+  for (const b of estado.bandas) {
+    const filas = new Map();
+    for (const l of delPunto.filter(l => l.banda === b.clave)) {
+      const clave = l.red + '|' + (l.canal ?? '');
+      const actual = filas.get(clave);
+      if (!actual || l.dbm > actual.dbm) filas.set(clave, l);
+    }
+    const h = document.createElement('h4');
+    h.textContent = filas.size ? `${b.nombre}: ${new Set([...filas.values()].map(l => l.red)).size} redes` : `${b.nombre}: no se midió aquí`;
+    caja.append(h);
+    if (!filas.size) continue;
+    const tabla = document.createElement('table');
+    tabla.innerHTML = `<thead><tr><th>Red</th>${hayCanal ? '<th>Canal</th>' : ''}<th class="cifra">Señal</th>${haySeguridad ? '<th>Seguridad</th>' : ''}</tr></thead><tbody></tbody>`;
+    for (const l of [...filas.values()].sort((a, c) => c.dbm - a.dbm)) {
+      const tr = document.createElement('tr');
+      if (l.red === normalizar(estado.red) && b.clave === estado.banda) tr.className = 'resaltada';
+      const celdas = [l.redTexto];
+      if (hayCanal) celdas.push(l.canal ?? '—');
+      celdas.push(textoDbm(l.dbm) + ' dBm');
+      if (haySeguridad) celdas.push(l.seguridad || '—');
+      celdas.forEach((t, i) => {
+        const td = document.createElement('td');
+        td.textContent = t;
+        if (i === (hayCanal ? 2 : 1)) td.className = 'cifra';
+        tr.append(td);
+      });
+      tabla.tBodies[0].append(tr);
+    }
+    caja.append(tabla);
+  }
+  const mover = document.createElement('button');
+  mover.type = 'button';
+  mover.className = 'boton secundario ancho';
+  mover.textContent = `Mover ${punto.id} a otro lugar`;
+  mover.addEventListener('click', () => { cerrarDetalle(); estado.activo = punto; actualizarInterfaz(); });
+  caja.append(mover);
+  caja.hidden = false;
+  $('tooltip').hidden = true;
+}
+function cerrarDetalle() { $('detalle').hidden = true; }
+
+/* ------------------------------------------------------------------
+   LABORATORIO: ROUTERS (solo referencia visual, no cambian el cálculo)
+   ------------------------------------------------------------------ */
+function routerEn(pos) {
+  let mejor = null;
+  let mejorDistancia = CONFIG.RADIO_TOQUE_PX + 6;
+  for (const r of estado.routers) {
+    const distancia = Math.hypot(r.x * pos.ancho - pos.cssX, r.y * pos.alto - pos.cssY);
+    if (distancia <= mejorDistancia) { mejor = r; mejorDistancia = distancia; }
+  }
+  return mejor;
+}
+
+function agregarRouterEn(pos) {
+  const numero = estado.routers.reduce((m, r) => Math.max(m, Number(r.id.slice(1))), 0) + 1;
+  const router = { id: 'R' + numero, x: pos.x, y: pos.y, nombre: '' };
+  estado.routers.push(router);
+  estado.ubicandoRouter = false;
+  estado.activo = siguientePendiente();
+  estado.aviso = `Agregaste el router ${router.id}. Si quedó mal, arrástralo. Puedes ponerle nombre en la lista.`;
+  actualizarInterfaz();
+}
+
+function mostrarTipRouter(pos, router) {
+  const tip = $('tooltip');
+  tip.innerHTML = '<strong></strong><br><span></span>';
+  tip.firstChild.textContent = '📡 ' + router.id + (router.nombre ? ' · ' + router.nombre : '');
+  tip.lastChild.textContent = 'Router (referencia). Arrástralo para moverlo.';
+  tip.hidden = false;
+  tip.style.left = (lienzoPlano.offsetLeft + pos.cssX) + 'px';
+  tip.style.top = (lienzoPlano.offsetTop + pos.cssY) + 'px';
+  const salir = lienzoPlano.offsetLeft + pos.cssX + tip.offsetWidth + 24 > $('lienzo').clientWidth;
+  tip.style.transform = salir ? 'translate(calc(-100% - 14px), -50%)' : 'translate(14px, -50%)';
+}
+
+function pintarRouters() {
+  const caja = $('cajaRouters');
+  caja.hidden = !estado.plano;
+  if (!estado.plano) return;
+  const boton = $('agregarRouter');
+  boton.textContent = estado.ubicandoRouter ? 'Cancelar' : '+ Agregar router';
+  const lista = $('listaRouters');
+  const enfocado = document.activeElement?.dataset?.router;
+  lista.replaceChildren(...estado.routers.map(r => {
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="icono-router" aria-hidden="true">📡</span><b></b><input type="text" maxlength="30" placeholder="Nombre (opcional)"><button type="button" title="Borrar este router">🗑</button>';
+    li.querySelector('b').textContent = r.id;
+    const input = li.querySelector('input');
+    input.value = r.nombre;
+    input.dataset.router = r.id;
+    input.setAttribute('aria-label', `Nombre del router ${r.id}`);
+    input.addEventListener('input', () => { r.nombre = input.value.trim(); redibujar(); });
+    const borrar = li.querySelector('button');
+    borrar.setAttribute('aria-label', `Borrar el router ${r.id}`);
+    borrar.addEventListener('click', () => {
+      estado.routers = estado.routers.filter(x => x !== r);
+      estado.aviso = `Borraste el router ${r.id}.`;
+      actualizarInterfaz();
+    });
+    return li;
+  }));
+  if (enfocado) lista.querySelector(`input[data-router="${enfocado}"]`)?.focus();
+  $('notaRouters').hidden = estado.routers.length > 0;
+}
+
+$('agregarRouter').addEventListener('click', () => {
+  estado.ubicandoRouter = !estado.ubicandoRouter;
+  cerrarDetalle();
+  if (estado.ubicandoRouter) estado.activo = null;
+  else estado.activo = siguientePendiente();
+  estado.aviso = estado.ubicandoRouter ? 'Oprime Esc o «Cancelar» si no quieres agregarlo.' : '';
+  actualizarInterfaz();
+});
+
+/* ------------------------------------------------------------------
+   LABORATORIO: COMPARAR BANDAS
+   ------------------------------------------------------------------ */
+function abrirCapa(id) { $(id).classList.add('abierta'); $(id).querySelector('.cerrar')?.focus(); }
+function cerrarCapas() { document.querySelectorAll('.capa.abierta:not(#capaMision)').forEach(c => c.classList.remove('abierta')); }
+document.querySelectorAll('[data-cerrar]').forEach(b => b.addEventListener('click', cerrarCapas));
+document.querySelectorAll('.capa').forEach(c => c.addEventListener('click', e => { if (e.target === c && c.id !== 'capaMision') cerrarCapas(); }));
+
+$('botonComparar').addEventListener('click', () => {
+  const cuerpo = $('cuerpoComparar');
+  cuerpo.replaceChildren();
+  const vista = estado.vista;
+  $('subComparar').textContent = `${nombreRed()} · ${ESCALAS[vista].titulo}. Mismos puntos y misma escala de colores en las dos bandas.`;
+  const datos = estado.bandas.map(b => {
+    const puntos = calcularPuntos(estado.lecturas, estado.red, b.clave);
+    for (const p of puntos) { const pos = estado.posiciones[p.id]; if (pos && p.tipo !== 'excluido') { p.x = pos.x; p.y = pos.y; } }
+    const usados = puntos.filter(p => p.tipo !== 'excluido');
+    return { banda: b, puntos: usados, faltan: usados.filter(p => !estaUbicado(p)).map(p => p.id), medidos: usados.filter(p => p.tipo === 'medido').length };
+  });
+  const faltan = [...new Set(datos.flatMap(d => d.faltan))];
+  if (faltan.length) {
+    const aviso = document.createElement('div');
+    aviso.className = 'conclusion';
+    aviso.innerHTML = '<p><strong>Para comparar falta ubicar algunos puntos.</strong></p><p></p>';
+    aviso.lastChild.textContent = `${faltan.join(', ')} solo tienen medición en una de las bandas. Ciérrame, ubícalos en el plano y vuelve a abrir la comparación.`;
+    cuerpo.append(aviso);
+    if (estado.planoReconocido) {
+      const auto = document.createElement('button');
+      auto.type = 'button';
+      auto.className = 'boton';
+      auto.style.marginTop = '10px';
+      auto.textContent = '📍 Ubicarlos automáticamente y comparar';
+      auto.addEventListener('click', () => {
+        for (const id of faltan) if (GUIA[id]) estado.posiciones[id] = { x: GUIA[id].x, y: GUIA[id].y };
+        recalcularPuntos();
+        estado.activo = siguientePendiente();
+        actualizarInterfaz();
+        $('botonComparar').click();
+      });
+      aviso.append(auto);
+    }
+    abrirCapa('capaComparar');
+    return;
+  }
+  const rejilla = document.createElement('div');
+  rejilla.className = 'comparacion';
+  const resultados = [];
+  for (const d of datos) {
+    const muestras = muestrasActuales(d.puntos, d.banda.clave, vista);
+    const r = calcularMapa(muestras, ESCALAS[vista].items);
+    resultados.push({ ...d, resumen: r.resumen });
+    // Se dibuja al tamaño en que se verá (por la densidad de la pantalla) para que el texto quede nítido.
+    const lienzo = document.createElement('canvas');
+    const anchoVisible = 500 * (window.devicePixelRatio || 1);
+    const escala = Math.min(1, anchoVisible / estado.plano.naturalWidth);
+    lienzo.width = Math.round(estado.plano.naturalWidth * escala);
+    lienzo.height = Math.round(estado.plano.naturalHeight * escala);
+    dibujarEscena(lienzo.getContext('2d'), lienzo.width, lienzo.height, lienzo.width * 0.026, { mapa: r.lienzo, puntos: d.puntos, banda: d.banda.clave, vista, activo: null });
+    const fig = document.createElement('figure');
+    const cap = document.createElement('figcaption');
+    cap.innerHTML = '<strong></strong><span></span>';
+    cap.firstChild.textContent = d.banda.nombre;
+    cap.lastChild.textContent = `${Math.round(porcentajeDestacado(r.resumen, vista))} % del área ${DESTACADO[vista].texto}. ${d.medidos} puntos medidos.`;
+    fig.append(lienzo, cap);
+    rejilla.append(fig);
+  }
+  cuerpo.append(rejilla, conclusionComparacion(resultados, vista));
+  abrirCapa('capaComparar');
+});
+
+function conclusionComparacion(resultados, vista) {
+  const caja = document.createElement('div');
+  caja.className = 'conclusion';
+  const textos = [];
+  const [a, b] = resultados;
+  if (a && b) {
+    const pa = porcentajeDestacado(a.resumen, vista), pb = porcentajeDestacado(b.resumen, vista);
+    const mejor = pa >= pb ? a : b, peor = pa >= pb ? b : a;
+    textos.push(`<strong>${mejor.banda.nombre}</strong> ${DESTACADO[vista].texto} en más área (${Math.round(Math.max(pa, pb))} % frente a ${Math.round(Math.min(pa, pb))} % en ${peor.banda.nombre}).`);
+    const soloEn = (x, y) => x.puntos.filter(p => !y.puntos.some(q => q.id === p.id)).map(p => p.id);
+    const soloA = soloEn(a, b), soloB = soloEn(b, a);
+    if (soloA.length) textos.push(`${soloA.join(', ')} solo se midió en ${a.banda.nombre}.`);
+    if (soloB.length) textos.push(`${soloB.join(', ')} solo se midió en ${b.banda.nombre}.`);
+  }
+  textos.push('Recuerda: 2.4 GHz llega más lejos y atraviesa mejor las paredes; 5 GHz es más rápida pero pierde más señal con la distancia y los muros.');
+  caja.innerHTML = textos.map(t => `<p>${t}</p>`).join('');
+  return caja;
+}
+
+/* ------------------------------------------------------------------
+   LABORATORIO: ANÁLISIS DE CANALES
+   ------------------------------------------------------------------ */
+const CANALES_LIBRES_24 = [1, 6, 11]; // los únicos que no se superponen en 2.4 GHz
+
+$('botonCanales').addEventListener('click', () => {
+  const cuerpo = $('cuerpoCanales');
+  cuerpo.replaceChildren();
+  const rejilla = document.createElement('div');
+  rejilla.className = 'grafica-canales';
+  const hallazgos = [];
+  for (const b of estado.bandas) {
+    const porCanal = new Map();
+    for (const l of estado.lecturas.filter(l => l.banda === b.clave && l.canal)) {
+      if (!porCanal.has(l.canal)) porCanal.set(l.canal, new Set());
+      porCanal.get(l.canal).add(l.red);
+    }
+    if (!porCanal.size) continue;
+    const canales = [...porCanal.keys()].sort((x, y) => x - y);
+    const maximo = Math.max(...[...porCanal.values()].map(s => s.size));
+    const seccion = document.createElement('section');
+    const h = document.createElement('h3');
+    h.textContent = b.nombre;
+    seccion.append(h);
+    const es24 = numeroBanda(b.clave) < 3;
+    for (const canal of canales) {
+      const redes = porCanal.get(canal);
+      const conRed = redes.has(normalizar(estado.red));
+      const fuera = es24 && !CANALES_LIBRES_24.includes(canal);
+      const fila = document.createElement('div');
+      fila.className = 'fila-canal' + (conRed ? ' sisclub' : '') + (fuera ? ' fuera' : '');
+      fila.innerHTML = '<span><span></span><small></small></span><div class="barra"></div><span class="cuantas"></span>';
+      fila.children[0].firstChild.textContent = 'Canal ' + canal;
+      fila.children[0].lastChild.textContent = conRed ? nombreRed() : fuera ? 'se superpone' : '';
+      fila.children[1].style.width = (redes.size / maximo * 100) + '%';
+      fila.children[1].title = [...redes].join(', ');
+      fila.children[2].textContent = redes.size;
+      seccion.append(fila);
+    }
+    rejilla.append(seccion);
+    const masLleno = canales.reduce((m, c) => porCanal.get(c).size > porCanal.get(m).size ? c : m, canales[0]);
+    const delRed = canales.filter(c => porCanal.get(c).has(normalizar(estado.red)));
+    hallazgos.push(`En <strong>${b.nombre}</strong> el canal más ocupado es el <strong>${masLleno}</strong>, con ${porCanal.get(masLleno).size} redes${delRed.includes(masLleno) ? `, y ${nombreRed()} está en él: lo comparte con ${porCanal.get(masLleno).size - 1} ${porCanal.get(masLleno).size - 1 === 1 ? 'red' : 'redes'} más` : ''}.`);
+    if (es24) {
+      const malos = canales.filter(c => !CANALES_LIBRES_24.includes(c));
+      const lista = malos.length > 1 ? `los canales ${malos.slice(0, -1).join(', ')} y ${malos[malos.length - 1]}` : `el canal ${malos[0]}`;
+      if (malos.length) hallazgos.push(`En 2.4 GHz hay redes en ${lista}. Solo 1, 6 y 11 no se pisan entre sí: ${malos.length > 1 ? 'esos canales se superponen' : 'ese canal se superpone'} con sus vecinos y causa${malos.length > 1 ? 'n' : ''} interferencia.`);
+    }
+  }
+  const leyenda = document.createElement('p');
+  leyenda.style.cssText = 'font-size:13px;color:var(--tinta-suave);margin:12px 0 0';
+  leyenda.innerHTML = `<span class="color" style="display:inline-block;vertical-align:-3px;background:var(--acento)"></span> canal de ${nombreRed()} &nbsp; <span class="color" style="display:inline-block;vertical-align:-3px;background:#fd8d3c"></span> canal que se superpone (2.4 GHz) &nbsp; <span class="color" style="display:inline-block;vertical-align:-3px;background:#85b7eb"></span> otras redes`;
+  const conclusion = document.createElement('div');
+  conclusion.className = 'conclusion';
+  conclusion.innerHTML = hallazgos.map(t => `<p>${t}</p>`).join('');
+  cuerpo.append(rejilla, leyenda, conclusion);
+  abrirCapa('capaCanales');
+});
+
+/* ------------------------------------------------------------------
+   LABORATORIO: AJUSTES Y ESCALA
+   ------------------------------------------------------------------ */
+function textoEscala() {
+  const ppm = pixelesPorMetro();
+  const anchoM = estado.plano.naturalWidth / ppm;
+  return estado.pxPorMetro
+    ? `Calibrada: el plano mide unos ${anchoM.toFixed(1)} m de ancho.`
+    : `Sin calibrar: se supone que el plano mide unos ${anchoM.toFixed(1)} m de ancho (correcto para el plano del local). Si usas otro plano, calíbralo.`;
+}
+
+// Estado de la escala bajo el paso 1 (solo en el Laboratorio).
+function pintarEscalaPlano() {
+  const caja = $('escalaPlano');
+  caja.hidden = !estado.plano;
+  if (!estado.plano) return;
+  const anchoM = (estado.plano.naturalWidth / pixelesPorMetro()).toFixed(1);
+  const sinCalibrar = !estado.pxPorMetro && !estado.planoReconocido;
+  caja.classList.toggle('alerta', sinCalibrar);
+  $('textoEscalaPlano').textContent = estado.pxPorMetro ? `📏 Escala calibrada: el plano mide unos ${anchoM} m de ancho.`
+    : estado.planoReconocido ? `📏 Escala: unos ${anchoM} m de ancho (plano del local).`
+    : '⚠ Escala sin calibrar: marca una distancia que conozcas para que el mapa mida bien.';
+  $('botonCalibrar').textContent = sinCalibrar ? '📏 Calibrar' : 'Cambiar';
+}
+
+function abrirAjustes() {
+  const a = estado.ajustes;
+  $('ajSinCobertura').value = a.sinCobertura;
+  $('ajRuido24').value = a.ruido['2.4ghz'];
+  $('ajRuido5').value = a.ruido['5ghz'];
+  $('ajRadio').value = a.radio;
+  $('ajOpacidad').value = Math.round(a.opacidad * 100);
+  abrirCapa('capaAjustes');
+}
+
+function aplicarAjustes(nuevos) {
+  estado.ajustes = nuevos;
+  recalcularPuntos();
+  if (estado.mapa || (estado.yaGenerado && !siguientePendiente())) generarMapa();
+  actualizarInterfaz();
+}
+
+const numeroEn = (id, minimo, maximo, porDefecto) => {
+  const v = Number($(id).value);
+  return Number.isFinite(v) ? Math.min(maximo, Math.max(minimo, v)) : porDefecto;
+};
+
+$('botonAjustes').addEventListener('click', abrirAjustes);
+$('guardarAjustes').addEventListener('click', () => {
+  const inicial = AJUSTES_INICIALES();
+  aplicarAjustes({
+    sinCobertura: numeroEn('ajSinCobertura', -110, -60, inicial.sinCobertura),
+    ruido: { '2.4ghz': numeroEn('ajRuido24', -110, -70, -90), '5ghz': numeroEn('ajRuido5', -110, -70, -95) },
+    radio: numeroEn('ajRadio', 1, 30, inicial.radio),
+    opacidad: numeroEn('ajOpacidad', 30, 100, 80) / 100
+  });
+  cerrarCapas();
+});
+$('restablecerAjustes').addEventListener('click', () => {
+  aplicarAjustes(AJUSTES_INICIALES());
+  abrirAjustes();
+});
+$('botonCalibrar').addEventListener('click', () => {
+  cerrarCapas();
+  cerrarDetalle();
+  estado.activo = null;
+  estado.calibrando = { primero: null };
+  estado.aviso = 'Oprime Esc para cancelar.';
+  actualizarInterfaz();
+});
+
+function clicCalibrar(pos) {
+  const ancho = estado.plano.naturalWidth, alto = estado.plano.naturalHeight;
+  const punto = { x: pos.x * ancho, y: pos.y * alto };
+  const marca = document.createElement('span');
+  marca.className = 'marca-calibracion';
+  marca.style.left = (lienzoPlano.offsetLeft + pos.cssX) + 'px';
+  marca.style.top = (lienzoPlano.offsetTop + pos.cssY) + 'px';
+  $('lienzo').append(marca);
+  if (!estado.calibrando.primero) {
+    estado.calibrando.primero = punto;
+    actualizarInterfaz();
+    return;
+  }
+  const distanciaPx = Math.hypot(punto.x - estado.calibrando.primero.x, punto.y - estado.calibrando.primero.y);
+  setTimeout(() => {
+    const respuesta = prompt('¿Cuántos metros hay entre los dos puntos que marcaste? (por ejemplo: 4.5)');
+    document.querySelectorAll('.marca-calibracion').forEach(m => m.remove());
+    estado.calibrando = null;
+    const metros = parseFloat(String(respuesta ?? '').replace(',', '.'));
+    if (distanciaPx > 5 && metros > 0) {
+      estado.pxPorMetro = distanciaPx / metros;
+      estado.aviso = `Escala calibrada. ${textoEscala()}`;
+      if (estado.mapa) generarMapa();
+    } else {
+      estado.aviso = 'No se cambió la escala.';
+    }
+    actualizarInterfaz();
+  }, 50);
+}
+
+/* ------------------------------------------------------------------
+   MODOS Y PANTALLA DE INICIO
+   ------------------------------------------------------------------ */
+function reiniciarTrabajo() {
+  Object.assign(estado, {
+    plano: null, puntos: [], activo: null, mapa: null, mapaVencido: false, arrastre: null, aviso: '', alerta: false,
+    lecturas: [], red: normalizar(CONFIG.RED), banda: normalizar(CONFIG.BANDA).replace(/\s/g, ''), bandas: [], redes: [],
+    posiciones: {}, vista: 'senal', resumen: null, yaGenerado: false, planoReconocido: false, pxPorMetro: null, calibrando: null,
+    routers: [], ubicandoRouter: false
+  });
+  for (const id of ['nombrePlano', 'errorPlano', 'nombreExcel', 'errorExcel']) $(id).textContent = '';
+  $('selectorRed').replaceChildren();
+  $('selectorBanda').replaceChildren();
+  $('tooltip').hidden = true;
+  cerrarDetalle();
+  cerrarCapas();
+}
+
+function abrirModo(modo) {
+  if (modo === 'laboratorio' && !misionCumplida()) return;
+  estado.modo = modo;
+  reiniciarTrabajo();
+  if (modo === 'mision') estado.ajustes = AJUSTES_INICIALES(); // la misión siempre usa los valores del proyecto
+  document.body.classList.toggle('modo-mision', modo === 'mision');
+  document.body.classList.toggle('modo-laboratorio', modo === 'laboratorio');
+  const t = TEXTOS[modo];
+  $('chipModo').textContent = t.chip;
+  $('introModo').textContent = t.intro;
+  $('ayudaPlano').textContent = t.plano;
+  $('ayudaExcel').textContent = t.excel;
+  $('inicio').hidden = true;
+  $('app').hidden = false;
+  actualizarInterfaz();
+  window.scrollTo(0, 0);
+}
+
+function pintarInicio() {
+  const cumplida = misionCumplida();
+  $('selloMision').hidden = !cumplida;
+  $('entrarMision').textContent = cumplida ? 'Repetir la misión →' : 'Empezar la misión →';
+  const lab = $('tarjetaLab');
+  lab.classList.toggle('cerrado', !cumplida);
+  $('candadoLab').hidden = cumplida;
+  $('etiquetaLab').textContent = cumplida ? 'Desbloqueado' : 'Paso 2 · Cuando termines la misión';
+  const entrar = $('entrarLab');
+  entrar.textContent = cumplida ? 'Entrar al laboratorio →' : '🔒 Termina la misión para abrirlo';
+  entrar.setAttribute('aria-disabled', String(!cumplida));
+}
+
+function irAlInicio() {
+  if (hayPuntosUbicados() && !estado.mapa && !confirm('Si vuelves al inicio se borrarán los puntos que ubicaste. ¿Continuar?')) return;
+  reiniciarTrabajo();
+  $('capaMision').classList.remove('abierta');
+  $('app').hidden = true;
+  $('inicio').hidden = false;
+  document.body.classList.add('modo-mision');
+  document.body.classList.remove('modo-laboratorio');
+  pintarInicio();
+  window.scrollTo(0, 0);
+}
+
+function celebrarMision() {
+  const yaEstaba = misionCumplida();
+  marcarMision();
+  $('avisoDesbloqueo').hidden = yaEstaba;
+  $('capaMision').classList.add('abierta');
+  $('verMapa').focus();
+  confeti(110);
+}
+
+function confeti(cantidad) {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colores = ['#1a9850', '#7fc95a', '#ffdf2e', '#fd8d3c', '#1f5fbf', '#f2b705', '#5b3cc4'];
+  for (let i = 0; i < cantidad; i++) {
+    const c = document.createElement('span');
+    c.className = 'confeti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colores[i % colores.length];
+    c.style.animationDuration = (1.6 + Math.random() * 1.6) + 's';
+    c.style.animationDelay = Math.random() * .4 + 's';
+    c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    document.body.append(c);
+    setTimeout(() => c.remove(), 3800);
+  }
+}
+
+$('entrarMision').addEventListener('click', () => abrirModo('mision'));
+$('entrarLab').addEventListener('click', () => {
+  if (misionCumplida()) { abrirModo('laboratorio'); return; }
+  const tarjeta = $('tarjetaLab');
+  tarjeta.classList.remove('sacudir'); void tarjeta.offsetWidth; tarjeta.classList.add('sacudir');
+});
+$('volverInicio').addEventListener('click', irAlInicio);
+$('verMapa').addEventListener('click', () => $('capaMision').classList.remove('abierta'));
+$('irLab').addEventListener('click', () => {
+  if (estado.mapa || !hayPuntosUbicados() || confirm('Vas a salir de la misión. ¿Continuar?')) {
+    estado.puntos = [];
+    $('capaMision').classList.remove('abierta');
+    abrirModo('laboratorio');
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  $('capaMision').classList.remove('abierta');
+  cerrarCapas();
+  cerrarDetalle();
+  if (estado.calibrando) {
+    estado.calibrando = null;
+    document.querySelectorAll('.marca-calibracion').forEach(m => m.remove());
+    estado.aviso = 'Calibración cancelada.';
+    actualizarInterfaz();
+  }
+  if (estado.ubicandoRouter) {
+    estado.ubicandoRouter = false;
+    estado.activo = siguientePendiente();
+    estado.aviso = '';
+    actualizarInterfaz();
+  }
+});
+
+/* ------------------------------------------------------------------
+   INICIO
+   ------------------------------------------------------------------ */
+window.addEventListener('resize', redibujar);
+window.addEventListener('beforeunload', evento => {
+  if (hayPuntosUbicados()) { evento.preventDefault(); evento.returnValue = ''; }
+});
+pintarLeyenda();
+pintarInicio();
+</script>
+
+<!-- SheetJS: librería que lee archivos de Excel. Va incluida para funcionar sin internet. -->
+<script src="vendor/xlsx.full.min.js"></script>
+</body>
+</html>

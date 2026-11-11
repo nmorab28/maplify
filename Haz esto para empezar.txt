@@ -1,0 +1,88 @@
+﻿==============================================================
+  MAPLIFY - HAZ ESTO PARA EMPEZAR
+  Mapas de señal WiFi - Proyecto Redes de Datos II
+==============================================================
+
+No necesitas internet ni instalar nada. Solo un computador con
+Google Chrome o Microsoft Edge.
+
+
+--------------------------------------------------------------
+PASO 1. DESCOMPRIME LA CARPETA
+--------------------------------------------------------------
+
+Si recibiste un archivo .zip, primero hay que sacar lo que tiene
+adentro. Si abres los archivos desde el .zip, no van a funcionar.
+
+  1. Haz clic derecho sobre el archivo .zip.
+  2. Elige "Extraer todo...".
+  3. Oprime "Extraer".
+  4. Se abre una carpeta nueva. Trabaja siempre desde esa carpeta.
+
+
+--------------------------------------------------------------
+PASO 2. ABRE EL MANUAL (PRIMERO ESTO)
+--------------------------------------------------------------
+
+El manual te enseña paso a paso, como un juego, a usar Maplify.
+
+  1. En la carpeta, haz doble clic en:  Manual.html
+  2. Se abre en el navegador. Oprime "Comenzar" y sigue los
+     niveles en orden.
+
+Si no se abre en Chrome o Edge (por ejemplo, se abre en otro
+programa o te pregunta con qué abrirlo):
+
+  1. Haz clic derecho sobre Manual.html.
+  2. Elige "Abrir con".
+  3. Elige "Google Chrome". Si no aparece, elige "Microsoft Edge".
+
+
+--------------------------------------------------------------
+PASO 3. ABRE MAPLIFY (EL PROGRAMA)
+--------------------------------------------------------------
+
+  1. En la misma carpeta, haz doble clic en:  Maplify.html
+     (si no abre bien, usa clic derecho > "Abrir con" >
+     "Google Chrome", igual que con el manual).
+  2. Elige "Misión guiada". La primera vez es obligatoria: el
+     "Laboratorio libre" se desbloquea cuando la termines.
+  3. Cuando el programa te pida los archivos, elige estos:
+
+       Paso 1 (Elegir plano) ..... Plano.jfif.jpeg
+       Paso 2 (Elegir Excel) ..... Relevamiento_WiFi_Limpio.xlsx
+
+  4. Sigue lo que dice la barra azul de arriba.
+
+
+--------------------------------------------------------------
+TEN EN CUENTA
+--------------------------------------------------------------
+
+  - Puedes tener el manual y el programa abiertos al mismo tiempo,
+    en dos pestañas del navegador.
+  - No cierres la pestaña del programa a mitad del trabajo: se
+    pierden los puntos que ubicaste.
+  - La imagen del mapa que descargues queda en tu carpeta
+    "Descargas".
+  - Si tienes el Excel abierto en Excel, ciérralo antes de subirlo.
+  - Cuando termines la Misión, en el Laboratorio puedes probar con
+    "Excel de prueba (datos imaginarios).xlsx" para ver otro mapa.
+
+
+--------------------------------------------------------------
+QUÉ HAY EN LA CARPETA
+--------------------------------------------------------------
+
+  Manual.html ...................... El manual. Ábrelo primero.
+  Maplify.html ..................... Maplify, el programa del mapa.
+  Plano.jfif.jpeg .................. El plano del local (paso 1).
+  Relevamiento_WiFi_Limpio.xlsx .... Las mediciones (paso 2).
+  Excel de prueba (datos
+  imaginarios).xlsx ................ Datos inventados para practicar
+                                     en el Laboratorio libre.
+
+  Puntos de medicion.jfif.jpeg ..... Plano viejo. NO lo uses.
+  Carpeta "fuente" ................. Código del programa. Solo para
+                                     quien lo vaya a modificar. No
+                                     la necesitas para usarlo.

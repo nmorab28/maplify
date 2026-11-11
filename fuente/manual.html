@@ -1,0 +1,2079 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maplify · Manual interactivo</title>
+<style>
+  :root {
+    color-scheme: light;
+    --fondo: #eef1f5;
+    --superficie: #ffffff;
+    --tinta: #1c2733;
+    --tinta-suave: #566473;
+    --borde: #d5dbe3;
+    --acento: #1f5fbf;
+    --acento-oscuro: #174a96;
+    --acento-claro: #eef4fd;
+    --ok: #1a7f46;
+    --ok-claro: #e7f5ec;
+    --error: #b3261e;
+    --error-claro: #fdecea;
+    --resalte: #fff4d6;
+    --resalte-borde: #e0a400;
+    --marino: #16304f;
+    --oro: #f2b705;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--fondo);
+    color: var(--tinta);
+    font: 17px/1.55 "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    min-height: 100vh;
+  }
+  h1, h2, h3 { line-height: 1.25; }
+  button { font: inherit; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Pantallas generales ---------- */
+  .vista { min-height: 100vh; display: none; }
+  .vista.activa { display: flex; flex-direction: column; align-items: center; animation: aparecer .35s ease; }
+  @keyframes aparecer { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .boton {
+    border: 0; border-radius: 10px; padding: 12px 24px; font-weight: 700; cursor: pointer;
+    background: var(--acento); color: #fff; font-size: 17px; transition: transform .1s, background .15s;
+  }
+  .boton:hover { background: var(--acento-oscuro); }
+  .boton:active { transform: scale(.97); }
+  .boton.grande { font-size: 21px; padding: 16px 44px; border-radius: 14px; box-shadow: 0 5px 0 var(--acento-oscuro); }
+  .boton.grande:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--acento-oscuro); }
+  .boton.secundario { background: #fff; color: var(--acento); box-shadow: inset 0 0 0 2px var(--acento); }
+  .boton.secundario:hover { background: var(--acento-claro); }
+  .boton.ok { background: var(--ok); }
+  .boton.bloqueado { background: #9aa5b1; cursor: not-allowed; }
+  .boton:focus-visible, .nodo:focus-visible, .chip:focus-visible, .icono-boton:focus-visible { outline: 3px solid #8db7f0; outline-offset: 3px; }
+  .enlace { background: none; border: 0; color: var(--acento); text-decoration: underline; cursor: pointer; padding: 4px; font-size: 15px; }
+
+  /* ---------- Inicio ---------- */
+  #inicio { justify-content: center; text-align: center; padding: 30px 16px; gap: 6px; }
+  .ondas { position: relative; width: 170px; height: 120px; margin-bottom: 10px; }
+  .ondas span {
+    position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+    border: 9px solid var(--acento); border-color: var(--acento) transparent transparent transparent;
+    border-radius: 50%; animation: onda 2.2s ease-in-out infinite;
+  }
+  .ondas span:nth-child(1) { width: 40px; height: 40px; bottom: -6px; animation-delay: 0s; }
+  .ondas span:nth-child(2) { width: 90px; height: 90px; bottom: -31px; animation-delay: .25s; }
+  .ondas span:nth-child(3) { width: 140px; height: 140px; bottom: -56px; animation-delay: .5s; }
+  .ondas span:nth-child(4) { width: 190px; height: 190px; bottom: -81px; animation-delay: .75s; }
+  .ondas i { position: absolute; left: 50%; bottom: -8px; transform: translateX(-50%); width: 18px; height: 18px; border-radius: 50%; background: var(--acento); }
+  @keyframes onda { 0%, 100% { opacity: .2; } 40% { opacity: 1; } }
+  .supertitulo { margin: 0; color: var(--acento); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 14px; }
+  #inicio h1 { font-size: clamp(48px, 9vw, 88px); margin: 4px 0 12px; letter-spacing: -.02em; line-height: 1.15; color: var(--marino); }
+  .degradado { background: linear-gradient(90deg, #1f5fbf 0%, #5b3cc4 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .subtitulo { font-size: 20px; color: var(--tinta-suave); max-width: 560px; margin: 0 0 26px; }
+  .botones-inicio { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .pista-inicio { margin-top: 30px; color: var(--tinta-suave); font-size: 15px; max-width: 520px; }
+  .franja-colores { display: flex; gap: 6px; margin: 20px 0 0; }
+  .franja-colores span { width: 34px; height: 10px; border-radius: 99px; }
+
+  /* ---------- Barra superior ---------- */
+  .barra-juego {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 12px 18px; position: sticky; top: 0; z-index: 20; background: rgba(238, 241, 245, .93); backdrop-filter: blur(4px);
+  }
+  .barra-juego .centro { text-align: center; flex: 1; min-width: 0; }
+  .barra-juego .centro strong { display: block; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .barra-juego .centro small { color: var(--tinta-suave); font-size: 13px; }
+  .grupo-botones { display: flex; gap: 8px; }
+  .icono-boton {
+    border: 1.5px solid var(--borde); background: #fff; color: var(--tinta); border-radius: 10px;
+    height: 42px; min-width: 42px; padding: 0 12px; cursor: pointer; font-weight: 600; font-size: 15px; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .icono-boton:hover { border-color: var(--acento); color: var(--acento); }
+  .icono-boton .txt { display: inline; }
+
+  /* ---------- Mapa de niveles ---------- */
+  #mapa { padding-bottom: 40px; }
+  .cabecera-mapa { text-align: center; padding: 6px 16px 0; }
+  .cabecera-mapa h2 { font-size: 30px; margin: 4px 0; }
+  .marcador-estrellas { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1.5px solid var(--borde); border-radius: 99px; padding: 6px 16px; font-weight: 700; }
+  .marcador-estrellas .estrella { color: var(--oro); font-size: 20px; }
+  .camino { position: relative; width: min(560px, 100%); margin: 50px auto 10px; padding: 0 16px; }
+  .camino svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .fila-nodo { position: relative; display: flex; justify-content: center; margin: 0 0 16px; }
+  .nodo {
+    position: relative; z-index: 1; border: 0; background: none; cursor: pointer; padding: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 6px; width: 170px; color: var(--tinta);
+  }
+  .nodo .circulo {
+    width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center; font-size: 36px;
+    background: #fff; border: 4px solid var(--borde); box-shadow: 0 6px 0 #c3ccd6; transition: transform .15s;
+  }
+  .nodo:hover .circulo { transform: translateY(-3px); }
+  .nodo.hecho .circulo { border-color: var(--ok); box-shadow: 0 6px 0 #11603a; background: var(--ok-claro); }
+  .nodo.actual .circulo { border-color: var(--acento); box-shadow: 0 6px 0 var(--acento-oscuro); background: var(--acento-claro); animation: rebote 1.6s ease-in-out infinite; }
+  .nodo.bonus .circulo { border-style: dashed; }
+  .nodo.cerrado { cursor: not-allowed; }
+  .nodo.cerrado .circulo { filter: grayscale(1); opacity: .55; }
+  .nodo .circulo { position: relative; }
+  .nodo.cerrado .circulo::after { content: "🔒"; position: absolute; right: -8px; bottom: -6px; font-size: 22px; }
+  @keyframes rebote { 50% { transform: translateY(-7px); } }
+  .nodo .nombre { font-weight: 700; font-size: 16px; text-align: center; line-height: 1.2; background: var(--fondo); padding: 2px 8px; border-radius: 8px; }
+  .nodo .estrellas { background: var(--fondo); padding: 0 6px; border-radius: 8px; }
+  .nodo .nombre small { display: block; font-weight: 400; color: var(--tinta-suave); font-size: 13px; }
+  .nodo .estrellas { font-size: 18px; letter-spacing: 2px; color: #cfd6de; height: 20px; }
+  .nodo .estrellas b { color: var(--oro); font-weight: 400; }
+  .globo {
+    position: absolute; top: -34px; background: var(--acento); color: #fff; font-size: 13px; font-weight: 700;
+    padding: 3px 10px; border-radius: 8px; white-space: nowrap; animation: rebote 1.6s ease-in-out infinite;
+  }
+  .globo::after { content: ""; position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--acento); border-bottom: 0; }
+  .pie-mapa { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; padding: 0 16px; }
+
+  /* ---------- Nivel ---------- */
+  #nivel { padding-bottom: 30px; }
+  .puntitos { display: flex; justify-content: center; gap: 7px; margin-top: 4px; }
+  .puntitos span { width: 10px; height: 10px; border-radius: 50%; background: var(--borde); transition: all .2s; }
+  .puntitos span.listo { background: var(--acento); }
+  .puntitos span.ahora { background: var(--acento); width: 26px; border-radius: 99px; }
+  .puntitos span.reto { background: none; border: 2px solid var(--oro); }
+  .puntitos span.reto.ahora, .puntitos span.reto.listo { background: var(--oro); border-color: var(--oro); }
+
+  .tarjeta-nivel {
+    width: min(860px, calc(100% - 32px)); background: var(--superficie); border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(20, 30, 45, .1); padding: 34px 40px 30px; margin-top: 8px;
+  }
+  .pantalla { animation: entrar .3s ease; }
+  @keyframes entrar { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+  .pantalla.volver { animation-name: entrarIzq; }
+  @keyframes entrarIzq { from { opacity: 0; transform: translateX(-18px); } to { opacity: 1; transform: none; } }
+  .pantalla > .etiqueta { text-align: center; margin: 0; color: var(--acento); font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+  .pantalla > h2 { text-align: center; font-size: 30px; margin: 6px 0 10px; }
+  .pantalla > .lead { text-align: center; font-size: 19px; color: var(--tinta-suave); margin: 0 auto 22px; max-width: 62ch; }
+  .pantalla p, .pantalla li { max-width: 70ch; }
+  .pantalla h3 { font-size: 20px; margin: 22px 0 6px; }
+  .centrado { text-align: center; margin-left: auto; margin-right: auto; }
+  .emoji-grande { text-align: center; font-size: 54px; line-height: 1; margin: 0 0 6px; }
+
+  .navegacion { width: min(860px, calc(100% - 32px)); display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; }
+  .aviso-reto { color: var(--tinta-suave); font-size: 15px; text-align: center; flex: 1; }
+  .sacudir { animation: sacudir .4s; }
+  @keyframes sacudir { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+
+  /* ---------- Bloques de contenido ---------- */
+  .tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: 12px; padding: 18px 20px; margin: 16px 0; }
+  .nota { border-left: 5px solid var(--acento); background: var(--acento-claro); border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+  .cuidado { border-left: 5px solid var(--resalte-borde); background: var(--resalte); border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+  .nota p, .cuidado p { margin: 4px 0; }
+  .boton-falso { display: inline-block; background: var(--acento); color: #fff; font-weight: 600; font-size: .9em; padding: 1px 9px; border-radius: 6px; white-space: nowrap; }
+  .boton-falso.secundario { background: #fff; color: var(--acento); box-shadow: inset 0 0 0 1.5px var(--acento); }
+  .archivo { font-family: Consolas, "Cascadia Mono", monospace; font-size: .9em; background: #e8ecf1; padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+
+  .acciones { list-style: none; counter-reset: accion; padding: 0; margin: 14px auto; max-width: 640px; }
+  .acciones > li { counter-increment: accion; position: relative; padding: 3px 0 12px 48px; }
+  .acciones > li::before {
+    content: counter(accion); position: absolute; left: 0; top: 0; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--acento); color: #fff; display: grid; place-items: center; font-weight: 700;
+  }
+  .lista-simple { max-width: 640px; margin: 10px auto; }
+  .lista-simple li { margin-bottom: 8px; }
+
+  figure { margin: 18px auto 20px; }
+  .captura { position: relative; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(20, 30, 45, .2); cursor: zoom-in; background: #fff; margin: 0 auto; }
+  .captura img { display: block; width: 100%; height: auto; }
+  .captura[data-recorte] { max-width: 470px; }
+  .senal { position: absolute; border: 4px solid #e8410c; border-radius: 10px; pointer-events: none; box-shadow: 0 0 0 4px rgba(255, 255, 255, .75); animation: latido 1.6s ease-in-out infinite; }
+  .senal b { position: absolute; top: -16px; left: -16px; width: 30px; height: 30px; border-radius: 50%; background: #e8410c; color: #fff; display: grid; place-items: center; font-size: 15px; box-shadow: 0 0 0 3px #fff; }
+  @keyframes latido { 50% { box-shadow: 0 0 0 9px rgba(232, 65, 12, .25); } }
+  figcaption { font-size: 14.5px; color: var(--tinta-suave); margin-top: 8px; text-align: center; }
+
+  .archivos { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 14px 0; }
+  .archivo-card { background: var(--superficie); border: 1.5px solid var(--borde); border-radius: 14px; padding: 14px 14px; text-align: center; }
+  .archivo-card .icono { font-size: 34px; line-height: 1; }
+  .archivo-card strong { display: block; margin: 8px 0 2px; overflow-wrap: anywhere; font-size: 14px; }
+  .archivo-card span { font-size: 14px; color: var(--tinta-suave); }
+  button.archivo-card { cursor: pointer; font: inherit; color: inherit; transition: transform .12s, border-color .12s; }
+  button.archivo-card:hover:not(:disabled) { border-color: var(--acento); transform: translateY(-3px); }
+  .archivo-card.bien { border-color: var(--ok); background: var(--ok-claro); }
+  .archivo-card.mal { border-color: var(--error); background: var(--error-claro); }
+
+  .escala { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 14px 0; }
+  .escala div { border-radius: 8px; padding: 8px 10px; font-size: 14px; border: 1px solid rgba(0, 0, 0, .15); }
+  .escala small { display: block; }
+  .escala .activa { outline: 3px solid var(--tinta); outline-offset: 1px; }
+  .probador { display: grid; grid-template-columns: 140px 1fr; gap: 18px; align-items: center; }
+  .muestra { width: 140px; height: 110px; border-radius: 12px; border: 1px solid rgba(0, 0, 0, .2); display: grid; place-items: center; font-size: 26px; font-weight: 700; }
+  .probador input[type=range] { width: 100%; accent-color: var(--acento); height: 30px; }
+  .regla { display: flex; justify-content: space-between; font-size: 13px; color: var(--tinta-suave); }
+  .resultado-probador strong { font-size: 21px; }
+  .etiqueta-campo { font-size: 13px; color: var(--tinta-suave); }
+
+  /* Menú "Abrir con" */
+  .menu-demo { display: flex; align-items: flex-start; justify-content: center; flex-wrap: wrap; margin: 14px 0; font: 14px "Segoe UI", Arial, sans-serif; }
+  .icono-archivo { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 116px; margin-right: 14px; padding: 8px; border-radius: 4px; background: #cce4f7; border: 1px solid #99c9ef; cursor: context-menu; }
+  .icono-archivo .hoja { width: 42px; height: 52px; background: #fff; border: 1px solid #8a96a3; border-radius: 3px; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--acento); }
+  .menu, .submenu { background: #f2f2f2; border: 1px solid #a0a0a0; box-shadow: 2px 3px 8px rgba(0, 0, 0, .25); min-width: 190px; padding: 3px 0; text-align: left; }
+  .menu > div, .submenu > div, .menu > button, .submenu > button { display: block; width: 100%; border: 0; background: none; text-align: left; padding: 5px 26px 5px 30px; position: relative; font: inherit; color: #111; }
+  .menu > button:hover, .submenu > button:hover { background: #dbe9f7; cursor: pointer; }
+  .menu .sep { border-top: 1px solid #d0d0d0; margin: 3px 0; padding: 0 !important; }
+  .menu .elegido, .submenu .elegido { background: #91c9f7 !important; outline: 1px solid #5aa9eb; }
+  .menu .con-flecha::after { content: "›"; position: absolute; right: 10px; }
+  .submenu { margin-top: 30px; }
+  .demo-pie { flex-basis: 100%; color: var(--tinta-suave); font-size: 13px; margin-top: 8px; text-align: center; }
+
+  /* Plano de referencia */
+  .referencia { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(240px, 1fr); gap: 20px; align-items: start; }
+  .plano-ref { position: relative; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(20, 30, 45, .2); background: #fff; }
+  .plano-ref img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+  .punto-ref {
+    position: absolute; transform: translate(-50%, -50%); width: 32px; height: 32px; border-radius: 50%;
+    border: 3px solid #fff; background: var(--marino); color: #fff; font-size: 11.5px; font-weight: 700;
+    cursor: pointer; padding: 0; display: grid; place-items: center; box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  }
+  .punto-ref.estimado { background: #7a4f00; }
+  .punto-ref.no-ubica { background: #fff; color: var(--tinta-suave); border: 2px dashed var(--tinta-suave); }
+  .punto-ref.elegido { box-shadow: 0 0 0 6px rgba(224, 164, 0, .6); transform: translate(-50%, -50%) scale(1.15); z-index: 2; }
+  .ficha h3 { margin: 0 0 4px; font-size: 24px; }
+  .ficha .valor { font-weight: 700; }
+  .insignia { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 9px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+  .insignia.estimada { background: #fbe7c2; color: #6b4500; }
+  .insignia.excluida { background: #e3e7ec; color: var(--tinta-suave); }
+  .insignia.asignada { background: var(--error-claro); color: var(--error); }
+  .convenciones { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--tinta-suave); margin-top: 10px; }
+  .convenciones span { display: inline-flex; align-items: center; gap: 6px; }
+  .mini { width: 16px; height: 16px; border-radius: 50%; display: inline-block; background: var(--marino); }
+  .mini.estimado { background: #7a4f00; }
+  .mini.no-ubica { background: #fff; border: 2px dashed var(--tinta-suave); }
+  .tabla-puntos { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 14px; }
+  .tabla-puntos th, .tabla-puntos td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+  .tabla-puntos th { font-size: 13.5px; color: var(--tinta-suave); }
+  .tabla-puntos tbody tr { cursor: pointer; }
+  .tabla-puntos tbody tr:hover td { background: var(--acento-claro); }
+
+  /* Pasillo IDW */
+  .contenedor-pasillo { position: relative; margin: 46px 0 0; }
+  .pasillo { position: relative; height: 70px; border-radius: 10px; overflow: hidden; display: flex; border: 1px solid var(--borde); }
+  .pasillo div { flex: 1; }
+  .medicion { position: absolute; top: -36px; font-size: 13px; font-weight: 700; }
+  .medicion .circulo { width: 30px; height: 30px; border-radius: 50%; background: var(--marino); color: #fff; display: grid; place-items: center; border: 2px solid #fff; }
+  .marcador-tu { position: absolute; top: -4px; width: 4px; height: 82px; background: var(--tinta); transform: translateX(-50%); border-radius: 2px; pointer-events: none; }
+  .marcador-tu span { position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: var(--tinta); color: #fff; font-size: 13px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+  .cuentas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .cuentas div { background: var(--fondo); border-radius: 10px; padding: 10px 12px; font-size: 15px; }
+  .cuentas strong { display: block; font-size: 20px; }
+
+  /* ---------- Retos ---------- */
+  .reto-caja { background: var(--fondo); border-radius: 16px; padding: 22px; margin: 10px 0 0; }
+  .retro { min-height: 28px; text-align: center; font-weight: 600; margin: 14px 0 0; }
+  .retro.bien { color: var(--ok); }
+  .retro.mal { color: var(--error); }
+  .exito-reto { text-align: center; background: var(--ok-claro); border: 2px solid #9fd3b2; border-radius: 14px; padding: 14px; margin-top: 16px; font-weight: 700; color: var(--ok); animation: aparecer .3s; }
+
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; min-height: 64px; }
+  .chip {
+    border: 2px solid var(--borde); background: #fff; border-radius: 14px; padding: 12px 20px; font-size: 22px; font-weight: 700;
+    cursor: pointer; color: var(--tinta); box-shadow: 0 4px 0 #c3ccd6; transition: transform .1s;
+  }
+  .chip:hover { border-color: var(--acento); }
+  .chip:active { transform: translateY(3px); box-shadow: 0 1px 0 #c3ccd6; }
+  .podio { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
+  .podio div { border: 2px dashed var(--borde); border-radius: 12px; height: 74px; display: grid; place-items: center; text-align: center; font-weight: 700; font-size: 20px; background: #fff; }
+  .podio div small { display: block; font-size: 12px; font-weight: 600; color: var(--tinta-suave); }
+  .podio div.lleno { border-style: solid; animation: aparecer .25s; }
+
+  .planos-opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .opcion-plano { border: 3px solid var(--borde); border-radius: 14px; background: #fff; padding: 8px; cursor: pointer; font: inherit; color: inherit; transition: transform .12s, border-color .12s; }
+  .opcion-plano:hover:not(:disabled) { border-color: var(--acento); transform: translateY(-3px); }
+  .opcion-plano .lienzo { position: relative; }
+  .opcion-plano img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .opcion-plano .viejo { position: absolute; transform: translate(-50%, -50%); width: 9%; aspect-ratio: 1; border-radius: 50%; border: 2px solid #c0262c; color: #c0262c; font-size: 11px; font-weight: 700; display: grid; place-items: center; background: rgba(255, 255, 255, .7); }
+  .opcion-plano strong { display: block; margin-top: 8px; font-size: 14px; overflow-wrap: anywhere; }
+  .opcion-plano.bien { border-color: var(--ok); }
+  .opcion-plano.mal { border-color: var(--error); }
+
+  .programa-mini { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(20, 30, 45, .15); font-size: 15px; }
+  .programa-mini .panel { padding: 14px 16px; border-right: 1px solid var(--borde); }
+  .programa-mini .zona { display: grid; grid-template-rows: auto 1fr; min-height: 240px; }
+  .programa-mini .barra-azul { background: var(--acento); color: #fff; font-weight: 600; padding: 10px 14px; }
+  .programa-mini .barra-azul.verde { background: var(--ok); }
+  .paso-mini { display: grid; grid-template-columns: 26px 1fr; gap: 8px; padding: 8px 0; border-top: 1px solid var(--borde); }
+  .paso-mini:first-child { border-top: 0; }
+  .paso-mini .num { width: 26px; height: 26px; border-radius: 50%; background: var(--acento); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+  .paso-mini.hecho .num { background: var(--ok); }
+  .paso-mini.gris .num { background: #9aa5b1; }
+  .paso-mini.gris h4 { color: #9aa5b1; }
+  .paso-mini h4 { margin: 2px 0 6px; font-size: 15px; }
+  .ok-texto { color: var(--ok); font-size: 13px; margin: 6px 0 0; overflow-wrap: anywhere; }
+  .dialogo-archivos { margin: 14px; background: #fff; border: 1px solid #a0a0a0; border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, .2); overflow: hidden; animation: aparecer .2s; align-self: start; }
+  .dialogo-archivos .titulo { background: #f3f3f3; padding: 8px 12px; font-size: 14px; border-bottom: 1px solid #ddd; font-weight: 600; }
+  .dialogo-archivos ul { list-style: none; margin: 0; padding: 6px; }
+  .dialogo-archivos li button { width: 100%; display: flex; gap: 10px; align-items: center; border: 0; background: none; padding: 7px 10px; border-radius: 6px; cursor: pointer; font-size: 14.5px; text-align: left; color: var(--tinta); }
+  .dialogo-archivos li button:hover { background: #e5f1fb; }
+  .dialogo-archivos li button.sel { background: #cce4f7; outline: 1px solid #99c9ef; }
+  .dialogo-archivos .pie { display: flex; justify-content: flex-end; gap: 8px; padding: 8px 12px; border-top: 1px solid #ddd; background: #f8f8f8; }
+  .dialogo-archivos .pie button { border: 1px solid #adadad; background: #e1e1e1; padding: 4px 18px; border-radius: 3px; cursor: pointer; font-size: 14px; }
+  .dialogo-archivos .pie button.principal { background: #0067c0; color: #fff; border-color: #0067c0; }
+  .lista-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 8px; font-size: 13px; }
+  .lista-mini span { border: 1px solid var(--borde); border-radius: 5px; padding: 3px 6px; }
+  .lista-mini span:first-child { background: var(--resalte); border-color: var(--resalte-borde); }
+
+  .practica { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 16px; align-items: start; }
+  .practica .barra-azul { background: var(--acento); color: #fff; font-weight: 600; padding: 10px 14px; border-radius: 10px 10px 0 0; font-size: 16px; }
+  .practica .barra-azul.verde { background: var(--ok); }
+  .lienzo-practica { position: relative; cursor: crosshair; border-radius: 0 0 10px 10px; overflow: hidden; background: #fff; box-shadow: 0 2px 10px rgba(20, 30, 45, .15); touch-action: manipulation; }
+  .lienzo-practica img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+  .marca-programa { position: absolute; transform: translate(-50%, -50%); width: 30px; height: 30px; border-radius: 50%; background: var(--marino); color: #fff; border: 3px solid #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; animation: aparecer .2s; pointer-events: none; }
+  .marca-fallo { position: absolute; transform: translate(-50%, -50%); color: var(--error); font-size: 30px; font-weight: 700; animation: desvanecer 1.1s forwards; pointer-events: none; }
+  @keyframes desvanecer { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.8); } }
+  .objetivo-pista { position: absolute; transform: translate(-50%, -50%); width: 70px; height: 70px; border-radius: 50%; border: 4px dashed var(--resalte-borde); animation: latido 1.2s infinite; pointer-events: none; }
+  .lista-practica { display: grid; gap: 6px; }
+  .lista-practica div { border: 1px solid var(--borde); background: #fff; border-radius: 7px; padding: 7px 10px; font-size: 15px; display: flex; gap: 8px; }
+  .lista-practica div.activo { background: var(--resalte); border-color: var(--resalte-borde); box-shadow: inset 0 0 0 1px var(--resalte-borde); }
+  .lista-practica div.listo b { color: var(--ok); }
+  .pista-texto { font-size: 14.5px; color: var(--tinta-suave); margin-top: 10px; }
+
+  .comparador { position: relative; max-width: 470px; margin: 16px auto 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(20, 30, 45, .2); aspect-ratio: 542 / 726; background: #fff; user-select: none; }
+  .comparador img { position: absolute; width: 265.7%; max-width: none; left: -117%; top: -8.8%; pointer-events: none; }
+  .comparador .despues { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); }
+  .comparador .linea { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: #fff; transform: translateX(-50%); box-shadow: 0 0 0 1px rgba(0, 0, 0, .2); pointer-events: none; }
+  .comparador .linea::after { content: "⇆"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-weight: 700; box-shadow: 0 1px 6px rgba(0, 0, 0, .3); }
+  .comparador .rotulo { position: absolute; top: 10px; background: rgba(22, 48, 79, .85); color: #fff; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; pointer-events: none; }
+  .comparador input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+
+  .vidas { display: flex; justify-content: center; gap: 6px; font-size: 28px; margin-bottom: 6px; }
+  .vidas span { transition: transform .3s, filter .3s; }
+  .vidas span.perdida { filter: grayscale(1); opacity: .35; transform: scale(.8); }
+  .pregunta-jefe h3 { text-align: center; font-size: 22px; margin: 6px 0 16px; }
+  .opciones { display: grid; gap: 10px; max-width: 560px; margin: 0 auto; }
+  .opciones button { text-align: left; border: 2px solid var(--borde); background: #fff; border-radius: 12px; padding: 12px 16px; cursor: pointer; color: var(--tinta); font-size: 17px; }
+  .opciones button:hover:not(:disabled) { border-color: var(--acento); background: var(--acento-claro); }
+  .opciones button.bien { border-color: var(--ok); background: var(--ok-claro); font-weight: 600; }
+  .opciones button.mal { border-color: var(--error); background: var(--error-claro); }
+  .opciones button:disabled { cursor: default; color: var(--tinta); }
+  .mapa-tocar { position: relative; max-width: 470px; margin: 0 auto; cursor: crosshair; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(20, 30, 45, .2); }
+  .mapa-tocar img { display: block; width: 100%; pointer-events: none; user-select: none; }
+  .fin-juego { text-align: center; padding: 10px 0; }
+
+  /* ---------- Superposiciones ---------- */
+  .capa { position: fixed; inset: 0; background: rgba(10, 18, 28, .6); display: none; place-items: center; z-index: 60; padding: 16px; }
+  .capa.abierta { display: grid; animation: aparecer .2s; }
+  .ventana-exito { background: #fff; border-radius: 22px; padding: 30px 34px; text-align: center; width: min(460px, 100%); box-shadow: 0 20px 50px rgba(0, 0, 0, .3); }
+  .ventana-exito h2 { font-size: 30px; margin: 6px 0; }
+  .estrellas-grandes { font-size: 56px; letter-spacing: 6px; margin: 6px 0; }
+  .estrellas-grandes span { display: inline-block; color: #d5dbe3; }
+  .estrellas-grandes span.ganada { color: var(--oro); animation: pop .45s cubic-bezier(.3, 1.6, .5, 1) both; }
+  @keyframes pop { from { transform: scale(0) rotate(-40deg); } to { transform: scale(1) rotate(0); } }
+  .ventana-exito .botones { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+
+  dialog { border: 0; border-radius: 18px; padding: 0; width: min(760px, calc(100% - 24px)); max-height: calc(100vh - 40px); box-shadow: 0 20px 50px rgba(0, 0, 0, .3); }
+  dialog::backdrop { background: rgba(10, 18, 28, .6); }
+  .dialogo-cabecera { position: sticky; top: 0; background: #fff; display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; border-bottom: 1px solid var(--borde); z-index: 1; }
+  .dialogo-cabecera h2 { margin: 0; font-size: 22px; }
+  .dialogo-cuerpo { padding: 14px 22px 24px; }
+  .buscador { width: 100%; font: inherit; padding: 11px 14px; border: 1.5px solid var(--borde); border-radius: 10px; background: #fff; }
+  .buscador:focus { outline: 3px solid #8db7f0; border-color: var(--acento); }
+  .grupo-problemas { margin-top: 18px; }
+  .grupo-problemas h3 { margin: 0 0 6px; font-size: 17px; }
+  details { background: var(--superficie); border: 1px solid var(--borde); border-radius: 10px; margin: 8px 0; }
+  summary { cursor: pointer; padding: 11px 16px; font-weight: 600; }
+  summary .msg { color: var(--error); }
+  details[open] summary { border-bottom: 1px solid var(--borde); }
+  details .solucion { padding: 8px 18px 12px; }
+  details .solucion p { margin: 6px 0; }
+  .sin-resultados { color: var(--tinta-suave); }
+  .glosario dt { font-weight: 700; margin-top: 12px; font-size: 18px; }
+  .glosario dd { margin: 2px 0 0; }
+
+  .termino { border: 0; background: none; padding: 0; color: inherit; cursor: help; text-decoration: underline dotted var(--acento) 2px; text-underline-offset: 3px; font: inherit; }
+  .definicion { position: absolute; z-index: 70; max-width: 320px; background: var(--marino); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 15px; line-height: 1.45; box-shadow: 0 6px 20px rgba(0, 0, 0, .3); display: none; }
+  .definicion strong { display: block; margin-bottom: 2px; }
+
+  .zoom { position: fixed; inset: 0; background: rgba(10, 18, 28, .85); display: none; place-items: center; z-index: 80; padding: 20px; cursor: zoom-out; }
+  .zoom.abierto { display: grid; }
+
+  .confeti { position: fixed; top: -20px; width: 10px; height: 16px; z-index: 90; pointer-events: none; animation: caer linear forwards; }
+  @keyframes caer { to { transform: translateY(110vh) rotate(720deg); } }
+
+  /* ---------- Diploma ---------- */
+  #final { padding: 20px 16px 40px; }
+  .diploma {
+    width: min(760px, 100%); background: #fffdf6; border: 10px double var(--oro); border-radius: 18px;
+    padding: 34px 36px; text-align: center; margin-top: 10px; box-shadow: 0 10px 30px rgba(20, 30, 45, .12);
+  }
+  .diploma h2 { font-size: 40px; margin: 6px 0; letter-spacing: .02em; }
+  .diploma .nombre-diploma { font-size: 34px; font-weight: 700; color: var(--acento-oscuro); border-bottom: 2px solid var(--borde); display: inline-block; min-width: 60%; padding: 0 10px 4px; margin: 10px 0; }
+  .diploma .resumen { text-align: left; max-width: 520px; margin: 16px auto 0; }
+  .lista-chequeo { list-style: none; padding: 0; }
+  .lista-chequeo li { padding: 4px 0 4px 32px; position: relative; }
+  .lista-chequeo li::before { content: "✓"; position: absolute; left: 4px; color: var(--ok); font-weight: 700; }
+  .campo-nombre { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 10px 0 4px; }
+  .campo-nombre input { font: inherit; padding: 11px 14px; border: 1.5px solid var(--borde); border-radius: 10px; min-width: 260px; }
+  .error-campo { color: var(--error); font-size: 14px; min-height: 20px; margin: 0; }
+
+  #impresion { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+  }
+
+  @media (max-width: 760px) {
+    body { font-size: 16px; }
+    .tarjeta-nivel { padding: 22px 16px 20px; border-radius: 16px; }
+    .pantalla > h2 { font-size: 24px; }
+    .icono-boton .txt { display: none; }
+    .referencia, .practica, .programa-mini { grid-template-columns: 1fr; }
+    .programa-mini .panel { border-right: 0; border-bottom: 1px solid var(--borde); }
+    .probador { grid-template-columns: 1fr; }
+    .muestra { width: 100%; height: 80px; }
+    .escala { grid-template-columns: 1fr 1fr; }
+    .cuentas { grid-template-columns: 1fr; }
+    .podio { grid-template-columns: repeat(2, 1fr); }
+    .punto-ref { width: 24px; height: 24px; font-size: 9.5px; border-width: 2px; }
+    .nodo { width: 140px; }
+    .nodo .circulo { width: 70px; height: 70px; font-size: 30px; }
+    .diploma { padding: 22px 16px; }
+    .diploma h2 { font-size: 30px; }
+  }
+
+  @media print {
+    body { background: #fff; font-size: 12pt; }
+    body.imprimir-todo .vista, body.imprimir-todo .capa, body.imprimir-todo .barra-juego { display: none !important; }
+    body.imprimir-todo #impresion { display: block; }
+    #impresion .pantalla { break-inside: avoid-page; margin-bottom: 18px; animation: none; }
+    #impresion .bloque-nivel { break-before: page; }
+    #impresion .bloque-nivel:first-child { break-before: auto; }
+    body.imprimir-diploma .vista:not(#final), body.imprimir-diploma .barra-juego, body.imprimir-diploma .no-imprimir { display: none !important; }
+    body.imprimir-diploma .diploma { box-shadow: none; }
+    .senal { animation: none; }
+    details > .solucion { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =========================================================== INICIO -->
+<section class="vista" id="inicio">
+  <div class="ondas" aria-hidden="true"><span></span><span></span><span></span><span></span><i></i></div>
+  <p class="supertitulo">Manual interactivo · Redes de Datos II</p>
+  <h1>Map<span class="degradado">lify</span></h1>
+  <p class="subtitulo">Tu misión: convertir unas mediciones de WiFi en un mapa de colores del local. Sin saber de redes, en unos 15 minutos.</p>
+  <div class="botones-inicio">
+    <button type="button" class="boton grande" id="botonComenzar">▶ Comenzar</button>
+    <button type="button" class="boton secundario" id="botonContinuar" hidden>Continuar</button>
+  </div>
+  <div class="franja-colores" aria-hidden="true">
+    <span style="background:#1a9850"></span><span style="background:#7fc95a"></span><span style="background:#ffdf2e"></span><span style="background:#fd8d3c"></span><span style="background:#d7191c"></span>
+  </div>
+  <p class="pista-inicio">Supera los 7 niveles en orden. Cada nivel termina con un reto que te da hasta 3 estrellas. Al final ganas tu diploma.</p>
+</section>
+
+<!-- =========================================================== MAPA -->
+<section class="vista" id="mapa">
+  <header class="barra-juego">
+    <div class="grupo-botones"><button type="button" class="icono-boton" data-ir="inicio" aria-label="Volver al inicio">⌂<span class="txt">Inicio</span></button></div>
+    <div class="centro"><strong>Mapa de niveles</strong><small>Toca el nivel que rebota</small></div>
+    <div class="grupo-botones">
+      <button type="button" class="icono-boton" data-abrir="diccionario" aria-label="Abrir el diccionario">📖<span class="txt">Diccionario</span></button>
+      <button type="button" class="icono-boton" data-abrir="ayuda" aria-label="Abrir la ayuda">?<span class="txt">Ayuda</span></button>
+    </div>
+  </header>
+  <div class="cabecera-mapa">
+    <h2>Tu misión</h2>
+    <span class="marcador-estrellas"><span class="estrella">★</span><span id="totalEstrellas">0 de 21</span></span>
+  </div>
+  <div class="camino" id="camino"></div>
+  <div class="pie-mapa">
+    <button type="button" class="enlace" id="verTodo">Ver todos los niveles (para el profesor)</button>
+    <button type="button" class="enlace" id="botonImprimir">Versión para imprimir</button>
+    <button type="button" class="enlace" id="reiniciar">Empezar de cero</button>
+  </div>
+</section>
+
+<!-- =========================================================== NIVEL -->
+<section class="vista" id="nivel">
+  <header class="barra-juego">
+    <div class="grupo-botones"><button type="button" class="icono-boton" data-ir="mapa" aria-label="Volver al mapa de niveles">←<span class="txt">Mapa</span></button></div>
+    <div class="centro"><strong id="tituloNivel"></strong><div class="puntitos" id="puntitos" aria-hidden="true"></div></div>
+    <div class="grupo-botones">
+      <button type="button" class="icono-boton" data-abrir="diccionario" aria-label="Abrir el diccionario">📖<span class="txt">Diccionario</span></button>
+      <button type="button" class="icono-boton" data-abrir="ayuda" aria-label="Abrir la ayuda">?<span class="txt">Ayuda</span></button>
+    </div>
+  </header>
+  <main class="tarjeta-nivel" id="tarjetaNivel" aria-live="polite"></main>
+  <div class="navegacion">
+    <button type="button" class="boton secundario" id="anterior">← Anterior</button>
+    <span class="aviso-reto" id="avisoReto"></span>
+    <button type="button" class="boton" id="siguiente">Siguiente →</button>
+  </div>
+</section>
+
+<!-- =========================================================== DIPLOMA -->
+<section class="vista" id="final">
+  <header class="barra-juego no-imprimir" style="margin:-20px -16px 0; width:calc(100% + 32px)">
+    <div class="grupo-botones"><button type="button" class="icono-boton" data-ir="mapa" aria-label="Volver al mapa de niveles">←<span class="txt">Mapa</span></button></div>
+    <div class="centro"><strong>¡Misión cumplida!</strong></div>
+    <div class="grupo-botones"><button type="button" class="icono-boton" data-abrir="diccionario" aria-label="Abrir el diccionario">📖<span class="txt">Diccionario</span></button></div>
+  </header>
+  <div class="no-imprimir" style="text-align:center">
+    <p class="emoji-grande" style="margin-top:14px">🏆</p>
+    <p style="margin:0 0 4px">Escribe tu nombre para tu diploma:</p>
+    <div class="campo-nombre">
+      <input type="text" id="nombre" maxlength="60" placeholder="Ana María Pérez" aria-label="Tu nombre" aria-describedby="errorNombre">
+      <button type="button" class="boton" id="botonImprimirDiploma">Imprimir diploma</button>
+    </div>
+    <p class="error-campo" id="errorNombre" role="alert"></p>
+  </div>
+  <div class="diploma">
+    <p class="supertitulo">Diploma</p>
+    <h2>Maplify</h2>
+    <p style="margin:6px 0 0">Se otorga a</p>
+    <div class="nombre-diploma" id="nombreDiploma">Tu nombre</div>
+    <p style="margin:6px 0">por hacer su primer mapa de señal WiFi y aprender a leerlo,<br>con <strong id="estrellasDiploma">0</strong> estrellas de 21.</p>
+    <p style="margin:0;color:var(--tinta-suave);font-size:15px" id="fechaDiploma"></p>
+    <div class="resumen">
+      <h3 style="text-align:center;margin:18px 0 4px">Lo que ya sabes hacer, en 4 pasos</h3>
+      <ul class="lista-chequeo">
+        <li><span class="boton-falso">Elegir plano</span> → <span class="archivo">Plano.jfif.jpeg</span></li>
+        <li><span class="boton-falso">Elegir Excel</span> → <span class="archivo">Relevamiento_WiFi_Limpio.xlsx</span></li>
+        <li>Haz clic en el plano donde va cada punto, hasta «Ubicados: 13 de 13»</li>
+        <li><span class="boton-falso">Generar mapa</span> y luego <span class="boton-falso secundario">Descargar imagen (PNG)</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="no-imprimir" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:22px">
+    <button type="button" class="boton secundario" data-ir="mapa">Volver al mapa</button>
+    <button type="button" class="boton secundario" data-nivel-directo="8">Nivel extra: ¿Cómo funciona?</button>
+  </div>
+</section>
+
+<!-- =========================================================== SUPERPOSICIONES -->
+<div class="capa" id="capaExito">
+  <div class="ventana-exito" role="dialog" aria-modal="true" aria-labelledby="tituloExito">
+    <p class="emoji-grande" id="emojiExito">🎉</p>
+    <h2 id="tituloExito">¡Nivel completado!</h2>
+    <div class="estrellas-grandes" id="estrellasExito" aria-hidden="true"></div>
+    <p id="textoExito" style="margin:4px 0;color:var(--tinta-suave)"></p>
+    <div class="botones">
+      <button type="button" class="boton grande" id="botonSiguienteNivel">Siguiente nivel →</button>
+      <button type="button" class="boton secundario" id="botonRepetir">Repetir este nivel</button>
+      <button type="button" class="enlace" data-ir="mapa">Volver al mapa</button>
+    </div>
+  </div>
+</div>
+
+<dialog id="ayuda" aria-labelledby="tituloAyuda">
+  <div class="dialogo-cabecera"><h2 id="tituloAyuda">Si algo sale mal</h2><button type="button" class="icono-boton" data-cerrar aria-label="Cerrar la ayuda">✕</button></div>
+  <div class="dialogo-cuerpo" id="contenidoAyuda">
+    <p style="margin-top:0">Busca el mensaje que te salió o lo que te está pasando. Toca cualquiera para ver qué hacer.</p>
+    <label for="buscador" class="etiqueta-campo">Buscar un problema</label>
+    <input type="search" id="buscador" class="buscador" placeholder="Escribe una palabra, por ejemplo: Excel, gris, abrir…">
+    <p class="sin-resultados" id="sinResultados" hidden>No encontramos nada con esa palabra. Prueba con otra, o borra la búsqueda para ver la lista completa.</p>
+
+    <div class="grupo-problemas">
+      <h3>Al abrir el programa</h3>
+      <details><summary>Hice doble clic y se abrió otra cosa, o me pide elegir un programa</summary>
+        <div class="solucion"><p>Haz clic derecho sobre <span class="archivo">Maplify.html</span>, ve a <strong>Abrir con</strong> y elige <strong>Google Chrome</strong> o <strong>Microsoft Edge</strong>. Está explicado con un dibujo en el nivel 2, «Abrir el programa».</p></div></details>
+      <details><summary>Se ve una pantalla llena de texto raro o código</summary>
+        <div class="solucion"><p>El archivo se abrió en un editor de texto, no en el navegador. Ciérralo y ábrelo con <strong>Abrir con → Google Chrome</strong>.</p></div></details>
+      <details><summary>Al cerrar, el navegador pregunta si quiero salir</summary>
+        <div class="solucion"><p>Es un aviso del programa para que no pierdas los puntos que ubicaste. Si todavía no descargaste la imagen, responde que no. Si ya la descargaste, puedes salir tranquilo.</p></div></details>
+    </div>
+    <div class="grupo-problemas">
+      <h3>Al subir el plano (paso 1)</h3>
+      <details><summary><span class="msg">«Ese archivo no es una imagen JPG o PNG. Elige la imagen del plano.»</span></summary>
+        <div class="solucion"><p>Elegiste un archivo que no es una imagen, por ejemplo el Excel. Oprime otra vez <span class="boton-falso">Elegir plano</span> y elige <span class="archivo">Plano.jfif.jpeg</span>.</p></div></details>
+      <details><summary><span class="msg">«No se pudo abrir esa imagen. Prueba con otro archivo JPG o PNG.»</span></summary>
+        <div class="solucion"><p>La imagen está dañada o incompleta. Vuelve a copiar <span class="archivo">Plano.jfif.jpeg</span> desde donde te lo dieron e inténtalo otra vez.</p></div></details>
+      <details><summary><span class="msg">«Si cambias el plano se borrarán los puntos que ya ubicaste. ¿Continuar?»</span></summary>
+        <div class="solucion"><p>Oprimiste <span class="boton-falso">Elegir plano</span> cuando ya habías ubicado puntos. Si fue sin querer, oprime <strong>Cancelar</strong> y no se pierde nada.</p></div></details>
+      <details><summary>El plano que veo ya tiene puntos o círculos dibujados</summary>
+        <div class="solucion"><p>Subiste <span class="archivo">Puntos de medicion.jfif.jpeg</span>, que es una imagen vieja. Oprime <span class="boton-falso">Elegir plano</span> y elige <span class="archivo">Plano.jfif.jpeg</span>.</p></div></details>
+    </div>
+    <div class="grupo-problemas">
+      <h3>Al subir el Excel (paso 2)</h3>
+      <details><summary><span class="msg">«No se pudo abrir el archivo. Si lo tienes abierto en Excel, ciérralo y vuelve a subirlo.»</span></summary>
+        <div class="solucion"><p>Cierra el Excel (en Excel, no en el programa) y oprime otra vez <span class="boton-falso">Elegir Excel</span>.</p></div></details>
+      <details><summary><span class="msg">«Este Excel no tiene las columnas de mediciones (Punto, Banda, SSID y Nivel Señal). Revisa que sea el archivo correcto.»</span></summary>
+        <div class="solucion"><p>Elegiste otro Excel. Usa <span class="archivo">Relevamiento_WiFi_Limpio.xlsx</span>.</p></div></details>
+      <details><summary><span class="msg">«Este Excel no tiene mediciones de SISCLUB en 5 GHz.»</span></summary>
+        <div class="solucion"><p>El Excel es de otra medición o le borraron datos. Usa el archivo original <span class="archivo">Relevamiento_WiFi_Limpio.xlsx</span>.</p></div></details>
+      <details><summary><span class="msg">«No se pudo leer ese archivo. Revisa que sea un Excel .xlsx y que no esté dañado.»</span></summary>
+        <div class="solucion"><p>El archivo no es un Excel, o se dañó al copiarlo. Vuelve a copiarlo desde donde te lo dieron. Debe terminar en <strong>.xlsx</strong>.</p></div></details>
+      <details><summary><span class="msg">«Esta copia del programa está incompleta. Abre el archivo Maplify.html y vuelve a intentarlo.»</span></summary>
+        <div class="solucion"><p>Abriste una copia de trabajo del programa en vez del archivo final. Cierra esa pestaña y abre <span class="archivo">Maplify.html</span>.</p></div></details>
+      <details><summary>No me deja elegir el Excel en el paso 1, o el plano en el paso 2</summary>
+        <div class="solucion"><p>Cada botón solo acepta su tipo de archivo. <span class="boton-falso">Elegir plano</span> es para la imagen y <span class="boton-falso">Elegir Excel</span> es para el Excel.</p></div></details>
+    </div>
+    <div class="grupo-problemas">
+      <h3>Al ubicar los puntos (paso 3)</h3>
+      <details><summary>Hago clic en el plano y no pasa nada</summary>
+        <div class="solucion"><p>Revisa que hayas subido el plano <strong>y</strong> el Excel. Si ya están los dos, toca en la lista el punto que quieres ubicar (se pone amarillo) y haz clic en el plano.</p></div></details>
+      <details><summary>Puse un punto en el lugar equivocado</summary>
+        <div class="solucion"><p>Haz clic sobre el círculo, mantén apretado y arrástralo al lugar correcto. Si ya habías generado el mapa, vuelve a oprimir <span class="boton-falso">Generar mapa</span>.</p></div></details>
+      <details><summary><span class="msg">«Ese lugar ya tiene P3. Haz clic un poco al lado.»</span></summary>
+        <div class="solucion"><p>Hiciste clic justo encima de otro punto. Haz clic un poquito al lado, sin tocar el otro círculo.</p></div></details>
+      <details><summary>No encuentro P10 en el plano de referencia, o no lo puedo ubicar</summary>
+        <div class="solucion"><p>Es normal. P10 no tiene medición en 5 GHz, así que no entra al mapa. En la lista aparece en gris con el texto «Sin medición en 5 GHz, no se ubica».</p></div></details>
+    </div>
+    <div class="grupo-problemas">
+      <h3>Al generar o descargar (paso 4)</h3>
+      <details><summary>El botón «Generar mapa» está gris</summary>
+        <div class="solucion"><p>Te falta ubicar algún punto. Debajo del botón dice cuáles, por ejemplo «Te faltan: P4, P7». Ubícalos y el botón se activa.</p></div></details>
+      <details><summary><span class="msg">«Moviste un punto. Oprime «Generar mapa» otra vez.»</span></summary>
+        <div class="solucion"><p>Moviste un punto después de generar el mapa, así que los colores ya no eran correctos. Oprime <span class="boton-falso">Generar mapa</span> otra vez.</p></div></details>
+      <details><summary>Descargué la imagen y no la encuentro</summary>
+        <div class="solucion"><p>Abre la carpeta <strong>Descargas</strong> y busca <span class="archivo">maplify-senal-SISCLUB-5GHz.png</span>. En Chrome también puedes oprimir <strong>Ctrl + J</strong> para ver tus descargas.</p></div></details>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="diccionario" aria-labelledby="tituloDiccionario">
+  <div class="dialogo-cabecera"><h2 id="tituloDiccionario">📖 Diccionario</h2><button type="button" class="icono-boton" data-cerrar aria-label="Cerrar el diccionario">✕</button></div>
+  <div class="dialogo-cuerpo">
+    <p style="margin-top:0;color:var(--tinta-suave)">Las palabras que debes conocer. En los niveles aparecen con <button type="button" class="termino" data-t="subrayado">subrayado de puntos</button>: tócalas para leer su explicación.</p>
+    <dl class="glosario" id="glosario"></dl>
+  </div>
+</dialog>
+
+<div class="zoom" id="zoom" role="dialog" aria-label="Imagen ampliada"></div>
+<div class="definicion" id="definicion" role="tooltip"></div>
+<div id="impresion"></div>
+
+<!-- =========================================================== NIVEL 1: LO BÁSICO -->
+<template id="t-1">
+  <section class="pantalla">
+    <p class="etiqueta">Tu misión</p>
+    <h2>Vas a hacer un mapa de la señal WiFi</h2>
+    <p class="lead">Con este manual vas a convertir unas mediciones de WiFi en un mapa de colores del local, como este. Solo tienes que seguir los niveles en orden.</p>
+    <figure>
+      <div class="captura" data-zoom style="max-width:520px"><img src="img/08-imagen-final.jpg" alt="Mapa terminado: el plano del local pintado de verde, amarillo, naranja y rojo según la señal, con los puntos P1 a P14 y sus valores."></div>
+      <figcaption>Esto es lo que tendrás al final: verde donde la señal es buena y rojo donde casi no llega.</figcaption>
+    </figure>
+    <div class="nota">
+      <p><strong>Cómo funciona este manual.</strong> Avanza con <span class="boton-falso">Siguiente →</span>. Las palabras con <button class="termino" data-t="subrayado">subrayado de puntos</button> se explican si las tocas. Si te pierdes, el botón <strong>?</strong> de arriba abre la ayuda. Si cierras el manual, al volver a abrirlo sigue donde ibas.</p>
+    </div>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Tu equipo</p>
+    <h2>Qué necesitas</h2>
+    <p class="lead">Cuatro archivos, todos en la misma carpeta.</p>
+    <div class="archivos">
+      <div class="archivo-card"><div class="icono" aria-hidden="true">🗺️</div><strong class="archivo">Maplify.html</strong><span>El programa que hace el mapa.</span></div>
+      <div class="archivo-card"><div class="icono" aria-hidden="true">🏠</div><strong class="archivo">Plano.jfif.jpeg</strong><span>El dibujo del local, sin puntos marcados.</span></div>
+      <div class="archivo-card"><div class="icono" aria-hidden="true">📊</div><strong class="archivo">Relevamiento_WiFi_Limpio.xlsx</strong><span>El Excel con las mediciones.</span></div>
+      <div class="archivo-card"><div class="icono" aria-hidden="true">📘</div><strong class="archivo">Manual.html</strong><span>Este manual.</span></div>
+    </div>
+    <p class="centrado" style="text-align:center">También necesitas un computador con <strong>Google Chrome</strong> o <strong>Microsoft Edge</strong>. No hace falta internet ni instalar nada.</p>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Idea 1 de 3</p>
+    <p class="emoji-grande" aria-hidden="true">📡</p>
+    <h2>La señal WiFi se debilita con la distancia</h2>
+    <p class="lead">El <button class="termino" data-t="router">router</button> manda la señal WiFi por el aire, como una bombilla manda luz. Cerca del router la señal es fuerte; lejos, o detrás de muchas paredes, llega débil y el internet se pone lento o se cae.</p>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Idea 2 de 3</p>
+    <h2>La fuerza de la señal se mide en dBm</h2>
+    <p class="lead">La señal se mide con un número negativo llamado <button class="termino" data-t="dbm">dBm</button>. Lo único que debes recordar: <strong>entre más cerca de 0, mejor</strong>. Por eso −44 es mejor que −70.</p>
+    <div class="tarjeta" data-c="probador">
+      <h3 style="margin-top:0;text-align:center">Pruébalo: mueve la barra</h3>
+      <div class="probador">
+        <div class="muestra">−55</div>
+        <div>
+          <label class="etiqueta-campo">Fuerza de la señal (dBm)<input type="range" min="-95" max="-30" step="1" value="-55"></label>
+          <div class="regla"><span>−95 (muy débil)</span><span>−30 (muy fuerte)</span></div>
+          <p class="resultado-probador" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="escala" data-c="escala"></div>
+    </div>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Idea 3 de 3</p>
+    <p class="emoji-grande" aria-hidden="true">🗺️</p>
+    <h2>Un mapa de calor pinta la señal con colores</h2>
+    <p class="lead">Alguien caminó por el local con un celular y anotó la señal en 14 lugares, llamados <button class="termino" data-t="punto">puntos de medición</button> (P1, P2… P14). El programa pinta todo el plano usando esos números: verde donde la señal es buena y rojo donde es mala. Eso es un <button class="termino" data-t="calor">mapa de calor</button>.</p>
+    <div class="nota centrado" style="max-width:640px"><p>Lo único que el programa no sabe es <strong>dónde</strong> se tomó cada medición. Eso se lo vas a decir tú, haciendo clic en el plano.</p></div>
+  </section>
+
+  <section class="pantalla" data-reto="ordenar">
+    <p class="etiqueta">⭐ Reto del nivel</p>
+    <h2>Ordena las señales</h2>
+    <p class="lead">Toca las señales empezando por <strong>la más fuerte</strong> y terminando por la más débil.</p>
+    <div class="reto-caja"></div>
+  </section>
+</template>
+
+<!-- =========================================================== NIVEL 2: ABRIR EL PROGRAMA -->
+<template id="t-2">
+  <section class="pantalla">
+    <p class="etiqueta">Preparación</p>
+    <h2>Abre el programa</h2>
+    <p class="lead">El programa es el archivo <span class="archivo">Maplify.html</span>. Se abre en el navegador, como una página web, pero funciona sin internet.</p>
+    <ol class="acciones">
+      <li>Abre la carpeta donde están los archivos.</li>
+      <li>Haz <strong>doble clic</strong> en <span class="archivo">Maplify.html</span>.</li>
+      <li>Debe abrirse una pantalla como esta, con cuatro pasos a la izquierda.</li>
+    </ol>
+    <figure>
+      <div class="captura" data-zoom><img src="img/01-inicio.jpg" alt="El programa recién abierto: a la izquierda los pasos 1 a 4 y a la derecha una barra azul que dice: Empieza por el paso 1: sube la imagen del plano."></div>
+      <figcaption>Así se ve el programa al abrirlo. La barra azul de arriba siempre te dice qué hacer.</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Si algo raro pasa</p>
+    <h2>¿Se abrió otra cosa, o pide escoger un programa?</h2>
+    <p class="lead">Pasa cuando el computador no sabe con qué abrir el archivo. Haz esto:</p>
+    <ol class="acciones">
+      <li>Haz <strong>clic derecho</strong> sobre <span class="archivo">Maplify.html</span>.</li>
+      <li>Pon el ratón sobre <strong>Abrir con</strong>.</li>
+      <li>Elige <strong>Google Chrome</strong>. Si no aparece, elige <strong>Microsoft Edge</strong>.</li>
+    </ol>
+    <div class="menu-demo" aria-label="Ilustración del menú Abrir con">
+      <div class="icono-archivo"><div class="hoja">HTML</div>Maplify.html</div>
+      <div class="menu"><div>Abrir</div><div class="elegido con-flecha">Abrir con</div><div class="sep"></div><div>Compartir</div><div>Copiar</div><div>Cambiar nombre</div><div class="sep"></div><div>Propiedades</div></div>
+      <div class="submenu"><div class="elegido">Google Chrome</div><div>Microsoft Edge</div><div>Elegir otra aplicación</div></div>
+      <p class="demo-pie">Dibujo de referencia: en tu computador el menú puede verse un poco distinto.</p>
+    </div>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Importante</p>
+    <p class="emoji-grande" aria-hidden="true">⚠️</p>
+    <h2>No cierres el programa a mitad del trabajo</h2>
+    <p class="lead">Los puntos que ubiques se pierden si cierras la pestaña. Si lo intentas, el navegador te preguntará si quieres salir: responde que no.</p>
+  </section>
+
+  <section class="pantalla" data-reto="abrir">
+    <p class="etiqueta">⭐ Reto del nivel</p>
+    <h2>Abre el programa correcto</h2>
+    <p class="lead" data-enunciado>Esta es tu carpeta. ¿Qué archivo abres para hacer el mapa?</p>
+    <div class="reto-caja"></div>
+  </section>
+</template>
+
+<!-- =========================================================== NIVEL 3: EL PLANO -->
+<template id="t-3">
+  <section class="pantalla">
+    <p class="etiqueta">Paso 1 de 4</p>
+    <h2>Sube el plano</h2>
+    <p class="lead">El plano es el dibujo del local visto desde arriba. Sobre él se pintará el mapa.</p>
+    <ol class="acciones">
+      <li>En el paso 1 del programa, oprime el botón <span class="boton-falso">Elegir plano</span> (el que está marcado en rojo).</li>
+      <li>Se abre una ventana para buscar archivos. Busca la carpeta y elige <span class="archivo">Plano.jfif.jpeg</span>.</li>
+      <li>Oprime <strong>Abrir</strong>.</li>
+    </ol>
+    <figure>
+      <div class="captura" data-zoom data-recorte="0,90,380,290"><img src="img/01-inicio.jpg" alt="Pantalla inicial con el botón Elegir plano señalado."><span class="senal" data-caja="58,186,111,39"><b>1</b></span></div>
+      <figcaption>Oprime «Elegir plano».</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Ojo</p>
+    <p class="emoji-grande" aria-hidden="true">🧐</p>
+    <h2>Usa el plano limpio</h2>
+    <p class="lead">En la carpeta puede haber otra imagen llamada <span class="archivo">Puntos de medicion.jfif.jpeg</span>, que ya tiene puntos dibujados. Esa no: elige <span class="archivo">Plano.jfif.jpeg</span>.</p>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Comprueba</p>
+    <h2>Cómo sabes que funcionó</h2>
+    <p class="lead">El plano aparece a la derecha, el círculo del paso 1 se pone <strong style="color:var(--ok)">verde</strong>, debajo del botón sale <strong>✓ Plano.jfif.jpeg</strong> y la barra azul dice «Muy bien. Ahora sube el archivo de Excel (paso 2).»</p>
+    <figure>
+      <div class="captura" data-zoom><img src="img/02-plano.jpg" alt="El plano del local ya aparece a la derecha y el paso 1 está en verde."></div>
+      <figcaption>El plano ya está cargado.</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla" data-reto="plano">
+    <p class="etiqueta">⭐ Reto del nivel</p>
+    <h2>¿Cuál plano subes?</h2>
+    <p class="lead">Toca la imagen que debes elegir en el paso 1.</p>
+    <div class="reto-caja"></div>
+  </section>
+</template>
+
+<!-- =========================================================== NIVEL 4: EL EXCEL -->
+<template id="t-4">
+  <section class="pantalla">
+    <p class="etiqueta">Paso 2 de 4</p>
+    <h2>Sube el Excel</h2>
+    <p class="lead">El Excel trae los números de la señal medidos en cada punto. El programa los lee solo; tú no tienes que abrir el Excel.</p>
+    <ol class="acciones">
+      <li>En el paso 2, oprime <span class="boton-falso">Elegir Excel</span>.</li>
+      <li>Elige <span class="archivo">Relevamiento_WiFi_Limpio.xlsx</span> y oprime <strong>Abrir</strong>.</li>
+    </ol>
+    <figure>
+      <div class="captura" data-zoom data-recorte="0,90,380,290"><img src="img/02-plano.jpg" alt="Pantalla con el botón Elegir Excel señalado."><span class="senal" data-caja="58,287,106,39"><b>1</b></span></div>
+      <figcaption>Oprime «Elegir Excel».</figcaption>
+    </figure>
+    <div class="nota"><p><strong>Si tienes el Excel abierto en Excel, ciérralo antes.</strong> Algunos computadores no dejan que dos programas usen el mismo archivo a la vez.</p></div>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Comprueba</p>
+    <h2>Cómo sabes que funcionó</h2>
+    <p class="lead">Aparece <strong>✓ Relevamiento_WiFi_Limpio.xlsx (14 puntos)</strong> y, en el paso 3, la lista de puntos con su señal en dBm.</p>
+    <figure>
+      <div class="captura" data-zoom data-recorte="0,330,380,420"><img src="img/03-excel.jpg" alt="El paso 3 ya muestra la lista de puntos P1 a P14 con sus valores. P1 está resaltado en amarillo y P10 aparece en gris al final.">
+        <span class="senal" data-caja="58,451,144,32"><b>A</b></span><span class="senal" data-caja="58,707,293,32"><b>B</b></span></div>
+      <figcaption><strong>A:</strong> P1 está en amarillo porque es el primero que vas a ubicar. <strong>B:</strong> P10 sale en gris; ese no se ubica (en el nivel extra «¿Cómo funciona?» se explica por qué).</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla" data-reto="excel">
+    <p class="etiqueta">⭐ Reto del nivel</p>
+    <h2>Sube el Excel en el simulador</h2>
+    <p class="lead">Este es un programa de práctica. Haz lo mismo que harás en el de verdad.</p>
+    <div class="reto-caja"></div>
+  </section>
+</template>
+
+<!-- =========================================================== NIVEL 5: LOS PUNTOS -->
+<template id="t-5">
+  <section class="pantalla">
+    <p class="etiqueta">Paso 3 de 4</p>
+    <h2>Ubica los puntos en el plano</h2>
+    <p class="lead">Este es el paso más largo. Vas a decirle al programa dónde se midió cada punto, haciendo un clic en el plano por cada uno.</p>
+    <ol class="acciones">
+      <li>Mira la barra azul. Dice, por ejemplo, «Haz clic en el plano donde se midió P1.» En la lista, ese punto está en <span style="background:var(--resalte);outline:1.5px solid var(--resalte-borde);padding:0 5px;border-radius:4px">amarillo</span>.</li>
+      <li>Busca ese punto en el <strong>plano de referencia</strong> (lo verás en la siguiente pantalla) para saber dónde va.</li>
+      <li>Haz <strong>un clic</strong> en ese lugar del plano del programa. Aparece un círculo azul oscuro con el nombre del punto.</li>
+      <li>El programa pasa solo al siguiente punto. Repite hasta que diga <strong>«Ubicados: 13 de 13»</strong>.</li>
+    </ol>
+    <figure>
+      <div class="captura" data-zoom><img src="img/04-primer-punto.jpg" alt="P1 ya aparece en el plano, en el salón chimenea. La lista marca P1 con un chulo y P2 queda resaltado en amarillo.">
+        <span class="senal" data-caja="936,136,44,44"><b>1</b></span><span class="senal" data-caja="207,451,144,32"><b>2</b></span></div>
+      <figcaption><strong>1:</strong> P1 quedó en el plano. <strong>2:</strong> el programa ya pasó a P2. En la lista, P1 tiene un ✓.</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Tu guía</p>
+    <h2>Plano de referencia: dónde va cada punto</h2>
+    <p class="lead">Toca cualquier círculo para ver dónde va y cuánta señal tiene. También puedes tocar una fila de la tabla.</p>
+    <div data-c="referencia">
+      <div class="referencia">
+        <div>
+          <div class="plano-ref"><img src="img/plano-referencia.jpg" alt="Plano del local con la ubicación de los puntos de medición."></div>
+          <div class="convenciones"><span><i class="mini"></i> Ubicación medida</span><span><i class="mini estimado"></i> Ubicación estimada</span><span><i class="mini no-ubica"></i> No se ubica</span></div>
+        </div>
+        <div class="ficha tarjeta" aria-live="polite"></div>
+      </div>
+      <table class="tabla-puntos"><thead><tr><th>Punto</th><th>Dónde va</th><th>Señal</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Sin miedo a equivocarte</p>
+    <h2>Si te equivocas</h2>
+    <ul class="lista-simple">
+      <li><strong>Pusiste un punto en el lugar equivocado:</strong> haz clic sobre el círculo, mantén apretado el botón del ratón y <strong>arrástralo</strong> al lugar correcto.</li>
+      <li><strong>Quieres ubicar un punto distinto al amarillo:</strong> tócalo en la lista y luego haz clic en el plano.</li>
+      <li><strong>Sale «Ese lugar ya tiene P3. Haz clic un poco al lado.»:</strong> hiciste clic encima de otro punto. Haz clic un poquito al lado.</li>
+    </ul>
+    <figure>
+      <div class="captura" data-zoom data-recorte="0,300,380,430"><img src="img/06-completo.jpg" alt="Los 13 puntos están en el plano, la lista dice Ubicados: 13 de 13 y el botón Generar mapa está activo."><span class="senal" data-caja="58,400,293,22"><b>✓</b></span></div>
+      <figcaption>Así queda cuando terminas: «Ubicados: 13 de 13» y todos los puntos con ✓.</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla" data-reto="practica">
+    <p class="etiqueta">⭐ Reto del nivel</p>
+    <h2>Práctica: ubica tres puntos</h2>
+    <p class="lead">Haz clic en el plano donde va cada punto, como en el programa. Si no lo recuerdas, usa la pista.</p>
+    <div class="reto-caja"></div>
+  </section>
+</template>
+
+<!-- =========================================================== NIVEL 6: GENERAR -->
+<template id="t-6">
+  <section class="pantalla">
+    <p class="etiqueta">Paso 4 de 4</p>
+    <h2>Genera el mapa</h2>
+    <p class="lead">Ya hiciste lo difícil. Ahora el programa hace las cuentas por ti.</p>
+    <ol class="acciones">
+      <li>Oprime el botón <span class="boton-falso">Generar mapa</span>. Si está gris, todavía falta algún punto: debajo del botón dice cuáles, por ejemplo «Te faltan: P4, P7».</li>
+    </ol>
+    <figure>
+      <div class="captura" data-zoom data-recorte="0,560,380,300"><img src="img/06-completo.jpg" alt="El botón Generar mapa señalado."><span class="senal" data-caja="58,763,293,39"><b>1</b></span></div>
+    </figure>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Paso 4 de 4</p>
+    <h2>Descarga la imagen</h2>
+    <ol class="acciones" start="2" style="counter-reset: accion 1">
+      <li>En un instante el plano se pinta de colores y la barra de arriba se pone <strong style="color:var(--ok)">verde</strong>. Debajo de cada punto aparece su señal en dBm.</li>
+      <li>Oprime <span class="boton-falso secundario">Descargar imagen (PNG)</span> para guardar el mapa.</li>
+    </ol>
+    <figure>
+      <div class="captura" data-zoom><img src="img/07-mapa.jpg" alt="El mapa ya generado sobre el plano, con la barra superior verde y el botón Descargar imagen señalado."><span class="senal" data-caja="58,810,293,39"><b>3</b></span></div>
+      <figcaption>El mapa terminado. Oprime «Descargar imagen (PNG)».</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Tu premio</p>
+    <p class="emoji-grande" aria-hidden="true">📁</p>
+    <h2>¿Dónde quedó la imagen?</h2>
+    <p class="lead">Se guarda en la carpeta <strong>Descargas</strong> del computador con el nombre <span class="archivo">maplify-senal-SISCLUB-5GHz.png</span>. Trae el mapa, el título y la explicación de los colores, lista para ponerla en un informe o una presentación.</p>
+    <div class="nota centrado" style="max-width:640px"><p><strong>¿Moviste un punto después de generar?</strong> Los colores se borran y la barra dice «Moviste un punto. Oprime «Generar mapa» otra vez.» Solo vuelve a oprimir el botón.</p></div>
+  </section>
+
+  <section class="pantalla" data-reto="generar">
+    <p class="etiqueta">⭐ Reto del nivel</p>
+    <h2>Genera tu mapa</h2>
+    <p class="lead">Ya están los 13 puntos. Haz que el programa pinte el mapa.</p>
+    <div class="reto-caja"></div>
+  </section>
+</template>
+
+<!-- =========================================================== NIVEL 7: JEFE FINAL -->
+<template id="t-7">
+  <section class="pantalla">
+    <p class="etiqueta">Entender el resultado</p>
+    <h2>Cómo leer el mapa</h2>
+    <p class="lead">Cada color es un nivel de señal. Esta tabla es la misma que aparece debajo del mapa.</p>
+    <div class="escala" data-c="escala"></div>
+    <figure>
+      <div class="captura" data-zoom style="max-width:520px"><img src="img/08-imagen-final.jpg" alt="El mapa final descargado."></div>
+      <figcaption>El mapa de la red SISCLUB en 5 GHz.</figcaption>
+    </figure>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Entender el resultado</p>
+    <h2>Qué dice este mapa</h2>
+    <ul class="lista-simple">
+      <li><strong>La mayor parte del local tiene señal buena o excelente</strong> (verde). El salón, la Taberna y el salón chimenea están cubiertos.</li>
+      <li><strong>Las zonas más fuertes</strong> (verde oscuro) están alrededor de P7, en el salón, y de P13, en la cocina: ambos marcan −44 dBm.</li>
+      <li><strong>La zona roja</strong> está afuera de la cocina, junto a la puerta de abajo (P14). Ahí la red no apareció en la medición.</li>
+      <li><strong>Las zonas amarillas</strong> están en la Entrada y en el corredor (P3 con −70 y P5 con −68). Ahí el WiFi funciona, pero puede ir más lento.</li>
+      <li><strong>Las partes sin color</strong> están a más de 4 metros de cualquier medición. Como nadie midió ahí, el programa prefiere no adivinar.</li>
+    </ul>
+  </section>
+
+  <section class="pantalla" data-reto="jefe">
+    <p class="etiqueta">👑 Jefe final</p>
+    <h2>Demuestra que sabes leer el mapa</h2>
+    <p class="lead">Siete preguntas y tres vidas. Cada error te quita una.</p>
+    <div class="reto-caja"></div>
+  </section>
+</template>
+
+<!-- =========================================================== NIVEL EXTRA: CÓMO FUNCIONA -->
+<template id="t-8">
+  <section class="pantalla">
+    <p class="etiqueta">Nivel extra · para curiosos</p>
+    <h2>Cómo se tomaron las mediciones</h2>
+    <p class="lead">No necesitas esto para hacer el mapa, pero te ayuda a explicarlo.</p>
+    <p class="centrado" style="text-align:center">Una persona fue a cada uno de los 14 puntos del local con un celular y una aplicación que muestra las redes WiFi cercanas. En cada punto anotó todas las redes que veía, su señal en dBm y su <button class="termino" data-t="banda">banda</button> (2.4 GHz o 5 GHz). Todo quedó en el Excel: 257 filas.</p>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Nivel extra</p>
+    <h2>Por qué solo SISCLUB en 5 GHz</h2>
+    <p class="lead">En el local se ven muchas redes, pero la que importa es <strong>SISCLUB</strong>, la red del lugar. Además, una misma red transmite en dos bandas que se comportan distinto, así que mezclarlas en un mapa confundiría. Este mapa muestra <strong>SISCLUB en 5 GHz</strong>.</p>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Nivel extra</p>
+    <h2>Qué número usa cada punto</h2>
+    <ul class="lista-simple">
+      <li><strong>Si en un punto se vio SISCLUB varias veces</strong> (por ejemplo, desde dos antenas), se usa <strong>la señal más fuerte</strong>, porque el celular se conecta a la mejor.</li>
+      <li><strong>P10 no entra al mapa</strong> porque ahí solo se midió la banda de 2.4 GHz. No hay dato de 5 GHz, y es mejor no inventarlo.</li>
+      <li><strong>P14 vale −90</strong>: ahí sí se midió 5 GHz, pero SISCLUB no apareció. Eso significa que prácticamente no llega, y se le asigna −90, un valor de «sin señal».</li>
+      <li><strong>P3 (Entrada) y P12 (Taberna) tienen ubicación estimada.</strong> Los valores son reales, pero no quedó anotado exactamente dónde se midieron, así que se ubicaron en el sitio más probable.</li>
+    </ul>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Nivel extra</p>
+    <h2>Cómo pinta lo que nadie midió</h2>
+    <p class="lead">Entre dos puntos medidos, el programa <strong>estima</strong> la señal con un promedio: cada medición cuenta más entre más cerca esté. Este método se llama <button class="termino" data-t="idw">IDW</button>. Mueve la barra para caminar por un pasillo de 8 metros con una medición en cada extremo.</p>
+    <div class="tarjeta" data-c="idw">
+      <div class="contenedor-pasillo">
+        <div class="medicion" style="left:0"><div class="circulo">A</div></div>
+        <div class="medicion" style="right:0"><div class="circulo">B</div></div>
+        <div class="pasillo" aria-hidden="true"></div>
+        <div class="marcador-tu"><span>Tú</span></div>
+      </div>
+      <div class="regla" style="margin-top:6px"><span>A: −44 dBm (0 m)</span><span>B: −80 dBm (8 m)</span></div>
+      <label class="etiqueta-campo">Dónde estás en el pasillo<input type="range" min="0" max="8" step="0.5" value="2" style="width:100%;accent-color:var(--acento)"></label>
+      <div class="cuentas" aria-live="polite"></div>
+      <p class="explicacion" style="margin-bottom:0"></p>
+    </div>
+    <p class="centrado" style="text-align:center">El programa hace esta misma cuenta con los 13 puntos a la vez, para miles de cuadritos del plano, y pinta cada cuadrito con el color que le toca.</p>
+  </section>
+
+  <section class="pantalla">
+    <p class="etiqueta">Nivel extra</p>
+    <p class="emoji-grande" aria-hidden="true">🧱</p>
+    <h2>Lo que este método no sabe</h2>
+    <p class="lead"><strong>El mapa no tiene en cuenta las paredes.</strong> En la vida real una pared gruesa debilita la señal, pero el cálculo solo mira distancias. Por eso el mapa es una buena aproximación, no una medición exacta de cada rincón. Entre más puntos se midan, más fiel queda.</p>
+  </section>
+</template>
+
+<script>
+'use strict';
+
+const $ = id => document.getElementById(id);
+const CAPTURA = { ancho: 1440, alto: 860 };
+const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= DATOS ================= */
+const ESCALA = [
+  { desde: -50,       color: '#1a9850', nombre: 'Excelente',          rango: '−50 o mejor',  uso: 'Videos en alta calidad y videollamadas sin cortes.' },
+  { desde: -60,       color: '#7fc95a', nombre: 'Buena',              rango: '−51 a −60',    uso: 'Todo funciona bien: videos, redes sociales, llamadas.' },
+  { desde: -70,       color: '#ffdf2e', nombre: 'Aceptable',          rango: '−61 a −70',    uso: 'Funciona, pero los videos pueden cargar lento.' },
+  { desde: -80,       color: '#fd8d3c', nombre: 'Débil',              rango: '−71 a −80',    uso: 'Se cae a ratos. Sirve para mensajes, no para videos.' },
+  { desde: -Infinity, color: '#d7191c', nombre: 'Sin cobertura útil', rango: 'menos de −80', uso: 'Casi no hay internet.' }
+];
+const clasificar = dbm => ESCALA.find(b => Math.round(dbm) >= b.desde);
+const textoDbm = v => (v < 0 ? '−' : '') + Math.abs(Math.round(v));
+const tintaSobre = color => (color === '#d7191c' || color === '#1a9850') ? '#fff' : '#1c2733';
+
+const PUNTOS = [
+  { id: 'P1',  x: .598,   y: .130,   valor: -58, donde: 'Salón chimenea, en el centro de la sala.' },
+  { id: 'P2',  x: .6075,  y: .265,   valor: -52, donde: 'Salón chimenea, junto a la puerta de abajo que da al salón.' },
+  { id: 'P3',  x: .432,   y: .165,   valor: -70, donde: 'En la Entrada.', estimado: true },
+  { id: 'P4',  x: .4267,  y: .7125,  valor: -54, donde: 'Al final del corredor, abajo, junto a la puerta que sale a los parasoles.' },
+  { id: 'P5',  x: .43,    y: .40,    valor: -68, donde: 'En el corredor, a la misma altura que P7.' },
+  { id: 'P6',  x: .3985,  y: .611,   valor: -50, donde: 'En el corredor, parte de abajo, junto a la puerta doble.' },
+  { id: 'P7',  x: .6866,  y: .4015,  valor: -44, donde: 'En el salón, un poco a la derecha del centro.' },
+  { id: 'P8',  x: .6866,  y: .619,   valor: -59, donde: 'En el salón, abajo, justo encima de la Taberna.' },
+  { id: 'P9',  x: .8707,  y: .2965,  valor: -52, donde: 'Lado derecho del salón, arriba.' },
+  { id: 'P10', x: .864,   y: .44,    valor: null, donde: 'Lado derecho del salón, en la mitad. No se ubica porque no tiene medición en 5 GHz.', excluido: true },
+  { id: 'P11', x: .864,   y: .6175,  valor: -57, donde: 'Lado derecho del salón, abajo, cerca de Estación 1.' },
+  { id: 'P12', x: .606,   y: .695,   valor: -60, donde: 'En el centro de la Taberna.', estimado: true },
+  { id: 'P13', x: .2023,  y: .4025,  valor: -44, donde: 'En la cocina, en la mitad.' },
+  { id: 'P14', x: .1956,  y: .57,    valor: -90, donde: 'Afuera de la cocina, junto a su puerta de abajo.', asignado: true }
+];
+const PLANO_ALTO_SOBRE_ANCHO = 2400 / 1792;
+
+const GLOSARIO = {
+  subrayado: ['Palabra explicada', 'Así se ven las palabras que tienen explicación. Tócalas para leerla y toca en otro lado para cerrarla.'],
+  wifi: ['WiFi', 'La forma de conectarse a internet sin cables, por ondas de radio.'],
+  router: ['Router', 'El aparato que reparte el internet por WiFi. A veces hay varios en un mismo lugar, llamados antenas o puntos de acceso.'],
+  ssid: ['SSID o red', 'El nombre de la red WiFi que ves en el celular, por ejemplo SISCLUB.'],
+  banda: ['Banda (2.4 GHz y 5 GHz)', 'Los dos «carriles» por los que viaja el WiFi. 5 GHz es más rápida pero llega menos lejos; 2.4 GHz llega más lejos pero es más lenta.'],
+  dbm: ['dBm', 'La unidad en que se mide la fuerza de la señal WiFi. Siempre es negativa: −40 es muy fuerte y −90 casi no hay señal. Entre más cerca de 0, mejor.'],
+  punto: ['Punto de medición', 'Un lugar del local donde alguien se paró a medir la señal WiFi. Se llaman P1, P2… P14.'],
+  calor: ['Mapa de calor', 'Un dibujo que pinta un valor con colores. Aquí el valor es la señal WiFi: verde es buena y rojo es mala.'],
+  idw: ['IDW', 'Siglas en inglés de «ponderación por distancia inversa». Es un promedio donde las mediciones cercanas pesan más que las lejanas.']
+};
+
+const NIVELES = [
+  { n: 1, titulo: 'Lo básico',            sub: 'Qué es la señal',       icono: '📶' },
+  { n: 2, titulo: 'Abrir el programa',    sub: 'Preparación',           icono: '🖥️' },
+  { n: 3, titulo: 'El plano',             sub: 'Paso 1',                icono: '🏠' },
+  { n: 4, titulo: 'El Excel',             sub: 'Paso 2',                icono: '📊' },
+  { n: 5, titulo: 'Los puntos',           sub: 'Paso 3',                icono: '📍' },
+  { n: 6, titulo: 'Generar el mapa',      sub: 'Paso 4',                icono: '🎨' },
+  { n: 7, titulo: 'Jefe final',           sub: 'Leer el mapa',          icono: '👑' },
+  { n: 8, titulo: '¿Cómo funciona?',      sub: 'Nivel extra',           icono: '🔬', bonus: true }
+];
+const PRINCIPALES = NIVELES.filter(n => !n.bonus);
+
+/* ================= PROGRESO GUARDADO ================= */
+const CLAVE = 'mision-mapa-wifi';
+let progreso = { estrellas: {}, verTodo: false, nombre: '', nivel: null, pantalla: 0 };
+try { Object.assign(progreso, JSON.parse(localStorage.getItem(CLAVE)) || {}); } catch {}
+const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(progreso)); } catch {} };
+const completado = n => Boolean(progreso.estrellas[n]);
+const desbloqueado = n => progreso.verTodo || n === 1 || completado(n - 1) || (n === 8 && completado(7));
+const totalEstrellas = () => PRINCIPALES.reduce((s, l) => s + (progreso.estrellas[l.n] || 0), 0);
+const siguientePendiente = () => (PRINCIPALES.find(l => !completado(l.n)) || NIVELES[7]).n;
+const estrellasPorErrores = e => e === 0 ? 3 : e <= 2 ? 2 : 1;
+
+/* ================= VISTAS ================= */
+function mostrarVista(id) {
+  document.querySelectorAll('.vista').forEach(v => v.classList.toggle('activa', v.id === id));
+  cerrarDefinicion();
+  window.scrollTo({ top: 0 });
+  if (id === 'mapa') pintarMapa();
+  if (id === 'inicio') pintarInicio();
+  if (id === 'final') pintarDiploma();
+}
+document.addEventListener('click', e => {
+  const ir = e.target.closest('[data-ir]');
+  if (ir) { $('capaExito').classList.remove('abierta'); mostrarVista(ir.dataset.ir); }
+  const abrir = e.target.closest('[data-abrir]');
+  if (abrir) $(abrir.dataset.abrir).showModal();
+  const cerrar = e.target.closest('[data-cerrar]');
+  if (cerrar) cerrar.closest('dialog').close();
+  const directo = e.target.closest('[data-nivel-directo]');
+  if (directo) abrirNivel(Number(directo.dataset.nivelDirecto));
+});
+document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+
+function pintarInicio() {
+  const hay = Object.keys(progreso.estrellas).length > 0;
+  const boton = $('botonContinuar');
+  boton.hidden = !hay;
+  $('botonComenzar').textContent = hay ? '▶ Ir al mapa de niveles' : '▶ Comenzar';
+  if (hay) {
+    const n = siguientePendiente();
+    boton.textContent = `Continuar · nivel ${n}: ${NIVELES[n - 1].titulo}`;
+  }
+}
+$('botonComenzar').addEventListener('click', () => mostrarVista('mapa'));
+$('botonContinuar').addEventListener('click', () => {
+  const n = siguientePendiente();
+  abrirNivel(n, progreso.nivel === n ? progreso.pantalla : 0);
+});
+
+/* ================= MAPA DE NIVELES ================= */
+const DESPLAZAMIENTOS = [0, -110, 0, 110, 0, -110, 0, 110];
+function pintarMapa() {
+  const camino = $('camino');
+  camino.replaceChildren();
+  const actual = siguientePendiente();
+  const angosto = innerWidth < 560;
+  for (const nivel of NIVELES) {
+    const fila = document.createElement('div');
+    fila.className = 'fila-nodo';
+    fila.style.transform = `translateX(${DESPLAZAMIENTOS[nivel.n - 1] * (angosto ? .55 : 1)}px)`;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'nodo';
+    const est = progreso.estrellas[nivel.n] || 0;
+    if (completado(nivel.n)) b.classList.add('hecho');
+    else if (nivel.n === actual && desbloqueado(nivel.n)) b.classList.add('actual');
+    if (!desbloqueado(nivel.n)) b.classList.add('cerrado');
+    if (nivel.bonus) b.classList.add('bonus');
+    b.innerHTML = `<span class="circulo"></span><span class="nombre"><span></span><small></small></span><span class="estrellas"></span>`;
+    b.querySelector('.circulo').textContent = completado(nivel.n) ? '✓' : nivel.icono;
+    if (completado(nivel.n)) b.querySelector('.circulo').style.color = 'var(--ok)';
+    b.querySelector('.nombre span').textContent = (nivel.bonus ? '' : nivel.n + '. ') + nivel.titulo;
+    b.querySelector('.nombre small').textContent = nivel.sub;
+    b.querySelector('.estrellas').innerHTML = nivel.bonus ? (completado(8) ? '<b>✓ visto</b>' : '') : '<b>' + '★'.repeat(est) + '</b>' + '★'.repeat(3 - est);
+    b.setAttribute('aria-label', `Nivel ${nivel.n}: ${nivel.titulo}. ` + (!desbloqueado(nivel.n) ? 'Bloqueado.' : completado(nivel.n) ? `Completado con ${est} estrellas.` : 'Disponible.'));
+    if (b.classList.contains('actual')) {
+      const globo = document.createElement('span');
+      globo.className = 'globo';
+      globo.textContent = Object.keys(progreso.estrellas).length ? '¡Sigue aquí!' : '¡Empieza aquí!';
+      b.prepend(globo);
+    }
+    b.addEventListener('click', () => {
+      if (!desbloqueado(nivel.n)) {
+        b.classList.remove('sacudir'); void b.offsetWidth; b.classList.add('sacudir');
+        mostrarAvisoFlotante(b, `Primero termina el nivel ${nivel.n === 8 ? 7 : nivel.n - 1}.`);
+        return;
+      }
+      abrirNivel(nivel.n);
+    });
+    fila.append(b);
+    camino.append(fila);
+  }
+  $('totalEstrellas').textContent = `${totalEstrellas()} de 21`;
+  $('verTodo').textContent = progreso.verTodo ? 'Volver a bloquear los niveles' : 'Ver todos los niveles (para el profesor)';
+  requestAnimationFrame(dibujarSendero);
+}
+function dibujarSendero() {
+  const camino = $('camino');
+  camino.querySelector('svg')?.remove();
+  const base = camino.getBoundingClientRect();
+  const centros = [...camino.querySelectorAll('.circulo')].map(c => {
+    const r = c.getBoundingClientRect();
+    return [r.left + r.width / 2 - base.left, r.top + r.height / 2 - base.top];
+  });
+  if (centros.length < 2) return;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  let d = `M${centros[0][0]},${centros[0][1]}`;
+  for (let i = 1; i < centros.length; i++) {
+    const [x0, y0] = centros[i - 1], [x1, y1] = centros[i];
+    const my = (y0 + y1) / 2;
+    d += ` C${x0},${my} ${x1},${my} ${x1},${y1}`;
+  }
+  const hechos = PRINCIPALES.filter(l => completado(l.n)).length;
+  const crear = (color, ancho, raya) => {
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', d); p.setAttribute('fill', 'none'); p.setAttribute('stroke', color);
+    p.setAttribute('stroke-width', ancho); p.setAttribute('stroke-linecap', 'round');
+    if (raya) p.setAttribute('stroke-dasharray', raya);
+    return p;
+  };
+  svg.append(crear('#c3ccd6', 8, '2 16'));
+  if (hechos) {
+    const avance = crear('#1a7f46', 8, null);
+    svg.append(avance);
+    const largo = avance.getTotalLength();
+    const parcial = Math.min(hechos, centros.length - 1) / (centros.length - 1);
+    avance.setAttribute('stroke-dasharray', `${largo * parcial} ${largo}`);
+  }
+  camino.prepend(svg);
+}
+window.addEventListener('resize', () => { if ($('mapa').classList.contains('activa')) pintarMapa(); cerrarDefinicion(); });
+$('verTodo').addEventListener('click', () => { progreso.verTodo = !progreso.verTodo; guardar(); pintarMapa(); });
+$('reiniciar').addEventListener('click', () => {
+  if (!confirm('Se borrarán tus estrellas y empezarás desde el nivel 1. ¿Continuar?')) return;
+  progreso = { estrellas: {}, verTodo: false, nombre: '', nivel: null, pantalla: 0 };
+  guardar();
+  mostrarVista('inicio');
+});
+
+function mostrarAvisoFlotante(elemento, texto) {
+  const caja = elemento.getBoundingClientRect();
+  definicion.innerHTML = '<span></span>';
+  definicion.firstChild.textContent = texto;
+  definicion.style.display = 'block';
+  definicion.style.left = Math.max(8, caja.left + scrollX + caja.width / 2 - definicion.offsetWidth / 2) + 'px';
+  definicion.style.top = (caja.bottom + scrollY + 6) + 'px';
+  setTimeout(cerrarDefinicion, 1800);
+}
+
+/* ================= NIVELES ================= */
+const juego = { nivel: null, pantallas: [], indice: 0, retoListo: false, errores: 0 };
+
+function abrirNivel(n, pantalla = 0) {
+  juego.nivel = n;
+  juego.errores = 0;
+  juego.retoListo = false;
+  const tarjeta = $('tarjetaNivel');
+  tarjeta.replaceChildren($('t-' + n).content.cloneNode(true));
+  juego.pantallas = [...tarjeta.querySelectorAll('.pantalla')];
+  activar(tarjeta);
+  const nivel = NIVELES[n - 1];
+  $('tituloNivel').textContent = (nivel.bonus ? 'Nivel extra' : `Nivel ${n}`) + ` · ${nivel.titulo}`;
+  $('capaExito').classList.remove('abierta');
+  mostrarVista('nivel');
+  irAPantalla(Math.min(pantalla, juego.pantallas.length - 1), true);
+}
+
+function irAPantalla(i, adelante = true) {
+  juego.indice = i;
+  juego.pantallas.forEach((p, n) => {
+    p.hidden = n !== i;
+    p.classList.toggle('volver', !adelante);
+  });
+  const actual = juego.pantallas[i];
+  if (actual.dataset.reto && !actual.dataset.iniciado) {
+    actual.dataset.iniciado = '1';
+    RETOS[actual.dataset.reto](actual.querySelector('.reto-caja'), actual);
+  }
+  progreso.nivel = juego.nivel;
+  progreso.pantalla = i;
+  guardar();
+  pintarPuntitos();
+  pintarNavegacion();
+  cerrarDefinicion();
+  window.scrollTo({ top: 0 });
+}
+
+function pintarPuntitos() {
+  const cont = $('puntitos');
+  cont.replaceChildren(...juego.pantallas.map((p, n) => {
+    const s = document.createElement('span');
+    if (p.dataset.reto) s.classList.add('reto');
+    if (n < juego.indice) s.classList.add('listo');
+    if (n === juego.indice) s.classList.add('ahora');
+    return s;
+  }));
+}
+
+function pintarNavegacion() {
+  const actual = juego.pantallas[juego.indice];
+  const esReto = Boolean(actual.dataset.reto);
+  const ultima = juego.indice === juego.pantallas.length - 1;
+  $('anterior').style.visibility = juego.indice === 0 ? 'hidden' : 'visible';
+  const sig = $('siguiente');
+  sig.classList.toggle('bloqueado', esReto && !juego.retoListo);
+  sig.classList.toggle('ok', ultima && (!esReto || juego.retoListo));
+  sig.textContent = ultima ? (esReto ? 'Terminar nivel ✓' : 'Terminar nivel ✓') : (juego.indice === juego.pantallas.length - 2 && juego.pantallas[juego.indice + 1].dataset.reto ? '¡Al reto! →' : 'Siguiente →');
+  $('avisoReto').textContent = esReto && !juego.retoListo ? 'Supera el reto para terminar el nivel.' : '';
+}
+
+$('anterior').addEventListener('click', () => { if (juego.indice > 0) irAPantalla(juego.indice - 1, false); });
+$('siguiente').addEventListener('click', avanzar);
+function avanzar() {
+  const actual = juego.pantallas[juego.indice];
+  if (actual.dataset.reto && !juego.retoListo) {
+    const aviso = $('avisoReto');
+    aviso.classList.remove('sacudir'); void aviso.offsetWidth; aviso.classList.add('sacudir');
+    return;
+  }
+  if (juego.indice < juego.pantallas.length - 1) irAPantalla(juego.indice + 1, true);
+  else completarNivel();
+}
+document.addEventListener('keydown', e => {
+  if (!$('nivel').classList.contains('activa') || document.querySelector('dialog[open]') || $('capaExito').classList.contains('abierta')) return;
+  if (e.target.closest('input, select, textarea') || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (e.key === 'ArrowRight') avanzar();
+  if (e.key === 'ArrowLeft' && juego.indice > 0) irAPantalla(juego.indice - 1, false);
+});
+
+function retoSuperado(caja, mensaje) {
+  juego.retoListo = true;
+  const exito = document.createElement('div');
+  exito.className = 'exito-reto';
+  exito.textContent = '🎉 ' + mensaje + ' Oprime «Terminar nivel ✓».';
+  caja.append(exito);
+  pintarNavegacion();
+  confeti(40);
+}
+function fallo(caja) { juego.errores++; caja.classList.remove('sacudir'); void caja.offsetWidth; caja.classList.add('sacudir'); }
+
+function completarNivel() {
+  const n = juego.nivel;
+  const nivel = NIVELES[n - 1];
+  const estrellas = nivel.bonus ? 3 : estrellasPorErrores(juego.errores);
+  progreso.estrellas[n] = Math.max(progreso.estrellas[n] || 0, estrellas);
+  progreso.nivel = null;
+  progreso.pantalla = 0;
+  guardar();
+
+  const capa = $('capaExito');
+  $('emojiExito').textContent = n === 7 ? '🏆' : nivel.bonus ? '🔬' : '🎉';
+  $('tituloExito').textContent = n === 7 ? '¡Venciste al jefe final!' : nivel.bonus ? '¡Nivel extra completado!' : '¡Nivel completado!';
+  const cont = $('estrellasExito');
+  cont.innerHTML = nivel.bonus ? '' : [0, 1, 2].map(i => `<span class="${i < estrellas ? 'ganada' : ''}" style="animation-delay:${.15 + i * .2}s">★</span>`).join('');
+  $('textoExito').textContent = nivel.bonus ? 'Ya sabes cómo funciona el programa por dentro.'
+    : estrellas === 3 ? 'Perfecto: sin errores.' : `Ganaste ${estrellas} de 3 estrellas. Repite el nivel si quieres las 3.`;
+  const sig = $('botonSiguienteNivel');
+  if (n === 7) sig.textContent = 'Ver mi diploma 🏆';
+  else if (nivel.bonus) sig.textContent = completado(7) ? 'Ver mi diploma 🏆' : 'Volver al mapa';
+  else sig.textContent = `Siguiente nivel: ${NIVELES[n].titulo} →`;
+  sig.onclick = () => {
+    capa.classList.remove('abierta');
+    if (n === 7 || (nivel.bonus && completado(7))) mostrarVista('final');
+    else if (nivel.bonus) mostrarVista('mapa');
+    else abrirNivel(n + 1);
+  };
+  $('botonRepetir').onclick = () => abrirNivel(n);
+  capa.classList.add('abierta');
+  sig.focus();
+  confeti(n === 7 ? 140 : 80);
+}
+
+function confeti(cantidad) {
+  if (reducido) return;
+  const colores = ['#1a9850', '#7fc95a', '#ffdf2e', '#fd8d3c', '#1f5fbf', '#f2b705'];
+  for (let i = 0; i < cantidad; i++) {
+    const c = document.createElement('span');
+    c.className = 'confeti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colores[i % colores.length];
+    c.style.animationDuration = (1.6 + Math.random() * 1.6) + 's';
+    c.style.animationDelay = Math.random() * .4 + 's';
+    c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    document.body.append(c);
+    setTimeout(() => c.remove(), 3800);
+  }
+}
+
+/* ================= COMPONENTES DENTRO DE LAS PANTALLAS ================= */
+function activar(raiz) {
+  prepararCapturas(raiz);
+  raiz.querySelectorAll('[data-c="escala"]').forEach(pintarEscala);
+  raiz.querySelectorAll('[data-c="probador"]').forEach(activarProbador);
+  raiz.querySelectorAll('[data-c="referencia"]').forEach(activarReferencia);
+  raiz.querySelectorAll('[data-c="idw"]').forEach(activarIdw);
+}
+
+function prepararCapturas(raiz) {
+  raiz.querySelectorAll('.captura').forEach(c => {
+    const img = c.querySelector('img');
+    if (!img) return;
+    c.setAttribute('tabindex', '0');
+    c.setAttribute('role', 'button');
+    c.setAttribute('aria-label', 'Ampliar imagen: ' + img.alt);
+    const [rx, ry, rw, rh] = c.dataset.recorte ? c.dataset.recorte.split(',').map(Number) : [0, 0, CAPTURA.ancho, CAPTURA.alto];
+    if (c.dataset.recorte) {
+      c.style.aspectRatio = `${rw} / ${rh}`;
+      Object.assign(img.style, { position: 'absolute', width: (CAPTURA.ancho / rw * 100) + '%', maxWidth: 'none', left: (-rx / rw * 100) + '%', top: (-ry / rh * 100) + '%' });
+    }
+    c.querySelectorAll('.senal').forEach(s => {
+      const [x, y, w, h] = s.dataset.caja.split(',').map(Number);
+      const m = 6;
+      Object.assign(s.style, { left: ((x - m - rx) / rw * 100) + '%', top: ((y - m - ry) / rh * 100) + '%', width: ((w + 2 * m) / rw * 100) + '%', height: ((h + 2 * m) / rh * 100) + '%' });
+    });
+  });
+}
+
+const zoom = $('zoom');
+function abrirZoom(c) {
+  const copia = c.cloneNode(true);
+  const proporcion = c.offsetWidth / c.offsetHeight;
+  copia.style.width = `min(96vw, ${(92 * proporcion).toFixed(1)}vh, 1440px)`;
+  copia.style.maxWidth = 'none';
+  copia.removeAttribute('tabindex');
+  zoom.replaceChildren(copia);
+  zoom.classList.add('abierto');
+}
+document.addEventListener('click', e => { const c = e.target.closest('[data-zoom]'); if (c && !zoom.contains(c)) abrirZoom(c); });
+document.addEventListener('keydown', e => {
+  const c = e.target.closest?.('[data-zoom]');
+  if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); abrirZoom(c); }
+  if (e.key === 'Escape') { zoom.classList.remove('abierto'); cerrarDefinicion(); }
+});
+zoom.addEventListener('click', () => zoom.classList.remove('abierto'));
+
+function pintarEscala(cont) {
+  cont.replaceChildren(...ESCALA.map(b => {
+    const d = document.createElement('div');
+    d.style.background = b.color;
+    d.style.color = tintaSobre(b.color);
+    d.innerHTML = '<strong></strong><small></small>';
+    d.firstChild.textContent = b.nombre;
+    d.lastChild.textContent = b.rango + ' dBm';
+    return d;
+  }));
+}
+
+function activarProbador(raiz) {
+  const deslizador = raiz.querySelector('input[type=range]');
+  const muestra = raiz.querySelector('.muestra');
+  const resultado = raiz.querySelector('.resultado-probador');
+  const escala = raiz.querySelector('[data-c="escala"]');
+  const actualizar = () => {
+    const v = Number(deslizador.value);
+    const banda = clasificar(v);
+    muestra.style.background = banda.color;
+    muestra.style.color = tintaSobre(banda.color);
+    muestra.textContent = textoDbm(v);
+    resultado.innerHTML = '<strong></strong><br><span></span>';
+    resultado.firstChild.textContent = `${textoDbm(v)} dBm: ${banda.nombre}`;
+    resultado.lastChild.textContent = banda.uso;
+    escala.querySelectorAll('div').forEach((d, i) => d.classList.toggle('activa', ESCALA[i] === banda));
+  };
+  deslizador.addEventListener('input', actualizar);
+  actualizar();
+}
+
+function activarReferencia(raiz) {
+  const plano = raiz.querySelector('.plano-ref');
+  const ficha = raiz.querySelector('.ficha');
+  const cuerpo = raiz.querySelector('tbody');
+  const botones = new Map();
+  const textoValor = p => p.excluido ? 'No se usa' : textoDbm(p.valor) + ' dBm';
+  const mostrar = p => {
+    botones.forEach((b, id) => b.classList.toggle('elegido', id === p.id));
+    let insignia = '';
+    if (p.estimado) insignia = '<span class="insignia estimada">Ubicación estimada</span>';
+    if (p.excluido) insignia = '<span class="insignia excluida">No se ubica</span>';
+    if (p.asignado) insignia = '<span class="insignia asignada">Sin señal de SISCLUB</span>';
+    const banda = p.excluido ? null : clasificar(p.valor);
+    ficha.innerHTML = `<h3>${p.id}${insignia}</h3><p class="donde"></p><p class="valor"></p><p class="extra" style="color:var(--tinta-suave);font-size:15px;margin-bottom:0"></p>`;
+    ficha.querySelector('.donde').textContent = p.donde;
+    ficha.querySelector('.valor').textContent = p.excluido ? 'Señal: no tiene medición en 5 GHz.' : `Señal: ${textoValor(p)} (${banda.nombre})`;
+    ficha.querySelector('.extra').textContent =
+      p.estimado ? 'No quedó anotado el lugar exacto de esta medición. Se ubicó en el sitio más probable.'
+      : p.excluido ? 'En la lista del programa sale en gris. No tienes que hacer nada con él.'
+      : p.asignado ? 'Aquí se midió y SISCLUB no apareció. Por eso vale −90, que significa «sin señal».'
+      : 'Haz clic en este lugar del plano del programa cuando la barra azul te pida ' + p.id + '.';
+  };
+  for (const p of PUNTOS) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'punto-ref' + (p.estimado ? ' estimado' : '') + (p.excluido ? ' no-ubica' : '');
+    b.style.left = (p.x * 100) + '%';
+    b.style.top = (p.y * 100) + '%';
+    b.textContent = p.id;
+    b.setAttribute('aria-label', `${p.id}: ${p.donde}`);
+    b.addEventListener('click', () => mostrar(p));
+    plano.append(b);
+    botones.set(p.id, b);
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><strong></strong></td><td></td><td></td>';
+    tr.cells[0].firstChild.textContent = p.id;
+    tr.cells[1].textContent = p.donde.replace(/ No se ubica.*$/, '') + (p.estimado ? ' (estimada)' : '');
+    tr.cells[2].textContent = textoValor(p);
+    tr.addEventListener('click', () => { mostrar(p); plano.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
+    cuerpo.append(tr);
+  }
+  mostrar(PUNTOS[0]);
+}
+
+function activarIdw(raiz) {
+  const LARGO = 8, A = -44, B = -80;
+  const estimar = pos => {
+    const dA = pos, dB = LARGO - pos;
+    if (dA === 0) return { valor: A, pA: null, pB: null, dA, dB };
+    if (dB === 0) return { valor: B, pA: null, pB: null, dA, dB };
+    const pA = 1 / (dA * dA), pB = 1 / (dB * dB);
+    return { valor: (pA * A + pB * B) / (pA + pB), pA, pB, dA, dB };
+  };
+  const pasillo = raiz.querySelector('.pasillo');
+  for (let i = 0; i < 80; i++) {
+    const d = document.createElement('div');
+    d.style.background = clasificar(estimar((i + 0.5) / 80 * LARGO).valor).color;
+    pasillo.append(d);
+  }
+  const posicion = raiz.querySelector('input[type=range]');
+  const marcador = raiz.querySelector('.marcador-tu');
+  const cuentas = raiz.querySelector('.cuentas');
+  const explicacion = raiz.querySelector('.explicacion');
+  const fmt = n => n.toLocaleString('es-CO', { maximumFractionDigits: 3 });
+  const actualizar = () => {
+    const pos = Number(posicion.value);
+    const r = estimar(pos);
+    const banda = clasificar(r.valor);
+    marcador.style.left = (pos / LARGO * 100) + '%';
+    const caja = (nombre, d, p) => `<div>Distancia a ${nombre}: ${fmt(d)} m<strong>${p === null ? '—' : 'peso ' + fmt(p)}</strong>${p === null ? '' : `1 ÷ (${fmt(d)} × ${fmt(d)})`}</div>`;
+    cuentas.innerHTML = caja('A', r.dA, r.pA) + caja('B', r.dB, r.pB) + `<div>Señal estimada<strong>${textoDbm(r.valor)} dBm</strong>${banda.nombre}</div>`;
+    let texto;
+    if (r.dA === 0) texto = 'Estás parado justo sobre A, así que la señal es exactamente la medida ahí: −44 dBm.';
+    else if (r.dB === 0) texto = 'Estás parado justo sobre B, así que la señal es exactamente la medida ahí: −80 dBm.';
+    else if (Math.abs(r.pA - r.pB) < 1e-9) texto = 'Estás en la mitad: A y B pesan lo mismo, así que el resultado es el promedio de los dos.';
+    else {
+      const cerca = r.pA > r.pB ? 'A' : 'B';
+      const veces = Math.max(r.pA, r.pB) / Math.min(r.pA, r.pB);
+      texto = `Estás más cerca de ${cerca}, así que ${cerca} pesa ${fmt(Math.round(veces * 10) / 10)} veces más y el resultado se parece más a su valor.`;
+    }
+    explicacion.textContent = texto;
+  };
+  posicion.addEventListener('input', actualizar);
+  actualizar();
+}
+
+/* ================= RETOS ================= */
+const crear = (etiqueta, clase, texto) => { const e = document.createElement(etiqueta); if (clase) e.className = clase; if (texto != null) e.textContent = texto; return e; };
+const barajar = lista => { const a = [...lista]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function ponerRetro(retro, texto, bien) { retro.textContent = texto; retro.className = 'retro ' + (bien ? 'bien' : 'mal'); }
+
+const RETOS = {
+  /* Nivel 1: ordenar señales de la más fuerte a la más débil */
+  ordenar(caja) {
+    const valores = [-44, -58, -70, -90];
+    const chips = crear('div', 'chips');
+    const podio = crear('div', 'podio');
+    const etiquetas = ['1.ª · la más fuerte', '2.ª', '3.ª', '4.ª · la más débil'];
+    const huecos = etiquetas.map(t => { const d = crear('div'); d.innerHTML = '<span>?</span><small></small>'; d.querySelector('small').textContent = t; podio.append(d); return d; });
+    const retro = crear('p', 'retro');
+    let siguiente = 0;
+    for (const v of barajar(valores)) {
+      const b = crear('button', 'chip', textoDbm(v) + ' dBm');
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        if (v === valores[siguiente]) {
+          const banda = clasificar(v);
+          const h = huecos[siguiente];
+          h.classList.add('lleno');
+          h.style.background = banda.color;
+          h.style.color = tintaSobre(banda.color);
+          h.style.borderColor = banda.color;
+          h.firstChild.textContent = textoDbm(v);
+          h.querySelector('small').style.color = tintaSobre(banda.color);
+          b.remove();
+          siguiente++;
+          ponerRetro(retro, siguiente < 4 ? '¡Bien! Sigue con la siguiente más fuerte.' : '', true);
+          if (siguiente === 4) retoSuperado(caja, '¡Exacto! Entre más cerca de 0, más fuerte es la señal.');
+        } else {
+          fallo(b);
+          ponerRetro(retro, 'Todavía no. Busca la que esté más cerca de 0.', false);
+        }
+      });
+      chips.append(b);
+    }
+    caja.append(chips, podio, retro);
+  },
+
+  /* Nivel 2: elegir el programa y abrirlo con Chrome */
+  abrir(caja, pantalla) {
+    const enunciado = pantalla.querySelector('[data-enunciado]');
+    const retro = crear('p', 'retro');
+    const archivos = [
+      { nombre: 'Plano.jfif.jpeg', icono: '🏠', ok: false, msg: 'Ese es el plano. Lo vas a subir después, dentro del programa.' },
+      { nombre: 'Relevamiento_WiFi_Limpio.xlsx', icono: '📊', ok: false, msg: 'Ese es el Excel. También se sube dentro del programa.' },
+      { nombre: 'Maplify.html', icono: '🗺️', ok: true },
+      { nombre: 'Manual.html', icono: '📘', ok: false, msg: 'Ese es este manual. Busca el programa que hace el mapa.' }
+    ];
+    const rejilla = crear('div', 'archivos');
+    for (const a of barajar(archivos)) {
+      const b = crear('button', 'archivo-card');
+      b.type = 'button';
+      b.innerHTML = '<div class="icono" aria-hidden="true"></div><strong class="archivo"></strong>';
+      b.querySelector('.icono').textContent = a.icono;
+      b.querySelector('strong').textContent = a.nombre;
+      b.addEventListener('click', () => {
+        if (a.ok) { b.classList.add('bien'); ponerRetro(retro, '¡Correcto! Maplify.html es el programa.', true); setTimeout(etapaMenu, 900); }
+        else { b.classList.add('mal'); b.disabled = true; fallo(b); ponerRetro(retro, a.msg, false); }
+      });
+      rejilla.append(b);
+    }
+    caja.append(rejilla, retro);
+
+    function etapaMenu() {
+      enunciado.textContent = 'Le diste doble clic y se abrió en otro programa. Haz clic derecho (o clic) sobre el archivo y ábrelo con el navegador.';
+      caja.replaceChildren();
+      const demo = crear('div', 'menu-demo');
+      const icono = crear('div', 'icono-archivo');
+      icono.innerHTML = '<div class="hoja">HTML</div>Maplify.html';
+      icono.tabIndex = 0;
+      icono.setAttribute('role', 'button');
+      icono.setAttribute('aria-label', 'Archivo Maplify.html: abre su menú');
+      demo.append(icono);
+      const retro2 = crear('p', 'retro');
+      const mostrarMenu = e => {
+        e.preventDefault();
+        if (demo.querySelector('.menu')) return;
+        const menu = crear('div', 'menu');
+        const items = ['Abrir', 'Abrir con', '-', 'Compartir', 'Copiar', 'Cambiar nombre', '-', 'Propiedades'];
+        for (const it of items) {
+          if (it === '-') { menu.append(crear('div', 'sep')); continue; }
+          const b = crear('button', it === 'Abrir con' ? 'con-flecha' : '', it);
+          b.type = 'button';
+          b.addEventListener('click', () => {
+            if (it === 'Abrir con') { b.classList.add('elegido'); mostrarSubmenu(); ponerRetro(retro2, 'Bien. Ahora elige el navegador.', true); }
+            else if (it === 'Abrir') { fallo(b); ponerRetro(retro2, '«Abrir» lo vuelve a abrir en el programa equivocado. Busca «Abrir con».', false); }
+            else { fallo(b); ponerRetro(retro2, 'Esa opción no abre el archivo. Busca «Abrir con».', false); }
+          });
+          menu.append(b);
+        }
+        demo.append(menu);
+        menu.querySelector('button').focus();
+        ponerRetro(retro2, 'Se abrió el menú. ¿Cuál opción eliges?', true);
+      };
+      const mostrarSubmenu = () => {
+        if (demo.querySelector('.submenu')) return;
+        const sub = crear('div', 'submenu');
+        for (const [nombre, ok] of [['Google Chrome', true], ['Microsoft Edge', true], ['Bloc de notas', false]]) {
+          const b = crear('button', '', nombre);
+          b.type = 'button';
+          b.addEventListener('click', () => {
+            if (ok) { b.classList.add('elegido'); ponerRetro(retro2, `¡Listo! El programa se abre en ${nombre}.`, true); retoSuperado(caja, 'Ya sabes abrir el programa aunque el computador se confunda.'); sub.querySelectorAll('button').forEach(x => x.disabled = true); }
+            else { fallo(b); ponerRetro(retro2, 'El Bloc de notas mostraría puro texto raro. Elige un navegador: Chrome o Edge.', false); }
+          });
+          sub.append(b);
+        }
+        demo.append(sub);
+      };
+      icono.addEventListener('contextmenu', mostrarMenu);
+      icono.addEventListener('click', mostrarMenu);
+      icono.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') mostrarMenu(e); });
+      caja.append(demo, retro2);
+    }
+  },
+
+  /* Nivel 3: elegir el plano limpio */
+  plano(caja) {
+    const retro = crear('p', 'retro');
+    const rejilla = crear('div', 'planos-opciones');
+    const opciones = [{ limpio: true, nombre: 'Plano.jfif.jpeg' }, { limpio: false, nombre: 'Puntos de medicion.jfif.jpeg' }];
+    for (const o of barajar(opciones)) {
+      const b = crear('button', 'opcion-plano');
+      b.type = 'button';
+      b.innerHTML = '<div class="lienzo"><img alt=""></div><strong class="archivo"></strong>';
+      b.querySelector('img').src = document.querySelector('#t-5').content.querySelector('.plano-ref img').getAttribute('src');
+      b.querySelector('strong').textContent = o.nombre;
+      if (!o.limpio) {
+        PUNTOS.filter(p => !p.excluido).forEach((p, i) => {
+          const m = crear('span', 'viejo', String(i + 1));
+          m.style.left = (p.x * 100 + (i % 2 ? 3 : -3)) + '%';
+          m.style.top = (p.y * 100 + (i % 3 ? 2 : -2)) + '%';
+          b.querySelector('.lienzo').append(m);
+        });
+      }
+      b.setAttribute('aria-label', o.nombre + (o.limpio ? ', plano sin marcas' : ', plano con puntos dibujados'));
+      b.addEventListener('click', () => {
+        if (o.limpio) { b.classList.add('bien'); rejilla.querySelectorAll('button').forEach(x => x.disabled = true); ponerRetro(retro, '¡Correcto! Es el plano limpio, sin puntos dibujados.', true); retoSuperado(caja, 'Elegiste el plano correcto.'); }
+        else { b.classList.add('mal'); b.disabled = true; fallo(b); ponerRetro(retro, 'Ese ya tiene puntos dibujados, y además son viejos. Elige el limpio.', false); }
+      });
+      rejilla.append(b);
+    }
+    caja.append(rejilla, retro);
+  },
+
+  /* Nivel 4: simulador para subir el Excel */
+  excel(caja) {
+    const retro = crear('p', 'retro');
+    const prog = crear('div', 'programa-mini');
+    prog.innerHTML = `
+      <div class="panel">
+        <div class="paso-mini hecho"><span class="num">1</span><div><h4>Sube el plano</h4><span class="boton-falso">Elegir plano</span><p class="ok-texto">✓ Plano.jfif.jpeg</p></div></div>
+        <div class="paso-mini" data-paso2><span class="num">2</span><div><h4>Sube el Excel</h4><button type="button" class="boton" style="padding:6px 14px;font-size:15px">Elegir Excel</button><p class="ok-texto" hidden></p></div></div>
+        <div class="paso-mini gris" data-paso3><span class="num">3</span><div><h4>Ubica los puntos</h4><div data-lista></div></div></div>
+      </div>
+      <div class="zona"><div class="barra-azul">Muy bien. Ahora sube el archivo de Excel (paso 2).</div><div data-dialogo style="display:grid"></div></div>`;
+    caja.append(prog, retro);
+    const botonExcel = prog.querySelector('[data-paso2] button');
+    const zonaDialogo = prog.querySelector('[data-dialogo]');
+    const archivos = [
+      { nombre: 'Manual.html', icono: '📘', msg: 'Ese es el manual. Aquí va el Excel con las mediciones.' },
+      { nombre: 'Plano.jfif.jpeg', icono: '🏠', msg: 'Ese es el plano, y ya lo subiste. Aquí va el Excel.' },
+      { nombre: 'Puntos de medicion.jfif.jpeg', icono: '🖼️', msg: 'Esa es una imagen vieja, no el Excel.' },
+      { nombre: 'Relevamiento_WiFi_Limpio.xlsx', icono: '📊', ok: true },
+      { nombre: 'Maplify.html', icono: '🗺️', msg: 'Ese es el programa mismo. Busca el archivo que termina en .xlsx.' }
+    ];
+    botonExcel.addEventListener('click', () => {
+      if (zonaDialogo.firstChild) return;
+      const dlg = crear('div', 'dialogo-archivos');
+      dlg.innerHTML = '<div class="titulo">Abrir — Carpeta Maplify</div><ul></ul><div class="pie"><button type="button" class="principal">Abrir</button><button type="button">Cancelar</button></div>';
+      let elegido = null;
+      for (const a of archivos) {
+        const li = crear('li');
+        const b = crear('button');
+        b.type = 'button';
+        b.innerHTML = '<span aria-hidden="true"></span><span></span>';
+        b.firstChild.textContent = a.icono;
+        b.lastChild.textContent = a.nombre;
+        b.addEventListener('click', () => { dlg.querySelectorAll('li button').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); elegido = a; });
+        b.addEventListener('dblclick', confirmar);
+        li.append(b);
+        dlg.querySelector('ul').append(li);
+      }
+      const [abrirB, cancelarB] = dlg.querySelectorAll('.pie button');
+      abrirB.addEventListener('click', confirmar);
+      cancelarB.addEventListener('click', () => { dlg.remove(); ponerRetro(retro, 'Cerraste la ventana. Oprime «Elegir Excel» otra vez.', false); });
+      function confirmar() {
+        if (!elegido) { ponerRetro(retro, 'Primero toca un archivo de la lista y luego «Abrir».', false); return; }
+        if (!elegido.ok) { fallo(dlg); ponerRetro(retro, elegido.msg, false); return; }
+        dlg.remove();
+        const ok = prog.querySelector('[data-paso2] .ok-texto');
+        ok.hidden = false;
+        ok.textContent = '✓ Relevamiento_WiFi_Limpio.xlsx (14 puntos)';
+        prog.querySelector('[data-paso2]').classList.add('hecho');
+        prog.querySelector('[data-paso3]').classList.remove('gris');
+        prog.querySelector('[data-lista]').innerHTML = '<div class="lista-mini"><span>○ P1 −58</span><span>○ P2 −52</span><span>○ P3 −70</span><span>○ P4 −54</span></div>';
+        prog.querySelector('.barra-azul').textContent = 'Haz clic en el plano donde se midió P1.';
+        botonExcel.disabled = true;
+        ponerRetro(retro, '¡Perfecto! El programa leyó los 14 puntos.', true);
+        retoSuperado(caja, 'Subiste el Excel correcto.');
+      }
+      zonaDialogo.append(dlg);
+    });
+  },
+
+  /* Nivel 5: practicar la ubicación de tres puntos */
+  practica(caja) {
+    const objetivos = ['P1', 'P7', 'P13'].map(id => PUNTOS.find(p => p.id === id));
+    const cont = crear('div', 'practica');
+    cont.innerHTML = '<div><div class="barra-azul"></div><div class="lienzo-practica"><img alt="Plano del local para practicar"></div></div><div><div class="lista-practica"></div><button type="button" class="boton secundario" style="width:100%;margin-top:12px;font-size:15px;padding:8px">💡 Pista</button><p class="pista-texto"></p></div>';
+    cont.querySelector('img').src = document.querySelector('#t-5').content.querySelector('.plano-ref img').getAttribute('src');
+    const lienzo = cont.querySelector('.lienzo-practica');
+    const barra = cont.querySelector('.barra-azul');
+    const lista = cont.querySelector('.lista-practica');
+    const pista = cont.querySelector('.pista-texto');
+    const retro = crear('p', 'retro');
+    caja.append(cont, retro);
+    let actual = 0, fallosAqui = 0;
+    const pintarLista = () => {
+      lista.replaceChildren(...objetivos.map((p, i) => {
+        const d = crear('div', i < actual ? 'listo' : i === actual ? 'activo' : '');
+        d.innerHTML = `<b>${i < actual ? '✓' : '○'}</b><strong>${p.id}</strong><span style="margin-left:auto;color:var(--tinta-suave)">${textoDbm(p.valor)} dBm</span>`;
+        return d;
+      }));
+      barra.textContent = actual < objetivos.length ? `Haz clic en el plano donde se midió ${objetivos[actual].id}.` : '¡Los tres puntos quedaron bien ubicados!';
+      barra.classList.toggle('verde', actual >= objetivos.length);
+      pista.textContent = '';
+      lienzo.querySelector('.objetivo-pista')?.remove();
+    };
+    const mostrarPista = () => {
+      if (actual >= objetivos.length) return;
+      const p = objetivos[actual];
+      pista.textContent = `${p.id}: ${p.donde}`;
+      if (fallosAqui >= 2 && !lienzo.querySelector('.objetivo-pista')) {
+        const o = crear('span', 'objetivo-pista');
+        o.style.left = p.x * 100 + '%';
+        o.style.top = p.y * 100 + '%';
+        lienzo.append(o);
+      }
+    };
+    cont.querySelector('.boton').addEventListener('click', mostrarPista);
+    lienzo.addEventListener('click', e => {
+      if (actual >= objetivos.length) return;
+      const r = lienzo.getBoundingClientRect();
+      const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+      const p = objetivos[actual];
+      const distancia = Math.hypot(fx - p.x, (fy - p.y) * PLANO_ALTO_SOBRE_ANCHO);
+      if (distancia <= 0.075) {
+        const m = crear('span', 'marca-programa', p.id);
+        m.style.left = p.x * 100 + '%';
+        m.style.top = p.y * 100 + '%';
+        lienzo.append(m);
+        actual++;
+        fallosAqui = 0;
+        ponerRetro(retro, actual < objetivos.length ? `¡Bien! ${p.id} quedó en su lugar.` : '', true);
+        pintarLista();
+        if (actual === objetivos.length) retoSuperado(caja, 'Ubicaste los tres puntos. En el programa harás lo mismo con los 13.');
+      } else {
+        fallosAqui++;
+        juego.errores++;
+        const x = crear('span', 'marca-fallo', '✕');
+        x.style.left = fx * 100 + '%';
+        x.style.top = fy * 100 + '%';
+        lienzo.append(x);
+        setTimeout(() => x.remove(), 1100);
+        ponerRetro(retro, fallosAqui >= 2 ? 'Te marqué el lugar con un círculo amarillo.' : 'Ahí no va. Toca «Pista» si necesitas ayuda.', false);
+        if (fallosAqui >= 2) mostrarPista();
+      }
+    });
+    pintarLista();
+  },
+
+  /* Nivel 6: generar el mapa, comparar y elegir el botón de descarga */
+  generar(caja) {
+    const retro = crear('p', 'retro');
+    const zona = crear('div');
+    zona.style.textAlign = 'center';
+    const boton = crear('button', 'boton grande', 'Generar mapa');
+    boton.type = 'button';
+    const distractor = crear('button', 'boton secundario', 'Elegir plano');
+    distractor.type = 'button';
+    distractor.style.marginLeft = '12px';
+    zona.append(boton, distractor);
+    caja.append(zona, retro);
+    distractor.addEventListener('click', () => { fallo(distractor); ponerRetro(retro, '¡Cuidado! «Elegir plano» cambia el plano y borra los puntos. Oprime «Generar mapa».', false); });
+    boton.addEventListener('click', () => {
+      zona.replaceChildren();
+      const fuenteAntes = document.querySelector('#t-5').content.querySelector('img[src*="06-completo"], img[alt^="Los 13"]').getAttribute('src');
+      const fuenteDespues = document.querySelector('#t-6').content.querySelector('img[alt^="El mapa ya generado"]').getAttribute('src');
+      const comp = crear('div', 'comparador');
+      comp.innerHTML = '<img alt="Plano con los puntos, antes de generar"><div class="despues"><img alt="Plano con el mapa de colores"></div><div class="linea"></div><span class="rotulo" style="left:10px">Después</span><span class="rotulo" style="right:10px">Antes</span><input type="range" min="0" max="100" value="50" aria-label="Comparar antes y después">';
+      const [imgAntes, imgDespues] = comp.querySelectorAll('img');
+      imgAntes.src = fuenteAntes;
+      imgDespues.src = fuenteDespues;
+      const capa = comp.querySelector('.despues'), linea = comp.querySelector('.linea'), control = comp.querySelector('input');
+      const mover = () => { capa.style.clipPath = `inset(0 ${100 - control.value}% 0 0)`; linea.style.left = control.value + '%'; };
+      control.addEventListener('input', mover);
+      mover();
+      const texto = crear('p', '', '¡El plano se pintó! Arrastra la línea blanca para comparar el antes y el después.');
+      texto.style.fontWeight = '600';
+      zona.append(texto, comp);
+      ponerRetro(retro, '', true);
+      setTimeout(() => preguntaDescarga(), 600);
+    });
+    function preguntaDescarga() {
+      const bloque = crear('div', 'pregunta-jefe');
+      bloque.innerHTML = '<h3>Última pregunta: ¿qué botón guarda el mapa en tu computador?</h3><div class="opciones"></div>';
+      const ops = bloque.querySelector('.opciones');
+      for (const [t, ok] of barajar([['Descargar imagen (PNG)', true], ['Generar mapa', false], ['Elegir Excel', false]])) {
+        const b = crear('button', '', t);
+        b.type = 'button';
+        b.addEventListener('click', () => {
+          if (ok) { b.classList.add('bien'); ops.querySelectorAll('button').forEach(x => x.disabled = true); ponerRetro(retro, '¡Correcto! Queda en Descargas como maplify-senal-SISCLUB-5GHz.png.', true); retoSuperado(caja, 'Generaste y guardaste tu mapa.'); }
+          else { b.classList.add('mal'); b.disabled = true; fallo(b); ponerRetro(retro, t === 'Generar mapa' ? 'Ese pinta el mapa, pero no lo guarda.' : 'Ese sube el Excel. Busca el que descarga.', false); }
+        });
+        ops.append(b);
+      }
+      caja.insertBefore(bloque, retro);
+    }
+  },
+
+  /* Nivel 7: jefe final con vidas */
+  jefe(caja) {
+    const PREGUNTAS = [
+      { q: '¿Qué color indica la mejor señal?', o: ['Rojo', 'Verde oscuro', 'Amarillo'], c: 1, si: 'Verde oscuro es «Excelente»: −50 dBm o mejor.', no: 'El verde oscuro es la mejor señal y el rojo la peor.' },
+      { q: '¿Cuál señal es más fuerte?', o: ['−44 dBm', '−70 dBm', 'Son iguales'], c: 0, si: 'Entre más cerca de 0, más fuerte.', no: 'Recuerda: entre más cerca de 0, mejor. −44 está más cerca de 0 que −70.' },
+      { q: 'P5 marca −68 dBm. ¿Cómo es su señal?', o: ['Excelente', 'Aceptable', 'Sin cobertura útil'], c: 1, si: 'Entre −61 y −70 es «Aceptable»: funciona, pero puede ir lento.', no: '−68 está entre −61 y −70, que es «Aceptable» (amarillo).' },
+      { q: '¿Dónde está la peor señal del local?', o: ['En el salón, cerca de P7', 'Afuera de la cocina, cerca de P14', 'En la Taberna'], c: 1, si: 'P14 está en rojo porque ahí SISCLUB no apareció.', no: 'Busca la zona roja: está afuera de la cocina, alrededor de P14.' },
+      { q: '¿Por qué algunas partes del plano quedan sin color?', o: ['Porque el programa falló', 'Porque no hay ninguna medición cerca', 'Porque ahí no hay internet'], c: 1, si: 'Si no hay medición a menos de 4 metros, el programa no adivina.', no: 'Quedan en blanco porque no hay mediciones cerca, y el programa prefiere no adivinar.' },
+      { q: '¿Por qué P10 no aparece en el mapa?', o: ['Porque se nos olvidó ubicarlo', 'Porque no tiene medición en 5 GHz', 'Porque tenía mala señal'], c: 1, si: 'En P10 solo se midió la banda de 2.4 GHz.', no: 'P10 no tiene medición en 5 GHz, y es mejor no inventar el dato.' },
+      { tocar: true, q: 'Pregunta final: toca en el mapa la zona con la peor señal.', si: '¡Esa es! La zona roja junto a la puerta de la cocina.', no: 'Ahí no. Busca el color rojo.' }
+    ];
+    const OBJETIVO = { x: .1956, y: .57 * 2400 / 2606 };
+    let vidas = 3, indice = 0;
+    const marcador = crear('div', 'vidas');
+    const cuerpo = crear('div');
+    const retro = crear('p', 'retro');
+    caja.append(marcador, cuerpo, retro);
+    const pintarVidas = () => { marcador.innerHTML = [0, 1, 2].map(i => `<span class="${i >= vidas ? 'perdida' : ''}" aria-hidden="true">❤️</span>`).join('') + `<span class="sr" style="position:absolute;left:-9999px">Te quedan ${vidas} vidas</span>`; };
+    const perder = elemento => {
+      vidas--;
+      fallo(elemento);
+      pintarVidas();
+      if (vidas === 0) setTimeout(finJuego, 900);
+      return vidas === 0;
+    };
+    const botonSeguir = () => {
+      const b = crear('button', 'boton', indice < PREGUNTAS.length - 1 ? 'Siguiente pregunta →' : 'Ver resultado');
+      b.type = 'button';
+      b.style.marginTop = '14px';
+      b.addEventListener('click', () => { indice++; mostrar(); });
+      const fila = crear('div'); fila.style.textAlign = 'center'; fila.append(b);
+      cuerpo.append(fila);
+      b.focus();
+    };
+    function mostrar() {
+      cuerpo.replaceChildren();
+      retro.textContent = '';
+      if (indice >= PREGUNTAS.length) {
+        cuerpo.innerHTML = '<div class="fin-juego"><p class="emoji-grande">👑</p><h3 style="text-align:center;font-size:24px;margin:0">¡Venciste al jefe final!</h3></div>';
+        retoSuperado(caja, `Terminaste con ${vidas} ${vidas === 1 ? 'vida' : 'vidas'}.`);
+        return;
+      }
+      const p = PREGUNTAS[indice];
+      const bloque = crear('div', 'pregunta-jefe');
+      const h = crear('h3', '', `${indice + 1} de ${PREGUNTAS.length}. ${p.q}`);
+      bloque.append(h);
+      if (p.tocar) {
+        const mapa = crear('div', 'mapa-tocar');
+        mapa.innerHTML = '<img alt="Mapa de señal terminado">';
+        mapa.querySelector('img').src = document.querySelector('#t-7').content.querySelector('img').getAttribute('src');
+        let resuelto = false;
+        mapa.addEventListener('click', e => {
+          if (resuelto || vidas === 0) return;
+          const r = mapa.getBoundingClientRect();
+          const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+          const marca = crear('span', 'marca-fallo', '✕');
+          marca.style.left = fx * 100 + '%'; marca.style.top = fy * 100 + '%';
+          if (Math.hypot(fx - OBJETIVO.x, (fy - OBJETIVO.y) * (2606 / 1792)) <= .1) {
+            resuelto = true;
+            marca.textContent = '✓'; marca.style.color = 'var(--ok)'; marca.style.animation = 'aparecer .3s';
+            mapa.append(marca);
+            ponerRetro(retro, '✓ ' + p.si, true);
+            botonSeguir();
+          } else {
+            mapa.append(marca);
+            setTimeout(() => marca.remove(), 1100);
+            ponerRetro(retro, '✗ ' + p.no, false);
+            perder(mapa);
+          }
+        });
+        bloque.append(mapa);
+      } else {
+        const ops = crear('div', 'opciones');
+        p.o.forEach((t, i) => {
+          const b = crear('button', '', t);
+          b.type = 'button';
+          b.addEventListener('click', () => {
+            if (i === p.c) {
+              b.classList.add('bien');
+              ops.querySelectorAll('button').forEach(x => x.disabled = true);
+              ponerRetro(retro, '✓ ' + p.si, true);
+              botonSeguir();
+            } else {
+              b.classList.add('mal');
+              b.disabled = true;
+              ponerRetro(retro, '✗ ' + p.no + ' Intenta otra vez.', false);
+              perder(b);
+            }
+          });
+          ops.append(b);
+        });
+        bloque.append(ops);
+      }
+      cuerpo.append(bloque);
+    }
+    function finJuego() {
+      cuerpo.innerHTML = '<div class="fin-juego"><p class="emoji-grande">💔</p><h3 style="text-align:center;font-size:24px;margin:0 0 6px">Te quedaste sin vidas</h3><p>No pasa nada: repasa «Cómo leer el mapa» con el botón Anterior, o inténtalo de nuevo.</p></div>';
+      retro.textContent = '';
+      const b = crear('button', 'boton', 'Intentar de nuevo');
+      b.type = 'button';
+      b.addEventListener('click', () => { vidas = 3; indice = 0; juego.errores = 0; pintarVidas(); mostrar(); });
+      cuerpo.querySelector('.fin-juego').append(b);
+    }
+    pintarVidas();
+    mostrar();
+  }
+};
+
+/* ================= GLOSARIO ================= */
+const definicion = $('definicion');
+let terminoAbierto = null;
+function cerrarDefinicion() { definicion.style.display = 'none'; terminoAbierto = null; }
+document.addEventListener('click', e => {
+  const t = e.target.closest('.termino');
+  if (!t) { if (!e.target.closest('.definicion')) cerrarDefinicion(); return; }
+  e.stopPropagation();
+  if (terminoAbierto === t) return cerrarDefinicion();
+  const [titulo, texto] = GLOSARIO[t.dataset.t];
+  definicion.innerHTML = '<strong></strong><span></span>';
+  definicion.firstChild.textContent = titulo;
+  definicion.lastChild.textContent = texto;
+  definicion.style.display = 'block';
+  const caja = t.getBoundingClientRect();
+  const ancho = definicion.offsetWidth;
+  definicion.style.left = Math.min(Math.max(8, caja.left + scrollX), scrollX + document.documentElement.clientWidth - ancho - 8) + 'px';
+  definicion.style.top = (caja.bottom + scrollY + 8) + 'px';
+  terminoAbierto = t;
+}, true);
+for (const clave of ['wifi', 'router', 'ssid', 'banda', 'dbm', 'punto', 'calor', 'idw']) {
+  const dt = document.createElement('dt');
+  const dd = document.createElement('dd');
+  [dt.textContent, dd.textContent] = GLOSARIO[clave];
+  $('glosario').append(dt, dd);
+}
+
+/* ================= AYUDA: BUSCADOR ================= */
+const normalizar = t => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+$('buscador').addEventListener('input', e => {
+  const q = normalizar(e.target.value.trim());
+  let visibles = 0;
+  document.querySelectorAll('#ayuda .grupo-problemas').forEach(g => {
+    let enGrupo = 0;
+    g.querySelectorAll('details').forEach(d => {
+      const coincide = !q || normalizar(d.textContent).includes(q);
+      d.hidden = !coincide;
+      d.open = Boolean(q) && coincide;
+      if (coincide) enGrupo++;
+    });
+    g.hidden = enGrupo === 0;
+    visibles += enGrupo;
+  });
+  $('sinResultados').hidden = visibles > 0;
+});
+
+/* ================= DIPLOMA ================= */
+function pintarDiploma() {
+  const input = $('nombre');
+  input.value = progreso.nombre || '';
+  $('nombreDiploma').textContent = progreso.nombre || 'Tu nombre';
+  $('estrellasDiploma').textContent = totalEstrellas();
+  $('fechaDiploma').textContent = new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+  if (!reducido) confeti(60);
+}
+$('nombre').addEventListener('input', e => {
+  progreso.nombre = e.target.value.trim();
+  guardar();
+  $('nombreDiploma').textContent = progreso.nombre || 'Tu nombre';
+  $('errorNombre').textContent = '';
+});
+$('botonImprimirDiploma').addEventListener('click', () => {
+  if (!progreso.nombre) { $('errorNombre').textContent = 'Escribe tu nombre antes de imprimir el diploma.'; $('nombre').focus(); return; }
+  document.body.classList.add('imprimir-diploma');
+  print();
+});
+
+/* ================= VERSIÓN PARA IMPRIMIR ================= */
+$('botonImprimir').addEventListener('click', () => {
+  const destino = $('impresion');
+  destino.replaceChildren();
+  const portada = document.createElement('div');
+  portada.innerHTML = '<h1 style="text-align:center;font-size:34px;margin:0">Maplify</h1><p style="text-align:center">Manual para hacer el mapa de señal WiFi del local</p>';
+  destino.append(portada);
+  for (const nivel of NIVELES) {
+    const bloque = document.createElement('div');
+    bloque.className = 'bloque-nivel';
+    const h = document.createElement('h1');
+    h.textContent = (nivel.bonus ? 'Nivel extra' : `Nivel ${nivel.n}`) + `: ${nivel.titulo}`;
+    h.style.borderBottom = '3px solid #1f5fbf';
+    bloque.append(h, $('t-' + nivel.n).content.cloneNode(true));
+    bloque.querySelectorAll('[data-reto]').forEach(r => r.remove());
+    destino.append(bloque);
+  }
+  const ayuda = document.createElement('div');
+  ayuda.className = 'bloque-nivel';
+  ayuda.innerHTML = '<h1>Si algo sale mal</h1>';
+  const copiaAyuda = $('contenidoAyuda').cloneNode(true);
+  copiaAyuda.querySelectorAll('label, input, .sin-resultados').forEach(x => x.remove());
+  copiaAyuda.querySelectorAll('details').forEach(d => { d.open = true; d.hidden = false; });
+  copiaAyuda.querySelectorAll('.grupo-problemas').forEach(g => g.hidden = false);
+  ayuda.append(copiaAyuda);
+  const glos = document.createElement('div');
+  glos.className = 'bloque-nivel';
+  glos.innerHTML = '<h1>Palabras que debes conocer</h1>';
+  glos.append($('glosario').cloneNode(true));
+  destino.append(ayuda, glos);
+  activar(destino);
+  document.body.classList.add('imprimir-todo');
+  setTimeout(print, 300);
+});
+window.addEventListener('afterprint', () => document.body.classList.remove('imprimir-todo', 'imprimir-diploma'));
+
+/* ================= INICIO ================= */
+mostrarVista('inicio');
+</script>
+</body>
+</html>
