@@ -92,6 +92,93 @@
   .modo.cerrado .entrar { background: #c7cfd8; box-shadow: none; cursor: not-allowed; color: #4b5866; }
   .modo .sello { position: absolute; top: 14px; right: 14px; background: var(--ok); color: #fff; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 99px; box-shadow: 0 2px 6px rgba(0, 0, 0, .2); }
   .modo .candado { position: absolute; top: 58px; left: 50%; transform: translateX(-50%); font-size: 44px; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .25)); }
+  /* ---------- Portada (estilo propio del programa: oscuro y profesional) ---------- */
+  .inicio { text-align: left; padding: 0; position: relative; overflow: hidden; color: #e6edf7;
+    background:
+      radial-gradient(circle at 78% 42%, rgba(79, 140, 255, .28) 0, transparent 38%),
+      radial-gradient(circle at 18% 85%, rgba(124, 92, 255, .22) 0, transparent 35%),
+      linear-gradient(160deg, #0a1426 0%, #0e1f3d 55%, #0b1630 100%); }
+  .inicio::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 44px 44px; mask-image: radial-gradient(circle at 60% 45%, #000 0, transparent 75%); -webkit-mask-image: radial-gradient(circle at 60% 45%, #000 0, transparent 75%); }
+  .portada { position: relative; width: min(1320px, 100%); display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 34px; align-items: center; padding: 30px 34px; }
+  .portada-texto .supertitulo { display: inline-flex; align-items: center; gap: 8px; margin: 0; color: #9fc2ff; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 12px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 99px; padding: 6px 14px; }
+  .punto-vivo { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,.7); animation: vivo 1.8s infinite; }
+  @keyframes vivo { 70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
+  .inicio h1.marca { font-size: clamp(56px, 7.4vw, 104px); margin: 14px 0 0; letter-spacing: -.035em; line-height: 1; font-weight: 900; color: #fff; text-shadow: 0 10px 40px rgba(79,140,255,.25); }
+  .inicio h1.marca span { background: linear-gradient(90deg, #4fc3ff 0%, #7c5cff 60%, #c084fc 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .portada-lema { margin: 14px 0 0; font-size: 21px; font-weight: 800; color: #fff; }
+  .inicio .lema { margin: 8px 0 16px; font-size: 16.5px; color: #b6c4da; max-width: 560px; }
+  .cifras-portada { display: flex; gap: 0; margin: 0 0 18px; max-width: 560px; }
+  .cifras-portada > div { flex: 1; padding: 2px 16px; border-left: 1px solid rgba(255,255,255,.14); }
+  .cifras-portada > div:first-child { padding-left: 0; border-left: 0; }
+  .cifras-portada b { display: block; font-size: 26px; font-weight: 900; color: #fff; line-height: 1.1; }
+  .cifras-portada small { font-size: 12.5px; color: #8fa3c2; }
+  .elige { margin: 0 0 10px; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9fc2ff; }
+  .portada .modos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; justify-content: stretch; }
+  .portada .modo { padding-bottom: 16px; color: var(--tinta); }
+  .portada .modo.mision { box-shadow: 0 0 0 1px rgba(79,140,255,.4), 0 18px 50px rgba(31,95,191,.45); }
+  .portada .modo.lab:not(.cerrado) { box-shadow: 0 0 0 1px rgba(124,92,255,.45), 0 18px 50px rgba(91,60,196,.5); }
+  .portada .modo.cerrado { opacity: .88; box-shadow: 0 14px 34px rgba(0,0,0,.35); border-color: transparent; }
+  .portada .modo .ilustracion { height: 108px; }
+  .portada .modo .ilustracion svg { width: 240px; height: auto; }
+  .portada .modo .candado { top: 32px; font-size: 38px; }
+  .portada .modo .contenido { padding: 12px 16px 0; }
+  .portada .modo h2 { font-size: 20px; }
+  .portada .modo p.desc { font-size: 14px; margin-bottom: 10px; }
+  .portada .modo ul { gap: 6px; margin-bottom: 14px; }
+  .portada .modo li { font-size: 13.5px; }
+  .portada .modo li b { width: 22px; height: 22px; font-size: 12px; }
+  .portada .modo .entrar { padding: 11px; font-size: 16px; }
+  .portada .modo .etiqueta { font-size: 11px; }
+
+  .portada-plano { position: relative; padding: 50px 0 70px; perspective: 1500px; }
+  .svg-plano { display: block; width: 100%; height: auto; transform: rotateX(32deg) rotateZ(-10deg) scale(.95); transform-origin: 50% 55%;
+    filter: drop-shadow(0 0 1px rgba(159,194,255,.9)) drop-shadow(0 0 26px rgba(79,140,255,.55)) drop-shadow(0 40px 40px rgba(0,0,0,.55)); }
+  .onda-r { fill: none; stroke: #fff; stroke-width: 2.5; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ondaRouter 2.6s ease-out infinite; }
+  .onda-r.d2 { animation-delay: 1.3s; }
+  @keyframes ondaRouter { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
+  .flotante { position: absolute; border-radius: 14px; padding: 12px 14px; font-size: 13px; color: #e6edf7;
+    background: rgba(14, 28, 54, .72); border: 1px solid rgba(159,194,255,.22); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 16px 40px rgba(0,0,0,.45); }
+  .t-flotante { margin: 0 0 8px; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #9fc2ff; }
+  .f-tip { top: 24%; left: 10%; padding: 8px 12px; background: #0b1426; border-color: rgba(255,255,255,.18); animation: flotar 4s ease-in-out infinite; }
+  .f-tip b { display: block; font-size: 15px; color: #4ade80; }
+  .f-tip small { color: #b6c4da; font-size: 12px; }
+  .f-tip::after { content: ""; position: absolute; left: 22px; bottom: -7px; width: 12px; height: 12px; background: #0b1426; border-right: 1px solid rgba(255,255,255,.18); border-bottom: 1px solid rgba(255,255,255,.18); transform: rotate(45deg); }
+  @keyframes flotar { 50% { transform: translateY(-6px); } }
+  .f-comparar { top: 0; right: 0; width: 240px; }
+  .fila-comp { display: grid; grid-template-columns: 52px 1fr 40px; align-items: center; gap: 8px; margin: 6px 0; font-size: 12px; color: #b6c4da; }
+  .fila-comp b { color: #fff; text-align: right; }
+  .barra-comp { height: 8px; border-radius: 99px; background: rgba(255,255,255,.1); overflow: hidden; }
+  .barra-comp i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #22c55e, #4ade80); }
+  .nota-comp { color: #8fa3c2; font-size: 11.5px; }
+  .f-escala { right: 4%; bottom: 0; width: 310px; }
+  .barra-escala { height: 10px; border-radius: 99px; background: linear-gradient(90deg, #1a9850 0%, #7fc95a 28%, #ffdf2e 52%, #fd8d3c 76%, #d7191c 100%); box-shadow: 0 0 14px rgba(255,223,46,.25); }
+  .marcas-escala, .nombres-escala { display: flex; justify-content: space-between; font-size: 11.5px; color: #8fa3c2; margin-top: 5px; }
+  .nombres-escala b { font-size: 11px; letter-spacing: .08em; }
+  @media (max-width: 1100px) {
+    .portada { grid-template-columns: 1fr; padding: 26px 18px; gap: 6px; }
+    .portada-texto { text-align: center; }
+    .inicio .lema, .cifras-portada { margin-left: auto; margin-right: auto; }
+    .cifras-portada > div { text-align: center; }
+    .portada .modos { max-width: 760px; margin: 0 auto; }
+    .portada-plano { width: min(620px, 100%); margin: 0 auto; }
+  }
+  @media (max-width: 700px) {
+    .portada .modos { grid-template-columns: 1fr; max-width: 420px; }
+    .cifras-portada b { font-size: 20px; }
+    .cifras-portada > div { padding: 2px 8px; }
+    .f-comparar { width: 200px; padding: 10px; }
+    .f-escala { width: 250px; right: 0; }
+    .f-tip { display: none; }
+    .portada-plano { padding: 80px 0 80px; }
+  }
+  .prueba-velocidad { background: #f4f7fb; border: 1px solid var(--borde); border-radius: 10px; padding: 8px 10px; margin: 4px 0 10px; }
+  .prueba-velocidad p { margin: 0 0 6px; font-size: 13px; font-weight: 700; }
+  .prueba-velocidad div { display: flex; flex-wrap: wrap; gap: 6px; }
+  .prueba-velocidad span { background: #fff; border: 1px solid var(--borde); border-radius: 8px; padding: 3px 8px; font-size: 12.5px; color: var(--tinta-suave); }
+  .prueba-velocidad b { color: var(--tinta); margin-left: 2px; }
   .entrar:focus-visible, .boton:focus-visible, .fila:focus-visible, .chip-modo:focus-visible { outline: 3px solid #8db7f0; outline-offset: 2px; }
 
   .anim-mira { transform-origin: 160px 70px; animation: girar 6s linear infinite; }
@@ -234,6 +321,10 @@
   .comparacion figcaption strong { font-size: 17px; display: block; }
   .conclusion { background: var(--acento-claro); border-radius: 12px; padding: 12px 16px; margin-top: 14px; font-size: 14.5px; }
   .conclusion p { margin: 4px 0; }
+  .graficas { display: grid; gap: 18px; margin-top: 12px; }
+  .graficas section h3 { margin: 0 0 4px; font-size: 17px; }
+  .graficas section p.ayuda-grafica { margin: 0 0 8px; font-size: 13.5px; color: var(--tinta-suave); }
+  .graficas svg { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--borde); border-radius: 10px; }
   .grafica-canales { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 10px; }
   .grafica-canales h3 { margin: 0 0 8px; font-size: 17px; }
   .fila-canal { display: grid; grid-template-columns: 74px 1fr 24px; align-items: center; gap: 8px; font-size: 13.5px; margin-bottom: 5px; }
@@ -258,6 +349,12 @@
   .lista-routers input { flex: 1; min-width: 0; font: inherit; font-size: 13.5px; padding: 4px 6px; border: 1px solid var(--borde); border-radius: 6px; background: #fff; }
   .lista-routers button { border: 0; background: none; cursor: pointer; font-size: 16px; padding: 2px 4px; border-radius: 6px; }
   .lista-routers button:hover { background: #fff; }
+  .lista-routers li { flex-wrap: wrap; }
+  .lista-routers select { font: inherit; font-size: 12.5px; padding: 3px 4px; border: 1px solid var(--borde); border-radius: 6px; background: #fff; flex: 1 1 100%; min-width: 0; }
+  .avisos-routers { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+  .avisos-routers li { background: #fff7e6; border: 1px solid #f5c26b; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 7px 9px; font-size: 13px; line-height: 1.4; }
+  .avisos-routers b { color: #8a4b00; }
+  .nota-descarga { margin: 6px 0 0; font-size: 13px; color: #8a4b00; background: #fff7e6; border: 1px solid #f5c26b; border-radius: 8px; padding: 6px 9px; }
   .escala-plano { margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; background: var(--acento-claro); border-radius: 8px; padding: 6px 10px; }
   .escala-plano .boton-chico { margin: 0; }
   .escala-plano.alerta { background: var(--resalte); border: 1.5px solid var(--oro); font-weight: 600; }
@@ -299,10 +396,18 @@
 
 <!-- ======================================================= INICIO -->
 <section class="inicio" id="inicio">
-  <div class="ondas" aria-hidden="true"><span></span><span></span><span></span><span></span><i></i></div>
+  <div class="portada">
+  <div class="portada-texto">
+  <p class="supertitulo"><i class="punto-vivo"></i>Herramienta de site survey WiFi</p>
   <h1 class="marca">Map<span>lify</span></h1>
-  <p class="lema">Mapas de señal WiFi: descubre dónde llega bien el WiFi y dónde no.</p>
-  <div class="franja" aria-hidden="true"><span style="background:#1a9850"></span><span style="background:#7fc95a"></span><span style="background:#ffdf2e"></span><span style="background:#fd8d3c"></span><span style="background:#d7191c"></span></div>
+  <p class="portada-lema">Mapas de señal WiFi</p>
+    <p class="lema">Convierte tus mediciones en un mapa de calor y descubre dónde llega bien el WiFi y dónde no.</p>
+  <div class="cifras-portada">
+    <div><b>2.4 + 5</b><small>GHz analizados</small></div>
+    <div><b>4</b><small>vistas de análisis</small></div>
+    <div><b>0</b><small>instalación ni internet</small></div>
+  </div>
+  <p class="elige">Elige cómo quieres empezar:</p>
 
   <div class="modos">
     <article class="modo mision" id="tarjetaMision">
@@ -365,6 +470,69 @@
     </article>
   </div>
 
+  </div>
+
+  <div class="portada-plano" aria-hidden="true">
+    <svg viewBox="0 0 600 560" class="svg-plano">
+      <defs>
+        <clipPath id="pisoInicio"><path d="M60 40 H300 V18 H470 V60 H560 V300 H582 V470 H380 V540 H262 V470 H40 V262 H60 Z"/></clipPath>
+        <radialGradient id="calorInicio">
+          <stop offset="0" stop-color="#1a9850"/><stop offset=".28" stop-color="#7fc95a"/><stop offset=".55" stop-color="#ffdf2e"/><stop offset=".8" stop-color="#fdae61" stop-opacity=".5"/><stop offset="1" stop-color="#fdae61" stop-opacity="0"/>
+        </radialGradient>
+        <pattern id="baldosasInicio" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0 H0 V22" fill="none" stroke="#000" stroke-opacity=".06" stroke-width="1"/></pattern>
+        <filter id="sombraRouterInicio" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity=".3"/></filter>
+      </defs>
+      <g clip-path="url(#pisoInicio)">
+        <rect width="600" height="560" fill="#e8574a"/>
+        <rect width="600" height="560" fill="#f46d43" opacity=".55"/>
+        <circle cx="175" cy="150" r="215" fill="url(#calorInicio)"/>
+        <circle cx="430" cy="215" r="215" fill="url(#calorInicio)"/>
+        <circle cx="300" cy="395" r="200" fill="url(#calorInicio)"/>
+        <rect width="600" height="560" fill="url(#baldosasInicio)"/>
+        <rect x="300" y="18" width="80" height="112" fill="#8d97a3" opacity=".75"/>
+        <rect x="40" y="370" width="120" height="100" fill="#8d97a3" opacity=".7"/>
+        <g fill="#fff" fill-opacity=".55" stroke="#2c3540" stroke-opacity=".35" stroke-width="1.5">
+          <rect x="95" y="85" width="40" height="26" rx="3"/><rect x="160" y="200" width="60" height="22" rx="3"/>
+          <rect x="420" y="95" width="26" height="60" rx="3"/><rect x="495" y="120" width="34" height="34" rx="3"/>
+          <rect x="250" y="220" width="40" height="40" rx="3"/><rect x="340" y="300" width="56" height="24" rx="3"/>
+          <rect x="460" y="330" width="60" height="28" rx="3"/><rect x="110" y="300" width="56" height="26" rx="3"/>
+          <rect x="420" y="410" width="44" height="30" rx="3"/><rect x="215" y="420" width="40" height="28" rx="3"/>
+          <circle cx="80" cy="400" r="10"/><circle cx="120" cy="430" r="10"/>
+        </g>
+      </g>
+      <g stroke="#2c3540" stroke-width="6" stroke-linecap="square" fill="none">
+        <path d="M230 40 V95 M230 125 V175 H60"/><path d="M300 130 H380 V18"/><path d="M470 60 V150"/>
+        <path d="M40 370 H160 V470"/><path d="M60 262 H150 M190 262 H240 V330"/><path d="M560 300 H480 M440 300 H420"/>
+        <path d="M262 470 V430 M380 470 V430"/>
+      </g>
+      <path d="M60 40 H300 V18 H470 V60 H560 V300 H582 V470 H380 V540 H262 V470 H40 V262 H60 Z" fill="none" stroke="#2c3540" stroke-width="11" stroke-linejoin="round"/>
+      <g stroke="#fff" stroke-opacity=".7" stroke-width="3"><path d="M275 490 H367 M275 505 H367 M275 520 H367"/></g>
+      <g transform="translate(175 150)"><circle class="onda-r" r="20"/><circle class="onda-r d2" r="20"/><circle r="17" fill="#fff" filter="url(#sombraRouterInicio)"/><circle r="7" fill="none" stroke="#1f5fbf" stroke-width="3"/></g>
+      <g transform="translate(430 215)"><circle class="onda-r" r="20"/><circle class="onda-r d2" r="20"/><circle r="17" fill="#fff" filter="url(#sombraRouterInicio)"/><circle r="7" fill="none" stroke="#1f5fbf" stroke-width="3"/></g>
+      <g transform="translate(300 395)"><circle class="onda-r" r="20"/><circle class="onda-r d2" r="20"/><circle r="17" fill="#fff" filter="url(#sombraRouterInicio)"/><circle r="7" fill="none" stroke="#1f5fbf" stroke-width="3"/></g>
+    </svg>
+
+    <div class="flotante f-tip">
+      <b>−54 dBm · Buena</b>
+      <small>Estimado · a 2.2 m de P7</small>
+    </div>
+
+    <div class="flotante f-comparar">
+      <p class="t-flotante">⇆ 2.4 GHz vs 5 GHz</p>
+      <div class="fila-comp"><span>2.4 GHz</span><div class="barra-comp"><i style="width:83%"></i></div><b>83 %</b></div>
+      <div class="fila-comp"><span>5 GHz</span><div class="barra-comp"><i style="width:75%;background:linear-gradient(90deg,#7c5cff,#a78bfa)"></i></div><b>75 %</b></div>
+      <small class="nota-comp">del área con señal buena</small>
+    </div>
+
+    <div class="flotante f-escala">
+      <p class="t-flotante">Fuerza de la señal <span style="text-transform:none">(dBm)</span></p>
+      <div class="barra-escala"></div>
+      <div class="marcas-escala"><span>−30</span><span>−50</span><span>−60</span><span>−70</span><span>−80</span><span>−90</span></div>
+      <div class="nombres-escala"><b style="color:#4ade80">FUERTE</b><b style="color:#facc15">MEDIA</b><b style="color:#f87171">DÉBIL</b></div>
+    </div>
+  </div>
+  </div>
+  </div>
 </section>
 
 <!-- ======================================================= PROGRAMA -->
@@ -431,8 +599,9 @@
               <span class="etiqueta-campo" style="margin:0">📡 Routers <small>(opcional)</small></span>
               <button type="button" class="boton-chico" id="agregarRouter" style="margin:0">+ Agregar router</button>
             </div>
-            <p class="nota-banda" id="notaRouters">Marca dónde están los routers. Son una referencia: no cambian el mapa.</p>
+            <p class="nota-banda" id="notaRouters">Marca dónde están los routers. No cambian el mapa, pero si eliges qué red emite cada uno, Maplify revisa si algún punto cercano mide raro.</p>
             <ul class="lista-routers" id="listaRouters"></ul>
+            <ul class="avisos-routers" id="avisosRouters" hidden></ul>
           </div>
         </div>
       </li>
@@ -444,6 +613,7 @@
           <button type="button" class="boton ancho" id="botonGenerar" disabled>Generar mapa</button>
           <p class="faltan" id="faltan"></p>
           <button type="button" class="boton secundario ancho" id="botonDescargar" style="margin-top:8px" disabled>Descargar imagen (PNG)</button>
+          <p class="nota-descarga" id="notaDescarga" hidden>⚠ Hay un aviso de routers en el paso 3. Corrígelo para poder descargar la imagen.</p>
         </div>
       </li>
 
@@ -465,6 +635,7 @@
             <div class="resumen" id="resumen"></div>
             <div class="herramientas">
               <button type="button" class="boton secundario" id="botonComparar">⇆ Comparar 2.4 y 5 GHz</button>
+              <button type="button" class="boton secundario" id="botonGraficas">📈 Gráficas</button>
               <button type="button" class="boton secundario" id="botonCanales">📊 Análisis de canales</button>
               <button type="button" class="boton secundario" id="botonAjustes">⚙ Ajustes del mapa</button>
             </div>
@@ -511,6 +682,16 @@
     <h2 id="tituloComparar">⇆ 2.4 GHz frente a 5 GHz</h2>
     <p style="margin:0;color:var(--tinta-suave)" id="subComparar"></p>
     <div id="cuerpoComparar"></div>
+  </div>
+</div>
+
+<div class="capa" id="capaGraficas">
+  <div class="ventana ancha" role="dialog" aria-modal="true" aria-labelledby="tituloGraficas">
+    <button type="button" class="cerrar" data-cerrar aria-label="Cerrar">✕</button>
+    <h2 id="tituloGraficas">📈 Gráficas</h2>
+    <p style="margin:0;color:var(--tinta-suave)" id="subGraficas"></p>
+    <div id="cuerpoGraficas"></div>
+    <button type="button" class="boton secundario" id="descargarGraficas" style="margin-top:14px">Descargar gráficas (PNG)</button>
   </div>
 </div>
 
@@ -635,10 +816,17 @@ const estado = {
   planoReconocido: false,
   pxPorMetro: null,   // escala calibrada (píxeles de la imagen por metro)
   calibrando: null,
-  routers: [],          // [{ id: 'R1', x, y, nombre }] solo como referencia visual
+  routers: [],          // [{ id: 'R1', x, y, nombre, red }] referencia; con «red» se revisa la coherencia
   ubicandoRouter: false,
   ajustes: null
 };
+// Revisión de coherencia con los routers.
+const REVISION = {
+  RADIO_M: 4,                                  // se revisan los puntos a menos de esta distancia de un router
+  ESPERADO_1M: { '2.4ghz': -40, '5ghz': -46 }, // señal mínima razonable a 1 m (conservador: un router suele dar más)
+  MARGEN_DB: 20                                // si el punto mide esto o más por debajo de lo esperado, se avisa
+};
+
 const AJUSTES_INICIALES = () => ({ sinCobertura: CONFIG.SIN_COBERTURA_DBM, ruido: { '2.4ghz': -90, '5ghz': -95 }, radio: CONFIG.RADIO_MAXIMO_M, opacidad: CONFIG.OPACIDAD_MAPA });
 estado.ajustes = AJUSTES_INICIALES();
 
@@ -659,17 +847,31 @@ const marcarMision = () => { try { localStorage.setItem(CLAVE_MISION, 'si'); } c
 /* ------------------------------------------------------------------
    LECTURA DEL EXCEL Y VALOR DE CADA PUNTO
    ------------------------------------------------------------------ */
+// Se aceptan varios nombres para cada columna (sin importar mayúsculas ni tildes),
+// porque cada persona arma su Excel a su manera.
 const COLUMNAS = {
-  punto: t => t === 'punto',
-  banda: t => t === 'banda',
-  ssid:  t => t === 'ssid',
-  senal: t => t.startsWith('nivel senal')
+  punto: t => ['punto', 'puntos', 'id', 'muestra', 'punto de medicion'].includes(t),
+  banda: t => ['banda', 'band', 'frecuencia (ghz)'].includes(t),
+  ssid:  t => ['ssid', 'red', 'nombre red', 'nombre de red', 'nombre de la red', 'wifi'].includes(t),
+  senal: t => t.startsWith('nivel senal') || t.startsWith('nivel de senal') || t.startsWith('senal') || t.startsWith('rssi') || t === 'dbm' || t.startsWith('potencia')
 };
+// Convierte cualquier forma de escribir la banda ("2,4", "2.4 GHz", "5GHz", "5") en una clave fija.
+function normalizarBanda(texto) {
+  const t = normalizar(texto).replace(/\s/g, '').replace(',', '.');
+  if (/^2\.?4/.test(t)) return '2.4ghz';
+  if (/^5/.test(t)) return '5ghz';
+  if (/^6/.test(t)) return '6ghz';
+  return t;
+}
+const TEXTO_BANDA = { '2.4ghz': '2.4 GHz', '5ghz': '5 GHz', '6ghz': '6 GHz' };
 // Columnas que pueden faltar: si están, el Laboratorio muestra más análisis.
 const COLUMNAS_OPCIONALES = {
   canal: t => t === 'canal',
   bssid: t => t.startsWith('bssid'),
-  seguridad: t => t === 'seguridad'
+  seguridad: t => t === 'seguridad',
+  descarga: t => t.startsWith('descarga'),
+  subida: t => t.startsWith('subida'),
+  latencia: t => t.startsWith('latencia')
 };
 
 // Busca, en cualquier hoja, la tabla que tenga todas las columnas necesarias.
@@ -692,22 +894,32 @@ function buscarTabla(libro) {
 // Convierte la tabla en lecturas limpias: { numero, banda, red, dbm, ... }.
 function extraerLecturas({ filas, indices }) {
   const lecturas = [];
+  // Las apps escriben la red oculta de varias formas: «HiddenSSID», «(HiddenSSID)», «(Red oculta)»… son la misma.
+  const esRedOculta = v => /^\(?\s*(hidden\s*ssid|hidden|red oculta|oculta)\s*\)?$/.test(normalizar(v));
+  // Celdas vacías o con "-" / "N/D" cuentan como sin dato.
+  const textoOpcional = v => { const t = String(v ?? '').trim(); return t && !/^(-|–|n\/?d|n\/?a)$/i.test(t) ? t : null; };
   const celda = (fila, clave) => indices[clave] >= 0 ? fila[indices[clave]] : null;
   for (const fila of filas) {
     const coincide = String(fila[indices.punto] ?? '').match(/\d+/);
-    const dbm = Number(fila[indices.senal]);
+    let dbm = Number(String(fila[indices.senal] ?? '').replace(',', '.').replace('−', '-'));
     if (!coincide || fila[indices.senal] === null || !Number.isFinite(dbm)) continue;
-    const canal = Number(celda(fila, 'canal'));
+    if (dbm > 0 && dbm <= 100) dbm = -dbm;   // se olvidó el signo menos: 65 quiere decir −65
+    if (dbm < -100 || dbm > -10) continue;  // fuera de lo posible para una señal WiFi recibida
+    const canal = Number((String(celda(fila, 'canal') ?? '').match(/\d+/) || [])[0]);   // "6", "CH 6" o "Canal 6"
+    const banda = normalizarBanda(fila[indices.banda]);
     lecturas.push({
       numero: Number(coincide[0]),
-      banda: normalizar(fila[indices.banda]).replace(/\s/g, ''),
-      bandaTexto: String(fila[indices.banda] ?? '').trim(),
-      red: normalizar(fila[indices.ssid]),
-      redTexto: String(fila[indices.ssid] ?? '').trim() || '(sin nombre)',
+      banda,
+      bandaTexto: TEXTO_BANDA[banda] || String(fila[indices.banda] ?? '').trim(),
+      red: esRedOculta(fila[indices.ssid]) ? 'red oculta' : normalizar(fila[indices.ssid]),
+      redTexto: esRedOculta(fila[indices.ssid]) ? '(Red oculta)' : String(fila[indices.ssid] ?? '').trim() || '(sin nombre)',
       dbm,
       canal: Number.isFinite(canal) && canal > 0 ? canal : null,
-      bssid: celda(fila, 'bssid') ? String(celda(fila, 'bssid')).trim() : null,
-      seguridad: celda(fila, 'seguridad') ? String(celda(fila, 'seguridad')).trim() : null
+      bssid: textoOpcional(celda(fila, 'bssid')),
+      seguridad: textoOpcional(celda(fila, 'seguridad')),
+      descarga: textoOpcional(celda(fila, 'descarga')),
+      subida: textoOpcional(celda(fila, 'subida')),
+      latencia: textoOpcional(celda(fila, 'latencia'))
     });
   }
   return lecturas;
@@ -924,12 +1136,37 @@ function dibujarEscena(ctx, ancho, alto, radio, opciones = {}) {
   }
   // Los routers van debajo: si coinciden con un punto, el dato medido queda visible.
   for (const r of estado.routers) dibujarRouter(ctx, r, r.x * ancho, r.y * alto, radio);
+  const conAviso = new Set(revisarRouters(banda).map(a => a.punto.id));
   for (const p of puntos) {
     if (estaUbicado(p)) {
       const etiqueta = mapa ? textoValorVista(valorParaVista(p, banda, vista), vista) : false;
       dibujarMarcador(ctx, p, p.x * ancho, p.y * alto, radio, p === activo, etiqueta);
+      if (conAviso.has(p.id)) dibujarAviso(ctx, p.x * ancho + radio * 0.85, p.y * alto - radio * 0.85, radio);
     }
   }
+}
+
+// Triángulo naranja con «!» sobre un punto que no cuadra con un router cercano.
+function dibujarAviso(ctx, cx, cy, radio) {
+  const r = radio * 0.75;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r);
+  ctx.lineTo(cx + r * 0.95, cy + r * 0.7);
+  ctx.lineTo(cx - r * 0.95, cy + r * 0.7);
+  ctx.closePath();
+  ctx.fillStyle = '#f59e0b';
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = radio * 0.14;
+  ctx.lineJoin = 'round';
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#1c2733';
+  ctx.font = `900 ${r * 1.05}px "Segoe UI", Arial, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('!', cx, cy + r * 0.12);
+  ctx.restore();
 }
 
 // Ícono de router: cuadro morado con ondas WiFi y su nombre debajo.
@@ -1116,7 +1353,9 @@ function actualizarInterfaz() {
   $('faltan').textContent = !listos ? 'Se activa cuando ubiques todos los puntos.'
     : faltantes.length ? 'Te faltan: ' + faltantes.map(p => p.id).join(', ')
     : '';
-  $('botonDescargar').disabled = !estado.mapa;
+  const hayAvisosRouters = revisarRouters().length > 0;
+  $('botonDescargar').disabled = !estado.mapa || hayAvisosRouters;
+  $('notaDescarga').hidden = !(estado.mapa && hayAvisosRouters);
 
   const instruccion = $('instruccion');
   instruccion.textContent = textoInstruccion();
@@ -1437,7 +1676,7 @@ $('inputExcel').addEventListener('change', async evento => {
   try {
     const libro = XLSX.read(datos, { type: 'array' });
     const tabla = buscarTabla(libro);
-    if (!tabla) return fallar('Este Excel no tiene las columnas de mediciones (Punto, Banda, SSID y Nivel Señal). Revisa que sea el archivo correcto.');
+    if (!tabla) return fallar('Este Excel no tiene las columnas de mediciones (Punto, Banda, SSID y Nivel Señal). Revisa que sea el archivo correcto o usa la plantilla de Maplify.');
 
     const lecturas = extraerLecturas(tabla);
     const eleccion = elegirRedYBanda(lecturas);
@@ -1555,6 +1794,7 @@ function crearImagenFinal() {
 }
 
 $('botonDescargar').addEventListener('click', () => {
+  if (revisarRouters().length) return;   // con avisos de routers no se descarga
   crearImagenFinal().toBlob(blob => {
     const enlace = document.createElement('a');
     enlace.href = URL.createObjectURL(blob);
@@ -1791,6 +2031,24 @@ function mostrarDetalle(punto) {
     : `${nombreRed()} en ${nombreBanda()}: ${textoDbm(punto.valor)} dBm (${clasificar(punto.valor, ESCALA).nombre}).`;
   caja.append(cerrar, titulo, sub);
 
+  // Prueba de velocidad (solo si el Excel trae las columnas Descarga, Subida o Latencia)
+  const prueba = delPunto.find(l => l.descarga || l.subida || l.latencia);
+  if (prueba) {
+    const conUnidad = (v, unidad) => {
+      if (!v) return 'sin dato';
+      const t = String(v).replace(/\s*-\s*/g, '–').replace(/^picos/i, 'picos');
+      return /[a-z]{2,}/i.test(t.replace(/^picos\s*/i, '')) ? t : `${t} ${unidad}`;
+    };
+    const bloque = document.createElement('div');
+    bloque.className = 'prueba-velocidad';
+    bloque.innerHTML = '<p>⚡ Prueba de velocidad en este punto</p><div><span>↓ Descarga <b></b></span><span>↑ Subida <b></b></span><span>⏱ Latencia <b></b></span></div>';
+    const [d, sb, la] = bloque.querySelectorAll('b');
+    d.textContent = conUnidad(prueba.descarga, 'Mbps');
+    sb.textContent = conUnidad(prueba.subida, 'Mbps');
+    la.textContent = conUnidad(prueba.latencia, 'ms');
+    caja.append(bloque);
+  }
+
   for (const b of estado.bandas) {
     const filas = new Map();
     for (const l of delPunto.filter(l => l.banda === b.clave)) {
@@ -1847,7 +2105,7 @@ function routerEn(pos) {
 
 function agregarRouterEn(pos) {
   const numero = estado.routers.reduce((m, r) => Math.max(m, Number(r.id.slice(1))), 0) + 1;
-  const router = { id: 'R' + numero, x: pos.x, y: pos.y, nombre: '' };
+  const router = { id: 'R' + numero, x: pos.x, y: pos.y, nombre: '', red: '' };
   estado.routers.push(router);
   estado.ubicandoRouter = false;
   estado.activo = siguientePendiente();
@@ -1884,6 +2142,15 @@ function pintarRouters() {
     input.dataset.router = r.id;
     input.setAttribute('aria-label', `Nombre del router ${r.id}`);
     input.addEventListener('input', () => { r.nombre = input.value.trim(); redibujar(); });
+    if (estado.redes.length) {
+      const select = document.createElement('select');
+      select.setAttribute('aria-label', `Red que emite el router ${r.id}`);
+      select.append(new Option('¿Qué red emite? (opcional)', ''));
+      for (const red of estado.redes) select.append(new Option('Emite: ' + red, normalizar(red)));
+      select.value = r.red || '';
+      select.addEventListener('change', () => { r.red = select.value; actualizarInterfaz(); });
+      li.append(select);
+    }
     const borrar = li.querySelector('button');
     borrar.setAttribute('aria-label', `Borrar el router ${r.id}`);
     borrar.addEventListener('click', () => {
@@ -1895,6 +2162,44 @@ function pintarRouters() {
   }));
   if (enfocado) lista.querySelector(`input[data-router="${enfocado}"]`)?.focus();
   $('notaRouters').hidden = estado.routers.length > 0;
+  pintarAvisosRouters();
+}
+
+/* ------------------------------------------------------------------
+   LABORATORIO: REVISIÓN DE COHERENCIA CON LOS ROUTERS
+   Un punto muy cerca de un router de su red no debería medir muy mal.
+   ------------------------------------------------------------------ */
+function revisarRouters(banda = estado.banda) {
+  if (esMision() || !estado.plano || !estado.routers.length || !estado.puntos.length) return [];
+  const w = estado.plano.naturalWidth, h = estado.plano.naturalHeight;
+  const ppm = pixelesPorMetro();
+  const avisos = [];
+  for (const r of estado.routers) {
+    if (!r.red || r.red !== normalizar(estado.red)) continue;
+    for (const p of puntosUsados()) {
+      if (!estaUbicado(p) || p.valor === null || p.valor === undefined) continue;
+      const metros = Math.hypot((p.x - r.x) * w, (p.y - r.y) * h) / ppm;
+      if (metros > REVISION.RADIO_M) continue;
+      const esperado = (REVISION.ESPERADO_1M[banda] ?? -46) - 20 * Math.log10(Math.max(metros, 1));
+      if (p.valor <= esperado - REVISION.MARGEN_DB) avisos.push({ punto: p, router: r, metros, esperado });
+    }
+  }
+  return avisos;
+}
+
+function pintarAvisosRouters() {
+  const lista = $('avisosRouters');
+  const avisos = revisarRouters();
+  lista.hidden = !avisos.length;
+  lista.replaceChildren(...avisos.map(a => {
+    const li = document.createElement('li');
+    const nombre = a.router.id + (a.router.nombre ? ' · ' + a.router.nombre : '');
+    li.innerHTML = '<b></b> <span></span>';
+    li.firstChild.textContent = `⚠ ${a.punto.id} no cuadra con ${nombre}.`;
+    li.lastChild.textContent = `Está a ${a.metros.toFixed(1)} m y mide ${textoDbm(a.punto.valor)} dBm, pero ahí se esperaría al menos ${textoDbm(a.esperado)} dBm. `
+      + 'Revisa si el punto o el router están mal ubicados, o si el router es de otra red. Mientras el aviso esté, no se puede descargar la imagen.';
+    return li;
+  }));
 }
 
 $('agregarRouter').addEventListener('click', () => {
@@ -1994,6 +2299,225 @@ function conclusionComparacion(resultados, vista) {
   caja.innerHTML = textos.map(t => `<p>${t}</p>`).join('');
   return caja;
 }
+
+/* ------------------------------------------------------------------
+   LABORATORIO: GRÁFICAS (con los mismos datos del Excel)
+   ------------------------------------------------------------------ */
+const COLOR_BANDA = { '2.4ghz': '#2f7fd6', '5ghz': '#7c5cff', '6ghz': '#0f9d8a' };
+const colorBanda = clave => COLOR_BANDA[clave] || '#5a6b7d';
+const escapar = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const FUENTE_SVG = `font-family="Segoe UI, Arial, sans-serif"`;
+
+// Barras agrupadas por punto (una barra por banda). valores: { id, porBanda: { clave: { valor, tipo } } }
+function svgBarrasPorPunto({ puntos, bandas, minimo, maximo, lineas = [], unidad, formato, alto = 300 }) {
+  const W = 900, H = alto, izq = 56, der = 16, arriba = 34, abajo = 34;
+  const anchoUtil = W - izq - der, altoUtil = H - arriba - abajo;
+  const y = v => arriba + (maximo - v) / (maximo - minimo) * altoUtil;
+  const grupo = anchoUtil / Math.max(1, puntos.length);
+  const barra = Math.min(26, grupo * 0.8 / Math.max(1, bandas.length));
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" ${FUENTE_SVG}>`;
+  // Leyenda
+  bandas.forEach((b, i) => {
+    const x = W - der - (bandas.length - i) * 110;
+    svg += `<rect x="${x}" y="10" width="14" height="14" rx="3" fill="${colorBanda(b.clave)}"/><text x="${x + 20}" y="22" font-size="13" fill="#1c2733">${escapar(b.nombre)}</text>`;
+  });
+  // Eje y
+  const paso = (maximo - minimo) <= 12 ? Math.max(1, Math.ceil((maximo - minimo) / 6)) : 10;
+  for (let v = Math.ceil(minimo / paso) * paso; v <= maximo; v += paso) {
+    svg += `<line x1="${izq}" x2="${W - der}" y1="${y(v)}" y2="${y(v)}" stroke="#e3e8ef"/><text x="${izq - 8}" y="${y(v) + 4}" font-size="12" text-anchor="end" fill="#566473">${formato(v)}</text>`;
+  }
+  // Barras
+  puntos.forEach((pt, i) => {
+    const x0 = izq + i * grupo + (grupo - barra * bandas.length) / 2;
+    bandas.forEach((b, j) => {
+      const d = pt.porBanda[b.clave];
+      if (!d || d.valor === null || d.valor === undefined) return;
+      const v = Math.max(minimo, Math.min(maximo, d.valor));
+      const alto0 = y(minimo) - y(v);
+      const op = d.tipo === 'asignado' ? 0.35 : 1;
+      const titulo = `${pt.id} · ${b.nombre}: ${d.tipo === 'asignado' ? 'la red no apareció (' + formato(d.valor) + ' ' + unidad + ')' : formato(d.valor) + ' ' + unidad}`;
+      svg += `<rect x="${x0 + j * barra}" y="${y(v)}" width="${barra - 2}" height="${Math.max(1, alto0)}" rx="3" fill="${colorBanda(b.clave)}" opacity="${op}"><title>${escapar(titulo)}</title></rect>`;
+    });
+    svg += `<text x="${izq + i * grupo + grupo / 2}" y="${H - 12}" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1c2733">${pt.id}</text>`;
+  });
+  // Líneas de referencia (encima de las barras)
+  for (const l of lineas) {
+    svg += `<line x1="${izq}" x2="${W - der}" y1="${y(l.valor)}" y2="${y(l.valor)}" stroke="${l.color}" stroke-width="2" stroke-dasharray="7 5"/>`;
+    svg += `<text x="${W - der - 4}" y="${y(l.valor) - 6}" font-size="12.5" font-weight="700" text-anchor="end" fill="${l.color}" stroke="#ffffff" stroke-width="4" paint-order="stroke">${escapar(l.texto)}</text>`;
+  }
+  return svg + '</svg>';
+}
+
+// Barras horizontales apiladas: % del área de cada color, una fila por banda.
+function svgCalidadPorBanda(filas) {
+  const W = 900, fila = 46, arriba = 12, H = arriba + filas.length * (fila + 12) + 34, izq = 92, der = 16;
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" ${FUENTE_SVG}>`;
+  filas.forEach((f, i) => {
+    const top = arriba + i * (fila + 12);
+    svg += `<text x="${izq - 10}" y="${top + fila / 2 + 5}" font-size="15" font-weight="700" text-anchor="end" fill="#1c2733">${escapar(f.nombre)}</text>`;
+    let x = izq;
+    for (const c of f.resumen) {
+      const w = (W - izq - der) * c.porcentaje / 100;
+      if (w <= 0) continue;
+      svg += `<rect x="${x}" y="${top}" width="${w}" height="${fila}" fill="${c.color}"><title>${escapar(`${f.nombre} · ${c.nombre}: ${Math.round(c.porcentaje)} %`)}</title></rect>`;
+      if (c.porcentaje >= 7) {
+        const oscuro = c.color === '#1a9850' || c.color === '#d7191c';
+        svg += `<text x="${x + w / 2}" y="${top + fila / 2 + 5}" font-size="14" font-weight="700" text-anchor="middle" fill="${oscuro ? '#fff' : '#1c2733'}">${Math.round(c.porcentaje)} %</text>`;
+      }
+      x += w;
+    }
+  });
+  // Leyenda de colores
+  const leyenda = filas[0]?.resumen || [];
+  let lx = izq;
+  const ly = H - 14;
+  for (const c of leyenda) {
+    svg += `<rect x="${lx}" y="${ly - 11}" width="12" height="12" rx="2" fill="${c.color}"/><text x="${lx + 17}" y="${ly}" font-size="12.5" fill="#566473">${escapar(c.nombre)}</text>`;
+    lx += 30 + c.nombre.length * 7.2;
+  }
+  return svg + '</svg>';
+}
+
+function datosGraficas() {
+  const red = estado.red;
+  const bandas = estado.bandas;
+  const numeros = [...new Set(estado.lecturas.map(l => l.numero))].sort((a, b) => a - b);
+  const porBanda = Object.fromEntries(bandas.map(b => [b.clave, calcularPuntos(estado.lecturas, red, b.clave)]));
+  const senal = numeros.map(n => ({
+    id: 'P' + n,
+    porBanda: Object.fromEntries(bandas.map(b => {
+      const pt = porBanda[b.clave].find(x => x.numero === n);
+      return [b.clave, pt && pt.tipo !== 'excluido' ? { valor: pt.valor, tipo: pt.tipo } : null];
+    }))
+  }));
+  const redes = numeros.map(n => ({
+    id: 'P' + n,
+    porBanda: Object.fromEntries(bandas.map(b => {
+      const cuantas = new Set(estado.lecturas.filter(l => l.numero === n && l.banda === b.clave).map(l => l.red)).size;
+      return [b.clave, cuantas ? { valor: cuantas, tipo: 'medido' } : null];
+    }))
+  }));
+  // Calidad del área (necesita los puntos ubicados en esa banda)
+  const calidad = [];
+  for (const b of bandas) {
+    const puntos = porBanda[b.clave].filter(p => p.tipo !== 'excluido').map(p => ({ ...p, ...(estado.posiciones[p.id] || {}) }));
+    if (!puntos.length || puntos.some(p => p.x === null || p.x === undefined)) continue;
+    const r = calcularMapa(muestrasActuales(puntos, b.clave, 'senal'), ESCALAS.senal.items);
+    calidad.push({ nombre: b.nombre, clave: b.clave, resumen: r.resumen });
+  }
+  return { bandas, senal, redes, calidad };
+}
+
+function conclusionesGraficas({ bandas, senal, redes, calidad }) {
+  const textos = [];
+  for (const b of bandas) {
+    const medidos = senal.filter(p => p.porBanda[b.clave]);
+    const cumplen = medidos.filter(p => p.porBanda[b.clave].valor >= -67);
+    if (medidos.length) textos.push(`En <strong>${b.nombre}</strong>, <strong>${cumplen.length} de ${medidos.length}</strong> puntos cumplen −67 dBm (voz y video).`);
+  }
+  if (bandas.length >= 2) {
+    const [a, c] = bandas;
+    let ganaA = 0, ganaC = 0;
+    for (const p of senal) {
+      const va = p.porBanda[a.clave], vc = p.porBanda[c.clave];
+      if (!va || !vc) continue;
+      if (va.valor > vc.valor) ganaA++; else if (vc.valor > va.valor) ganaC++;
+    }
+    textos.push(`Punto por punto, ${a.nombre} llega mejor en ${ganaA} y ${c.nombre} en ${ganaC}.`);
+  }
+  const total = redes.map(p => ({ id: p.id, n: new Set(estado.lecturas.filter(l => 'P' + l.numero === p.id).map(l => l.red)).size }));
+  const max = total.reduce((m, x) => x.n > m.n ? x : m, total[0] || { n: 0 });
+  if (max && max.n) textos.push(`En <strong>${max.id}</strong> se oyen ${max.n} redes distintas: es donde hay más competencia por el aire.`);
+  return textos;
+}
+
+function construirGraficas() {
+  const d = datosGraficas();
+  const red = nombreRed();
+  const secciones = [];
+  secciones.push({
+    titulo: `Señal de ${red} en cada punto`,
+    ayuda: 'Barra más alta = mejor señal. Las líneas punteadas son los requisitos de uso. Barra clara: la red no apareció en ese punto.',
+    svg: svgBarrasPorPunto({
+      puntos: d.senal, bandas: d.bandas, minimo: -95, maximo: -30, unidad: 'dBm', formato: v => textoDbm(v),
+      lineas: [{ valor: -67, color: '#1a7f46', texto: '−67 voz y video' }, { valor: -75, color: '#c25a12', texto: '−75 navegación' }]
+    })
+  });
+  if (d.calidad.length) {
+    secciones.push({
+      titulo: 'Calidad del área por banda',
+      ayuda: 'Qué parte del área con datos queda en cada color del mapa.',
+      svg: svgCalidadPorBanda(d.calidad)
+    });
+  }
+  const maxRedes = Math.max(1, ...d.redes.flatMap(p => Object.values(p.porBanda).filter(Boolean).map(x => x.valor)));
+  secciones.push({
+    titulo: 'Redes que se oyen en cada punto',
+    ayuda: 'Cuántas redes distintas detectó el celular. Más redes = más competencia por el mismo aire.',
+    svg: svgBarrasPorPunto({ puntos: d.redes, bandas: d.bandas, minimo: 0, maximo: maxRedes + 1, unidad: 'redes', formato: v => String(Math.round(v)), alto: 260 })
+  });
+  return { secciones, conclusiones: conclusionesGraficas(d) };
+}
+
+$('botonGraficas').addEventListener('click', () => {
+  const { secciones, conclusiones } = construirGraficas();
+  $('subGraficas').textContent = `Los mismos datos del Excel, en gráficas sencillas. Red: ${nombreRed()}.`;
+  const cuerpo = $('cuerpoGraficas');
+  cuerpo.replaceChildren();
+  const cont = document.createElement('div');
+  cont.className = 'graficas';
+  for (const sec of secciones) {
+    const el = document.createElement('section');
+    el.innerHTML = `<h3></h3><p class="ayuda-grafica"></p>${sec.svg}`;
+    el.querySelector('h3').textContent = sec.titulo;
+    el.querySelector('.ayuda-grafica').textContent = sec.ayuda;
+    cont.append(el);
+  }
+  const conclusion = document.createElement('div');
+  conclusion.className = 'conclusion';
+  conclusion.innerHTML = conclusiones.map(t => `<p>${t}</p>`).join('');
+  cuerpo.append(cont, conclusion);
+  abrirCapa('capaGraficas');
+});
+
+// Descarga: todas las gráficas en una sola imagen.
+$('descargarGraficas').addEventListener('click', () => {
+  const { secciones, conclusiones } = construirGraficas();
+  const W = 900, margen = 30;
+  const altos = secciones.map(sec => Number(sec.svg.match(/viewBox="0 0 \d+ (\d+(?:\.\d+)?)"/)[1]));
+  const lineasConclusion = conclusiones.map(t => t.replace(/<[^>]+>/g, ''));
+  const H = 80 + secciones.reduce((s, sec, i) => s + 44 + altos[i] + 18, 0) + lineasConclusion.length * 22 + 50;
+  let todo = `<svg xmlns="http://www.w3.org/2000/svg" width="${W + margen * 2}" height="${H}" viewBox="0 0 ${W + margen * 2} ${H}" ${FUENTE_SVG}><rect width="100%" height="100%" fill="#ffffff"/>`;
+  todo += `<text x="${margen}" y="44" font-size="24" font-weight="700" fill="#16304f">${escapar(`Gráficas · ${nombreRed()}`)}</text>`;
+  let y = 80;
+  secciones.forEach((sec, i) => {
+    todo += `<text x="${margen}" y="${y + 22}" font-size="17" font-weight="700" fill="#1c2733">${escapar(sec.titulo)}</text>`;
+    y += 32;
+    todo += sec.svg.replace('<svg ', `<svg x="${margen}" y="${y}" width="${W}" height="${altos[i]}" `);
+    y += altos[i] + 30;
+  });
+  for (const t of lineasConclusion) { todo += `<text x="${margen}" y="${y}" font-size="15" fill="#1c2733">${escapar('• ' + t)}</text>`; y += 22; }
+  todo += `<text x="${margen}" y="${H - 16}" font-size="13" fill="#8a96a6">Generado con Maplify</text></svg>`;
+  const imagen = new Image();
+  imagen.onload = () => {
+    const lienzo = document.createElement('canvas');
+    lienzo.width = (W + margen * 2) * 2;
+    lienzo.height = H * 2;
+    const ctx = lienzo.getContext('2d');
+    ctx.scale(2, 2);
+    ctx.drawImage(imagen, 0, 0);
+    lienzo.toBlob(blob => {
+      const enlace = document.createElement('a');
+      enlace.href = URL.createObjectURL(blob);
+      enlace.download = `maplify-graficas-${normalizar(nombreRed()).replace(/[^a-z0-9]+/g, '-')}.png`;
+      document.body.append(enlace);
+      enlace.click();
+      enlace.remove();
+      setTimeout(() => URL.revokeObjectURL(enlace.href), 2000);
+    });
+  };
+  imagen.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(todo);
+});
 
 /* ------------------------------------------------------------------
    LABORATORIO: ANÁLISIS DE CANALES
