@@ -29,8 +29,9 @@ maplify/
 ├── GEMINI.md                       # Configuración y directrices para Antigravity / Gemini
 │
 ├── docs/                           # Documentación y presentaciones del proyecto
+│   ├── Cuestionario_Cisco_Site_Survey_Maplify.pdf # Cuestionario técnico estilo Cisco CCNA en IEEE
 │   ├── Haz esto para empezar.txt   # Guía rápida de inicio
-│   ├── Maplify · Site survey WiFi.pptx # Presentación ejecutiva actualizada
+│   ├── Maplify · Site survey WiFi.pptx # Presentación ejecutiva actualizada (con referencias IEEE)
 │   ├── Site survey WiFi - Presentación.pptx # Presentación base
 │   ├── Portada presentación.PNG   # Portada del proyecto
 │   ├── Portada presentación - opción A (clara).png # Portada variante clara
