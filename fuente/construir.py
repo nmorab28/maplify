@@ -3,6 +3,7 @@
 - Manual.html: manual.html con todas las imágenes de img/ incluidas.
 """
 import base64
+import json
 import re
 from pathlib import Path
 
@@ -23,24 +24,36 @@ salida.write_text(html.replace(etiqueta, '<script>' + sheetjs + '</script>'), en
 print(salida, salida.stat().st_size, 'bytes')
 
 # ---- Manual ----
+# Cada imagen se guarda UNA vez en window.IMAGENES y las etiquetas quedan con data-img;
+# el manual les pone la imagen al mostrarlas (función fuenteImagen).
 manual = (carpeta / 'manual.html').read_text(encoding='utf-8')
 cache = {}
 
 
-def incluir(coincidencia):
-    nombre = coincidencia.group(1)
+def registrar(nombre):
     if nombre not in cache:
         ruta = carpeta / 'img' / nombre
         if not ruta.exists():
             raise SystemExit(f'Falta la imagen {ruta}')
         cache[nombre] = 'data:image/jpeg;base64,' + base64.b64encode(ruta.read_bytes()).decode()
-    return f'src="{cache[nombre]}"'
 
 
-manual, cantidad = re.subn(r'src="img/([\w.-]+\.jpg)"', incluir, manual)
+def a_data_img(coincidencia):
+    registrar(coincidencia.group(1))
+    return f'data-img="{coincidencia.group(1)}"'
+
+
+manual, cantidad = re.subn(r'src="img/([\w.-]+\.jpg)"', a_data_img, manual)
+# Imágenes nombradas desde el código con fuenteImagen('nombre.jpg')
+for nombre in re.findall(r"fuenteImagen\('([\w.-]+\.jpg)'\)", manual):
+    registrar(nombre)
 if 'src="img/' in manual:
     raise SystemExit('Quedó una imagen sin incluir en el manual')
+if '</head>' not in manual:
+    raise SystemExit('manual.html no tiene </head>')
+datos = '<script>window.IMAGENES = ' + json.dumps(cache) + ';</script>\n</head>'
+manual = manual.replace('</head>', datos, 1)
 
 salida = carpeta.parent / 'Manual.html'
 salida.write_text(manual, encoding='utf-8', newline='\n')
-print(salida, salida.stat().st_size, 'bytes', f'({cantidad} imágenes, {len(cache)} distintas)')
+print(salida, salida.stat().st_size, 'bytes', f'({cantidad} referencias, {len(cache)} imágenes distintas)')
