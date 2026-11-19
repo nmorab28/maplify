@@ -31,10 +31,7 @@ maplify/
 ├── docs/                           # Documentación y presentaciones del proyecto
 │   ├── Cuestionario_Cisco_Site_Survey_Maplify.pdf # Cuestionario técnico estilo Cisco CCNA en IEEE
 │   ├── Haz esto para empezar.txt   # Guía rápida de inicio
-│   ├── Maplify · Site survey WiFi.pptx # Presentación ejecutiva actualizada (con referencias IEEE)
-│   ├── Site survey WiFi - Presentación.pptx # Presentación base
-│   ├── Portada presentación.PNG   # Portada del proyecto
-│   ├── Portada presentación - opción A (clara).png # Portada variante clara
+│   ├── Maplify - Presentación.html # Presentación final para abrir en el navegador
 │   └── investigacion/              # Marco teórico, glosario técnico y reglas
 │       ├── glosario-tecnico.md     # Catálogo con +32 términos IEEE/CWNP/Cisco
 │       ├── marco-teorico.md        # Propagación RF, fórmulas FSPL/IDW y normativa
@@ -60,6 +57,8 @@ maplify/
 ---
 
 ## 🛠️ Cómo Empezar
+
+La presentación final está en [docs/Maplify - Presentación.html](docs/Maplify%20-%20Presentaci%C3%B3n.html). Ábrela en el navegador; usa las flechas para avanzar, `N` para las notas y `F` para pantalla completa. Las imágenes están incluidas; las fuentes de Google son opcionales y requieren conexión.
 
 1. **Abrir el Manual:** Haz doble clic sobre `Manual.html` en tu navegador (Google Chrome o Microsoft Edge recomendado).
 2. **Ejecutar Maplify:** Abre `Maplify.html` para iniciar la aplicación.

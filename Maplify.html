@@ -273,19 +273,53 @@
   .item-leyenda small { color: var(--tinta-suave); font-size: 12.5px; }
   .explicacion { flex-basis: 100%; color: var(--tinta-suave); font-size: 12.5px; }
 
-  /* ================= HERRAMIENTAS DEL LABORATORIO ================= */
-  .solo-lab { display: none; }
-  body.modo-laboratorio .solo-lab { display: block; }
-  body.modo-laboratorio li.solo-lab { display: grid; }
+  /* ================= HERRAMIENTAS DEL LABORATORIO Y AVANZADAS ================= */
+  .solo-lab { display: block; }
+  li.solo-lab { display: grid; }
   .selectores { margin-top: 10px; background: var(--acento-claro); border-radius: 10px; padding: 10px 12px; }
   .selectores label, .etiqueta-campo { display: block; font-size: 13px; font-weight: 600; color: var(--tinta-suave); margin: 0 0 4px; }
   .selectores select, .campo-vista select { width: 100%; font: inherit; font-size: 14px; padding: 6px 8px; border: 1.5px solid var(--borde); border-radius: 8px; background: #fff; color: var(--tinta); }
-  .segmentado { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; background: #fff; border: 1.5px solid var(--borde); border-radius: 9px; padding: 3px; margin-top: 4px; }
-  .segmentado button { border: 0; background: none; border-radius: 6px; padding: 6px 4px; font-weight: 700; cursor: pointer; color: var(--tinta-suave); }
+  .segmentado { display: flex; flex-wrap: wrap; gap: 4px; background: #fff; border: 1.5px solid var(--borde); border-radius: 9px; padding: 3px; margin-top: 4px; }
+  .segmentado button { flex: 1 1 auto; border: 0; background: none; border-radius: 6px; padding: 6px 6px; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--tinta-suave); }
   .segmentado button[aria-pressed="true"] { background: var(--acento); color: #fff; }
+  .panel-solapamiento { margin-top: 8px; background: #fff; border: 1px solid var(--borde); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+  .panel-solapamiento .titulo-solap { font-weight: 700; color: var(--tinta); margin: 0 0 6px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .chips-bandas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+  .chip-banda { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 99px; font-size: 12.5px; font-weight: 600; border: 1.5px solid var(--borde); background: #f8fafc; cursor: pointer; user-select: none; }
+  .chip-banda input { margin: 0; accent-color: var(--acento); }
+  .chip-banda .punto-banda { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .opciones-solap { display: grid; gap: 4px; font-size: 12.5px; color: var(--tinta-suave); border-top: 1px dashed var(--borde); padding-top: 6px; }
+  .opciones-solap label { display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 500; cursor: pointer; }
   .nota-banda { font-size: 12.5px; color: var(--tinta-suave); margin: 6px 0 0; }
   .boton-chico { border: 1.5px dashed var(--acento); background: #fff; color: var(--acento); border-radius: 8px; padding: 4px 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin: 0 0 8px; }
   .boton-chico:hover { background: var(--acento-claro); }
+  .boton-chico.activo { background: var(--acento); color: #fff; border-style: solid; }
+  .estructuras { margin-top: 10px; background: #f8fafc; border: 1.5px solid var(--borde); border-radius: 10px; padding: 9px 11px; font-size: 13px; }
+  .estructuras-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 6px; }
+  .estructuras-acciones { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .estructuras-acciones .boton-chico { margin: 0; padding: 4px 8px; font-size: 12.5px; }
+  .estructuras select { width: 100%; font: inherit; font-size: 13px; padding: 5px 7px; border: 1px solid var(--borde); border-radius: 7px; background: #fff; margin: 4px 0 6px; }
+  .resumen-estructuras { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+  .tag-estructura { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; background: #fff; border: 1px solid var(--borde); border-radius: 6px; padding: 2px 6px; }
+  .tag-estructura i { width: 10px; height: 4px; border-radius: 2px; display: inline-block; }
+  .caja-ondas { margin-top: 10px; background: var(--acento-claro); border: 1px solid var(--borde); border-radius: 9px; padding: 8px 10px; font-size: 13px; display: grid; gap: 5px; }
+  .caja-ondas label { display: flex; align-items: center; gap: 7px; cursor: pointer; font-weight: 600; color: var(--tinta); }
+  .caja-ondas small { color: var(--tinta-suave); font-size: 12px; display: block; margin-left: 22px; }
+  .meta-router { flex: 1 1 100%; font-size: 12px; color: var(--tinta-suave); display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .badge-banda-ap { font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; color: #fff; }
+  /* Pantalla de carga asíncrona con progreso */
+  .pantalla-carga { position: fixed; inset: 0; background: rgba(15, 25, 38, .48); backdrop-filter: blur(4px); display: grid; place-items: center; z-index: 80; padding: 20px; transition: opacity .18s ease; }
+  .pantalla-carga[hidden] { display: none; }
+  .tarjeta-carga { background: #fff; color: var(--tinta); border-radius: 18px; padding: 24px 28px; width: min(410px, 94vw); box-shadow: 0 22px 60px rgba(0, 0, 0, .35); text-align: center; border: 1px solid var(--borde); }
+  .radar-carga { position: relative; width: 62px; height: 62px; margin: 0 auto 14px; display: grid; place-items: center; }
+  .radar-carga .anillo-carga { position: absolute; inset: 0; border-radius: 50%; border: 3.5px solid #e2e8f0; border-top-color: var(--acento); border-right-color: var(--lab); animation: girarAro .85s linear infinite; }
+  .radar-carga .pulso-carga { position: absolute; inset: 8px; border-radius: 50%; background: rgba(91, 60, 196, .14); animation: halo 1.2s ease-in-out infinite; }
+  .radar-carga .icono-carga { position: relative; font-size: 24px; line-height: 1; }
+  .tarjeta-carga h3 { margin: 0 0 6px; font-size: 17px; color: var(--azul-oscuro); }
+  .tarjeta-carga p { margin: 0 0 14px; font-size: 13.5px; color: var(--tinta-suave); min-height: 19px; }
+  .pista-progreso-carga { height: 10px; background: #e8eef5; border-radius: 99px; overflow: hidden; position: relative; }
+  .barra-progreso-carga { height: 100%; width: 12%; background: linear-gradient(90deg, var(--acento), var(--lab), #0f9d8a); border-radius: 99px; transition: width .12s ease-out; }
+  .porcentaje-carga { display: block; margin-top: 7px; font-size: 12.5px; font-weight: 700; color: var(--lab); font-variant-numeric: tabular-nums; }
   .campo-vista { margin-bottom: 10px; }
   .resumen { margin: 6px 0 10px; }
   .resumen .barra-apilada { display: flex; height: 14px; border-radius: 7px; overflow: hidden; gap: 2px; background: #fff; }
@@ -561,6 +595,29 @@
             <span id="textoEscalaPlano"></span>
             <button type="button" class="boton-chico" id="botonCalibrar">📏 Calibrar</button>
           </div>
+          <div class="estructuras solo-lab" id="cajaEstructuras" hidden>
+            <div class="estructuras-cabecera">
+              <span class="etiqueta-campo" style="margin:0">🧱 Paredes, vidrios y estructuras</span>
+              <label style="font-size:12px;display:inline-flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="verEstructuras" checked> Ver</label>
+            </div>
+            <p class="nota-banda" id="notaEstructuras" style="margin:0 0 6px">El sistema reconoce muros y vidrios del plano para calcular cómo atenúan cada banda (2.4, 5 y 6 GHz). Si falta alguno, dibújalo aquí.</p>
+            <div class="resumen-estructuras" id="resumenEstructuras"></div>
+            <label for="selectorMaterial" class="etiqueta-campo" style="margin-top:4px;font-size:12px">Material al dibujar o tocar un muro:</label>
+            <select id="selectorMaterial">
+              <option value="ladrillo">🧱 Pared de ladrillo (−7 dB en 2.4 · −11 dB en 5 · −13 dB en 6 GHz)</option>
+              <option value="concreto">🏢 Muro de concreto (−15 dB en 2.4 · −22 dB en 5 · −26 dB en 6 GHz)</option>
+              <option value="vidrio">🪟 Vidrio / Ventana (−3 dB en 2.4 · −5 dB en 5 · −6 dB en 6 GHz)</option>
+              <option value="madera">🚪 Puerta / Madera (−4 dB en 2.4 · −7 dB en 5 · −8 dB en 6 GHz)</option>
+              <option value="yeso">📋 Tabique Drywall / Yeso (−3 dB en 2.4 · −4 dB en 5 · −5 dB en 6 GHz)</option>
+              <option value="metal">⚙ Estructura metálica (−30 dB en 2.4 · −35 dB en 5 · −40 dB en 6 GHz)</option>
+            </select>
+            <div class="estructuras-acciones">
+              <button type="button" class="boton-chico" id="botonDetectarEstructuras">🔍 Auto-detectar</button>
+              <button type="button" class="boton-chico" id="botonDibujarEstructura">✏ Indicar pared/vidrio</button>
+              <button type="button" class="boton-chico" id="botonBorrarEstructura">🧹 Borrar uno</button>
+              <button type="button" class="boton-chico" id="botonLimpiarEstructuras">🗑 Limpiar</button>
+            </div>
+          </div>
         </div>
       </li>
 
@@ -578,8 +635,16 @@
           <div class="selectores solo-lab" id="selectores" hidden>
             <label for="selectorRed">Red que quieres ver</label>
             <select id="selectorRed"></select>
-            <span class="etiqueta-campo" style="margin-top:8px">Banda</span>
+            <span class="etiqueta-campo" style="margin-top:8px">Banda o Solapamiento</span>
             <div class="segmentado" id="selectorBanda" role="group" aria-label="Banda"></div>
+            <div class="panel-solapamiento" id="panelSolapamiento" hidden>
+              <p class="titulo-solap"><span>🔀 Bandas activas en el solapamiento</span></p>
+              <div class="chips-bandas" id="chipsBandasSolapadas"></div>
+              <div class="opciones-solap">
+                <label><input type="checkbox" id="checkContornosBanda" checked> Dibujar contornos de alcance por banda (−67 dBm)</label>
+                <label id="filaSimular6Ghz" hidden><input type="checkbox" id="checkSimular6Ghz" checked> Proyectar banda 6 GHz desde los APs (si el Excel solo midió 2.4/5 GHz)</label>
+              </div>
+            </div>
             <p class="nota-banda" id="notaBanda"></p>
           </div>
         </div>
@@ -588,7 +653,7 @@
       <li class="paso bloqueado" id="paso3">
         <span class="num">3</span>
         <div>
-          <h2>Ubica los puntos</h2>
+          <h2>Ubica los puntos y APs</h2>
           <p class="ayuda" id="ayudaUbicar">Primero sube el plano y el Excel.</p>
           <p class="progreso" id="progreso"></p>
           <div class="barra-progreso" id="barraProgreso" hidden><span></span></div>
@@ -596,10 +661,17 @@
           <ul class="lista" id="lista"></ul>
           <div class="routers solo-lab" id="cajaRouters" hidden>
             <div class="routers-cabecera">
-              <span class="etiqueta-campo" style="margin:0">📡 Routers <small>(opcional)</small></span>
-              <button type="button" class="boton-chico" id="agregarRouter" style="margin:0">+ Agregar router</button>
+              <span class="etiqueta-campo" style="margin:0">📡 Routers / APs del Excel</span>
+              <div style="display:flex;gap:4px;flex-wrap:wrap">
+                <button type="button" class="boton-chico" id="cargarApsExcel" style="margin:0" title="Detecta y ubica los APs según las redes y señales del Excel">⚡ Según Excel</button>
+                <button type="button" class="boton-chico" id="agregarRouter" style="margin:0">+ Agregar AP</button>
+              </div>
             </div>
-            <p class="nota-banda" id="notaRouters">Marca dónde están los routers. No cambian el mapa, pero si eliges qué red emite cada uno, Maplify revisa si algún punto cercano mide raro.</p>
+            <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;margin:6px 0 4px;cursor:pointer;color:var(--tinta)">
+              <input type="checkbox" id="checkOrientarRouter" checked>
+              🧭 Orientar puntos al Router/AP y mapear intensidad por banda
+            </label>
+            <p class="nota-banda" id="notaRouters">Los puntos se orientan hacia su Router/AP y el mapeo calcula cómo viaja y cae la señal de cada banda (2.4, 5 y 6 GHz) desde el AP atravesando las estructuras.</p>
             <ul class="lista-routers" id="listaRouters"></ul>
             <ul class="avisos-routers" id="avisosRouters" hidden></ul>
           </div>
@@ -612,21 +684,29 @@
           <h2>Genera el mapa</h2>
           <button type="button" class="boton ancho" id="botonGenerar" disabled>Generar mapa</button>
           <p class="faltan" id="faltan"></p>
+          <div class="caja-ondas" id="cajaOndas" hidden>
+            <label><input type="checkbox" id="checkVerOndas" checked> 🌊 Mostrar ondas de propagación por AP / red</label>
+            <small>Muestra gráficamente cómo viajan las ondas desde cada AP y cómo se atenúan con las paredes.</small>
+            <label><input type="checkbox" id="checkAnimarOndas" checked> ⏯ Animar viaje de la señal en tiempo real</label>
+            <label><input type="checkbox" id="checkOndasTodasRedes"> 📡 Mostrar ondas de todos los APs / redes ubicados</label>
+          </div>
           <button type="button" class="boton secundario ancho" id="botonDescargar" style="margin-top:8px" disabled>Descargar imagen (PNG)</button>
-          <p class="nota-descarga" id="notaDescarga" hidden>⚠ Hay un aviso de routers en el paso 3. Corrígelo para poder descargar la imagen.</p>
+          <p class="nota-descarga" id="notaDescarga" hidden>ℹ Hay un aviso de distancia en el paso 3. Revísalo si algún punto quedó lejos de su AP.</p>
         </div>
       </li>
 
       <li class="paso bloqueado solo-lab" id="paso5">
         <span class="num">5</span>
         <div>
-          <h2>Analiza el mapa</h2>
+          <h2>Analiza el mapa y solapamiento</h2>
           <p class="ayuda" id="ayudaAnalizar">Se activa cuando generes el mapa.</p>
           <div id="analisis" hidden>
             <div class="campo-vista">
               <label class="etiqueta-campo" for="selectorVista">¿Qué quieres ver en el mapa?</label>
               <select id="selectorVista">
                 <option value="senal">📶 Fuerza de la señal (dBm)</option>
+                <option value="solapamiento">🔀 Solapamiento de bandas (2.4 / 5 / 6 GHz en capas)</option>
+                <option value="dominante">🏆 Banda dominante en cada zona (2.4 vs 5 vs 6 GHz)</option>
                 <option value="requisitos">✅ Qué se puede hacer (requisitos)</option>
                 <option value="snr">🔊 SNR estimada (señal / ruido)</option>
                 <option value="redes">📡 Cantidad de redes que se oyen</option>
@@ -723,6 +803,23 @@
   </div>
 </div>
 
+<!-- ======================================================= PANTALLA DE CARGA ASÍNCRONA -->
+<div class="pantalla-carga" id="pantallaCarga" hidden role="status" aria-live="polite" aria-atomic="true">
+  <div class="tarjeta-carga">
+    <div class="radar-carga" aria-hidden="true">
+      <span class="pulso-carga"></span>
+      <span class="anillo-carga"></span>
+      <span class="icono-carga">📡</span>
+    </div>
+    <h3 id="tituloCarga">Procesando mapa WiFi…</h3>
+    <p id="detalleCarga">Calculando propagación y estructuras…</p>
+    <div class="pista-progreso-carga" aria-hidden="true">
+      <div class="barra-progreso-carga" id="barraCarga"></div>
+    </div>
+    <span class="porcentaje-carga" id="porcentajeCarga">0 %</span>
+  </div>
+</div>
+
 <script>
 'use strict';
 
@@ -791,6 +888,35 @@ const TEXTOS = {
 };
 
 /* ------------------------------------------------------------------
+   MATERIALES Y ESTRUCTURAS DEL PLANO (atenuación en dB por banda)
+   ------------------------------------------------------------------ */
+const MATERIALES_ESTRUCTURA = {
+  ladrillo: { nombre: 'Pared de ladrillo', corto: 'Ladrillo', color: '#b45309', grosor: 3.2, punteado: [], db: { '2.4ghz': 7, '5ghz': 11, '6ghz': 13 } },
+  concreto: { nombre: 'Muro de concreto', corto: 'Concreto', color: '#1e293b', grosor: 4.2, punteado: [], db: { '2.4ghz': 15, '5ghz': 22, '6ghz': 26 } },
+  vidrio:   { nombre: 'Vidrio / Ventana', corto: 'Vidrio',   color: '#06b6d4', grosor: 2.6, punteado: [7, 4], db: { '2.4ghz': 3, '5ghz': 5, '6ghz': 6 } },
+  madera:   { nombre: 'Puerta / Madera',  corto: 'Madera',   color: '#92400e', grosor: 2.8, punteado: [4, 3], db: { '2.4ghz': 4, '5ghz': 7, '6ghz': 8 } },
+  yeso:     { nombre: 'Tabique Drywall',  corto: 'Drywall',  color: '#64748b', grosor: 2.4, punteado: [], db: { '2.4ghz': 3, '5ghz': 4, '6ghz': 5 } },
+  metal:    { nombre: 'Estructura metálica', corto: 'Metal', color: '#dc2626', grosor: 4.0, punteado: [3, 2], db: { '2.4ghz': 30, '5ghz': 35, '6ghz': 40 } }
+};
+
+// Estructuras base de referencia del plano principal (x1, y1, x2, y2 normalizados entre 0 y 1).
+const ESTRUCTURAS_PLANO_BASE = [
+  { x1: 0.11, y1: 0.06, x2: 0.93, y2: 0.06, tipo: 'concreto', origen: 'auto' },
+  { x1: 0.93, y1: 0.06, x2: 0.93, y2: 0.78, tipo: 'concreto', origen: 'auto' },
+  { x1: 0.11, y1: 0.78, x2: 0.93, y2: 0.78, tipo: 'concreto', origen: 'auto' },
+  { x1: 0.11, y1: 0.06, x2: 0.11, y2: 0.78, tipo: 'concreto', origen: 'auto' },
+  { x1: 0.48, y1: 0.06, x2: 0.48, y2: 0.25, tipo: 'ladrillo', origen: 'auto' },
+  { x1: 0.48, y1: 0.28, x2: 0.73, y2: 0.28, tipo: 'ladrillo', origen: 'auto' },
+  { x1: 0.58, y1: 0.28, x2: 0.64, y2: 0.28, tipo: 'madera',   origen: 'auto' },
+  { x1: 0.35, y1: 0.28, x2: 0.35, y2: 0.64, tipo: 'ladrillo', origen: 'auto' },
+  { x1: 0.11, y1: 0.51, x2: 0.35, y2: 0.51, tipo: 'ladrillo', origen: 'auto' },
+  { x1: 0.18, y1: 0.51, x2: 0.23, y2: 0.51, tipo: 'madera',   origen: 'auto' },
+  { x1: 0.48, y1: 0.64, x2: 0.76, y2: 0.64, tipo: 'vidrio',   origen: 'auto' },
+  { x1: 0.76, y1: 0.28, x2: 0.76, y2: 0.64, tipo: 'vidrio',   origen: 'auto' },
+  { x1: 0.38, y1: 0.61, x2: 0.46, y2: 0.61, tipo: 'madera',   origen: 'auto' }
+];
+
+/* ------------------------------------------------------------------
    DATOS DEL PROGRAMA
    ------------------------------------------------------------------ */
 const estado = {
@@ -803,31 +929,49 @@ const estado = {
   arrastre: null,
   aviso: '',
   alerta: false,
-  // Laboratorio
+  // Datos del Excel y configuración multibanda
   lecturas: [],       // todas las filas útiles del Excel
   red: CONFIG.RED,    // red que se dibuja
-  banda: '5ghz',      // banda que se dibuja (normalizada)
+  banda: '5ghz',      // banda activa ('2.4ghz', '5ghz', '6ghz' o 'solapado')
   bandas: [],         // [{ clave, nombre }] presentes en el Excel
+  bandasSolapadas: ['2.4ghz', '5ghz', '6ghz'], // bandas activas al solapar
+  contornosBanda: true,
+  simular6Ghz: true,  // proyecta 6 GHz desde los APs si el Excel solo tiene 2.4 y 5 GHz
+  matricesBanda: {},  // cache de grillas por banda para contornos y tooltip
   redes: [],          // nombres de red, de la más vista a la menos vista
   posiciones: {},     // { P1: { x, y } }: la ubicación es la misma en todas las bandas
-  vista: 'senal',     // senal, requisitos, snr o redes
+  vista: 'senal',     // senal, solapamiento, dominante, requisitos, snr o redes
   resumen: null,      // porcentaje del área en cada color
-  yaGenerado: false,  // en el Laboratorio el mapa se recalcula solo después del primer «Generar»
+  yaGenerado: false,  // el mapa se recalcula solo después del primer «Generar»
   planoReconocido: false,
   pxPorMetro: null,   // escala calibrada (píxeles de la imagen por metro)
   calibrando: null,
-  routers: [],          // [{ id: 'R1', x, y, nombre, red }] referencia; con «red» se revisa la coherencia
+  // Routers / APs orientados según el Excel
+  routers: [],        // [{ id: 'AP1', x, y, nombre, red, bandas, bssid, mejorPunto, maxDbm }]
   ubicandoRouter: false,
+  orientarRouter: true,
+  // Ondas de propagación
+  verOndas: true,
+  animarOndas: true,
+  ondasTodasRedes: false,
+  faseOndas: 0,
+  rafOndas: null,
+  // Reconocimiento y edición de paredes, vidrios y estructuras
+  estructuras: [],    // [{ id, x1, y1, x2, y2, tipo, origen }]
+  verEstructuras: true,
+  modoEstructura: null, // null, 'dibujar' o 'borrar'
+  trazoEstructura: null, // { x1, y1, x2, y2 } mientras el usuario dibuja una pared/vidrio
+  materialActual: 'ladrillo',
   ajustes: null
 };
 // Revisión de coherencia con los routers.
 const REVISION = {
   RADIO_M: 4,                                  // se revisan los puntos a menos de esta distancia de un router
-  ESPERADO_1M: { '2.4ghz': -40, '5ghz': -46 }, // señal mínima razonable a 1 m (conservador: un router suele dar más)
-  MARGEN_DB: 20                                // si el punto mide esto o más por debajo de lo esperado, se avisa
+  ESPERADO_1M: { '2.4ghz': -40, '5ghz': -46, '6ghz': -49 }, // señal mínima razonable a 1 m
+  MARGEN_DB: 22                                // si el punto mide esto o más por debajo de lo esperado, se avisa
 };
 
-const AJUSTES_INICIALES = () => ({ sinCobertura: CONFIG.SIN_COBERTURA_DBM, ruido: { '2.4ghz': -90, '5ghz': -95 }, radio: CONFIG.RADIO_MAXIMO_M, opacidad: CONFIG.OPACIDAD_MAPA });
+const AJUSTES_INICIALES = () => ({ sinCobertura: CONFIG.SIN_COBERTURA_DBM, ruido: { '2.4ghz': -90, '5ghz': -95, '6ghz': -96 }, radio: CONFIG.RADIO_MAXIMO_M, opacidad: CONFIG.OPACIDAD_MAPA });
 estado.ajustes = AJUSTES_INICIALES();
 
 const $ = id => document.getElementById(id);
@@ -839,23 +983,263 @@ const normalizar = texto => String(texto ?? '')
 
 const textoDbm = v => (v < 0 ? '−' : '') + Math.abs(Math.round(v));
 const puntosUsados = () => estado.puntos.filter(p => p.tipo !== 'excluido');
-const estaUbicado = p => p.x !== null;
+const estaUbicado = p => p.x !== null && p.x !== undefined;
 const siguientePendiente = () => puntosUsados().find(p => !estaUbicado(p)) || null;
 const misionCumplida = () => { try { return localStorage.getItem(CLAVE_MISION) === 'si'; } catch { return false; } };
 const marcarMision = () => { try { localStorage.setItem(CLAVE_MISION, 'si'); } catch {} };
 
 /* ------------------------------------------------------------------
+   PANTALLA DE CARGA ASÍNCRONA Y CONTROL DE FLUIDEZ (SIN BLOQUEOS)
+   ------------------------------------------------------------------ */
+// Cede un fotograma real al navegador para que pinte la pantalla de carga y no se congele la interfaz.
+const pintarFotograma = () => new Promise(resolver => requestAnimationFrame(() => setTimeout(resolver, 0)));
+
+function mostrarCarga(titulo = 'Procesando mapa WiFi…', detalle = 'Preparando cálculo…', porcentaje = 8) {
+  const capa = $('pantallaCarga');
+  if (!capa) return;
+  $('tituloCarga').textContent = titulo;
+  $('detalleCarga').textContent = detalle;
+  const p = Math.max(4, Math.min(100, Math.round(porcentaje)));
+  $('barraCarga').style.width = p + '%';
+  $('porcentajeCarga').textContent = p + ' %';
+  capa.hidden = false;
+}
+
+// Admite progreso con detalle y porcentaje, o con título, detalle y porcentaje.
+function actualizarCarga(detalle, porcentaje, progreso) {
+  if (progreso !== undefined) {
+    $('tituloCarga').textContent = detalle;
+    detalle = porcentaje;
+    porcentaje = progreso;
+  }
+  if (detalle) $('detalleCarga').textContent = detalle;
+  if (porcentaje !== undefined && porcentaje !== null) {
+    const p = Math.max(4, Math.min(100, Math.round(porcentaje)));
+    $('barraCarga').style.width = p + '%';
+    $('porcentajeCarga').textContent = p + ' %';
+  }
+}
+
+function ocultarCarga() {
+  const capa = $('pantallaCarga');
+  if (capa) capa.hidden = true;
+}
+
+let tokenOperacionCarga = 0;
+// Ejecuta cualquier operación pesada mostrando la pantalla de carga y cediendo el hilo principal.
+async function ejecutarConCarga(titulo, detalleInicial, tareaAsync) {
+  const miToken = ++tokenOperacionCarga;
+  mostrarCarga(titulo, detalleInicial, 6);
+  await pintarFotograma();
+  try {
+    return await tareaAsync((detalle, pct) => {
+      if (miToken === tokenOperacionCarga) actualizarCarga(detalle, pct);
+    }, () => miToken !== tokenOperacionCarga);
+  } finally {
+    if (miToken === tokenOperacionCarga) {
+      actualizarCarga('¡Listo!', 100);
+      await new Promise(r => setTimeout(r, 70));
+      if (miToken === tokenOperacionCarga) ocultarCarga();
+    }
+  }
+}
+
+// Limpia cachés geométricas cuando cambian routers, puntos o estructuras.
+function invalidarCachesEscena() {
+  estado.versionEscena = (estado.versionEscena || 0) + 1;
+  estado.cacheEtiquetas = null;
+  estado.cacheAvisos = null;
+}
+
+/* ------------------------------------------------------------------
+   RECONOCIMIENTO AUTOMÁTICO Y EDICIÓN DE PAREDES, VIDRIOS Y ESTRUCTURAS
+   ------------------------------------------------------------------ */
+// Detecta automáticamente paredes (trazos oscuros/gruesos) y vidrios/tabiques (trazos finos/medios) en la imagen del plano.
+function detectarEstructurasPlano(imagen) {
+  if (!imagen) return [];
+  const detectadas = [];
+  let contadorId = 1;
+  if (estado.planoReconocido) {
+    for (const e of ESTRUCTURAS_PLANO_BASE) {
+      detectadas.push({ id: 'E' + (contadorId++), ...e });
+    }
+  }
+  const W = 280;
+  const H = Math.max(120, Math.round(W * (imagen.naturalHeight / imagen.naturalWidth)));
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(imagen, 0, 0, W, H);
+  const datos = ctx.getImageData(0, 0, W, H).data;
+
+  // Clasifica cada píxel: 0 = fondo claro, 1 = trazo fino/gris/azulado (vidrio/tabique), 2 = trazo oscuro fuerte (pared/muro)
+  const mapa = new Uint8Array(W * H);
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
+      const r = datos[i], g = datos[i + 1], b = datos[i + 2], a = datos[i + 3];
+      if (a < 120) continue;
+      const lum = (r * 0.299 + g * 0.587 + b * 0.114);
+      const azulado = b - Math.max(r, g) > 18;
+      if (lum < 105) mapa[y * W + x] = 2;
+      else if (lum < 185 || azulado) mapa[y * W + x] = 1;
+    }
+  }
+
+  const minLargoH = Math.round(W * 0.085);
+  const minLargoV = Math.round(H * 0.085);
+  const yaExisteCerca = (x1, y1, x2, y2) => detectadas.some(d => {
+    const mismoSentidoH = Math.abs(y1 - y2) < 0.02 && Math.abs(d.y1 - d.y2) < 0.02;
+    const mismoSentidoV = Math.abs(x1 - x2) < 0.02 && Math.abs(d.x1 - d.x2) < 0.02;
+    if (mismoSentidoH && Math.abs(y1 - d.y1) < 0.035) {
+      return Math.max(x1, d.x1) < Math.min(x2, d.x2) + 0.02;
+    }
+    if (mismoSentidoV && Math.abs(x1 - d.x1) < 0.035) {
+      return Math.max(y1, d.y1) < Math.min(y2, d.y2) + 0.02;
+    }
+    return false;
+  });
+
+  // Escaneo de muros y vidrios horizontales
+  for (let y = Math.round(H * 0.04); y < H * 0.94; y += 3) {
+    let inicio = -1, sumaTipo = 0, cuenta = 0, huecos = 0;
+    for (let x = Math.round(W * 0.04); x < W * 0.96; x++) {
+      const v = mapa[y * W + x];
+      if (v > 0) {
+        if (inicio < 0) { inicio = x; sumaTipo = 0; cuenta = 0; }
+        sumaTipo += v;
+        cuenta++;
+        huecos = 0;
+      } else if (inicio >= 0) {
+        huecos++;
+        if (huecos > 2 || x >= W * 0.96 - 1) {
+          const fin = x - huecos;
+          if (fin - inicio >= minLargoH) {
+            const x1 = +(inicio / W).toFixed(3), y1 = +(y / H).toFixed(3);
+            const x2 = +(fin / W).toFixed(3), y2 = y1;
+            if (!yaExisteCerca(x1, y1, x2, y2)) {
+              // Mide grosor vertical promedio para distinguir concreto, ladrillo y vidrio
+              let grosor = 1;
+              const xm = Math.round((inicio + fin) / 2);
+              for (let dy = -3; dy <= 3; dy++) if (dy !== 0 && y + dy >= 0 && y + dy < H && mapa[(y + dy) * W + xm] > 0) grosor++;
+              const promedio = sumaTipo / Math.max(1, cuenta);
+              const tipo = grosor >= 4 && promedio > 1.7 ? 'concreto' : promedio >= 1.55 ? 'ladrillo' : grosor <= 2 ? 'vidrio' : 'yeso';
+              detectadas.push({ id: 'E' + (contadorId++), x1, y1, x2, y2, tipo, origen: 'auto' });
+            }
+          }
+          inicio = -1;
+        }
+      }
+    }
+  }
+
+  // Escaneo de muros y vidrios verticales
+  for (let x = Math.round(W * 0.04); x < W * 0.96; x += 3) {
+    let inicio = -1, sumaTipo = 0, cuenta = 0, huecos = 0;
+    for (let y = Math.round(H * 0.04); y < H * 0.94; y++) {
+      const v = mapa[y * W + x];
+      if (v > 0) {
+        if (inicio < 0) { inicio = y; sumaTipo = 0; cuenta = 0; }
+        sumaTipo += v;
+        cuenta++;
+        huecos = 0;
+      } else if (inicio >= 0) {
+        huecos++;
+        if (huecos > 2 || y >= H * 0.94 - 1) {
+          const fin = y - huecos;
+          if (fin - inicio >= minLargoV) {
+            const x1 = +(x / W).toFixed(3), y1 = +(inicio / H).toFixed(3);
+            const x2 = x1, y2 = +(fin / H).toFixed(3);
+            if (!yaExisteCerca(x1, y1, x2, y2)) {
+              let grosor = 1;
+              const ym = Math.round((inicio + fin) / 2);
+              for (let dx = -3; dx <= 3; dx++) if (dx !== 0 && x + dx >= 0 && x + dx < W && mapa[ym * W + (x + dx)] > 0) grosor++;
+              const promedio = sumaTipo / Math.max(1, cuenta);
+              const tipo = grosor >= 4 && promedio > 1.7 ? 'concreto' : promedio >= 1.55 ? 'ladrillo' : grosor <= 2 ? 'vidrio' : 'yeso';
+              detectadas.push({ id: 'E' + (contadorId++), x1, y1, x2, y2, tipo, origen: 'auto' });
+            }
+          }
+          inicio = -1;
+        }
+      }
+    }
+  }
+  return detectadas.slice(0, 48);
+}
+
+// Determina si dos segmentos (A-B) y (C-D) se intersectan.
+function intersectanSegmentos(ax, ay, bx, by, cx, cy, dx, dy) {
+  const ccw = (p1x, p1y, p2x, p2y, p3x, p3y) => (p3y - p1y) * (p2x - p1x) > (p2y - p1y) * (p3x - p1x);
+  return (ccw(ax, ay, cx, cy, dx, dy) !== ccw(bx, by, cx, cy, dx, dy)) &&
+         (ccw(ax, ay, bx, by, cx, cy) !== ccw(ax, ay, bx, by, dx, dy));
+}
+
+// Precalcula las cajas delimitadoras (AABB) de cada estructura para descartar cruces en nanosegundos.
+function asegurarGeometriaEstructuras() {
+  for (const e of estado.estructuras) {
+    if (e._minX === undefined || e._tipoCache !== e.tipo) {
+      e._minX = Math.min(e.x1, e.x2);
+      e._maxX = Math.max(e.x1, e.x2);
+      e._minY = Math.min(e.y1, e.y2);
+      e._maxY = Math.max(e.y1, e.y2);
+      const mat = MATERIALES_ESTRUCTURA[e.tipo] || MATERIALES_ESTRUCTURA.ladrillo;
+      e._db = mat.db;
+      e._tipoCache = e.tipo;
+    }
+  }
+}
+
+// Calcula cuántos dB de atenuación acumula un rayo entre (x1, y1) y (x2, y2) en coordenadas normalizadas (0..1).
+function atenuacionPorEstructuras(x1, y1, x2, y2, banda = estado.banda) {
+  const n = estado.estructuras.length;
+  if (!n) return { db: 0, cruces: 0 };
+  asegurarGeometriaEstructuras();
+  const claveBanda = banda === 'solapado' ? '5ghz' : banda;
+  const rMinX = x1 < x2 ? x1 : x2;
+  const rMaxX = x1 > x2 ? x1 : x2;
+  const rMinY = y1 < y2 ? y1 : y2;
+  const rMaxY = y1 > y2 ? y1 : y2;
+  let totalDb = 0;
+  let cruces = 0;
+  for (let i = 0; i < n; i++) {
+    const e = estado.estructuras[i];
+    if (rMaxX < e._minX || rMinX > e._maxX || rMaxY < e._minY || rMinY > e._maxY) continue;
+    if (intersectanSegmentos(x1, y1, x2, y2, e.x1, e.y1, e.x2, e.y2)) {
+      totalDb += (e._db[claveBanda] ?? e._db['5ghz'] ?? 8);
+      cruces++;
+    }
+  }
+  return { db: totalDb > 42 ? 42 : totalDb, cruces };
+}
+
+// Busca una estructura cercana al clic del usuario para editarla o borrarla.
+function estructuraEn(pos) {
+  let mejor = null;
+  let mejorDist = 10;
+  for (const e of estado.estructuras) {
+    const x1 = e.x1 * pos.ancho, y1 = e.y1 * pos.alto;
+    const x2 = e.x2 * pos.ancho, y2 = e.y2 * pos.alto;
+    const dx = x2 - x1, dy = y2 - y1;
+    const lon2 = dx * dx + dy * dy || 1;
+    const t = Math.max(0, Math.min(1, ((pos.cssX - x1) * dx + (pos.cssY - y1) * dy) / lon2));
+    const px = x1 + t * dx, py = y1 + t * dy;
+    const dist = Math.hypot(pos.cssX - px, pos.cssY - py);
+    if (dist <= mejorDist) { mejor = e; mejorDist = dist; }
+  }
+  return mejor;
+}
+
+/* ------------------------------------------------------------------
    LECTURA DEL EXCEL Y VALOR DE CADA PUNTO
    ------------------------------------------------------------------ */
-// Se aceptan varios nombres para cada columna (sin importar mayúsculas ni tildes),
-// porque cada persona arma su Excel a su manera.
 const COLUMNAS = {
   punto: t => ['punto', 'puntos', 'id', 'muestra', 'punto de medicion'].includes(t),
   banda: t => ['banda', 'band', 'frecuencia (ghz)'].includes(t),
   ssid:  t => ['ssid', 'red', 'nombre red', 'nombre de red', 'nombre de la red', 'wifi'].includes(t),
   senal: t => t.startsWith('nivel senal') || t.startsWith('nivel de senal') || t.startsWith('senal') || t.startsWith('rssi') || t === 'dbm' || t.startsWith('potencia')
 };
-// Convierte cualquier forma de escribir la banda ("2,4", "2.4 GHz", "5GHz", "5") en una clave fija.
+// Convierte cualquier forma de escribir la banda ("2,4", "2.4 GHz", "5GHz", "6 GHz") en una clave fija.
 function normalizarBanda(texto) {
   const t = normalizar(texto).replace(/\s/g, '').replace(',', '.');
   if (/^2\.?4/.test(t)) return '2.4ghz';
@@ -863,11 +1247,10 @@ function normalizarBanda(texto) {
   if (/^6/.test(t)) return '6ghz';
   return t;
 }
-const TEXTO_BANDA = { '2.4ghz': '2.4 GHz', '5ghz': '5 GHz', '6ghz': '6 GHz' };
-// Columnas que pueden faltar: si están, el Laboratorio muestra más análisis.
+const TEXTO_BANDA = { '2.4ghz': '2.4 GHz', '5ghz': '5 GHz', '6ghz': '6 GHz', 'solapado': '2.4 + 5 + 6 GHz' };
 const COLUMNAS_OPCIONALES = {
   canal: t => t === 'canal',
-  bssid: t => t.startsWith('bssid'),
+  bssid: t => t.startsWith('bssid') || t === 'mac' || t.startsWith('ap'),
   seguridad: t => t === 'seguridad',
   descarga: t => t.startsWith('descarga'),
   subida: t => t.startsWith('subida'),
@@ -894,18 +1277,16 @@ function buscarTabla(libro) {
 // Convierte la tabla en lecturas limpias: { numero, banda, red, dbm, ... }.
 function extraerLecturas({ filas, indices }) {
   const lecturas = [];
-  // Las apps escriben la red oculta de varias formas: «HiddenSSID», «(HiddenSSID)», «(Red oculta)»… son la misma.
   const esRedOculta = v => /^\(?\s*(hidden\s*ssid|hidden|red oculta|oculta)\s*\)?$/.test(normalizar(v));
-  // Celdas vacías o con "-" / "N/D" cuentan como sin dato.
   const textoOpcional = v => { const t = String(v ?? '').trim(); return t && !/^(-|–|n\/?d|n\/?a)$/i.test(t) ? t : null; };
   const celda = (fila, clave) => indices[clave] >= 0 ? fila[indices[clave]] : null;
   for (const fila of filas) {
     const coincide = String(fila[indices.punto] ?? '').match(/\d+/);
     let dbm = Number(String(fila[indices.senal] ?? '').replace(',', '.').replace('−', '-'));
     if (!coincide || fila[indices.senal] === null || !Number.isFinite(dbm)) continue;
-    if (dbm > 0 && dbm <= 100) dbm = -dbm;   // se olvidó el signo menos: 65 quiere decir −65
-    if (dbm < -100 || dbm > -10) continue;  // fuera de lo posible para una señal WiFi recibida
-    const canal = Number((String(celda(fila, 'canal') ?? '').match(/\d+/) || [])[0]);   // "6", "CH 6" o "Canal 6"
+    if (dbm > 0 && dbm <= 100) dbm = -dbm;
+    if (dbm < -100 || dbm > -10) continue;
+    const canal = Number((String(celda(fila, 'canal') ?? '').match(/\d+/) || [])[0]);
     const banda = normalizarBanda(fila[indices.banda]);
     lecturas.push({
       numero: Number(coincide[0]),
@@ -925,15 +1306,26 @@ function extraerLecturas({ filas, indices }) {
   return lecturas;
 }
 
-// Aplica la regla del proyecto: banda sin escanear = excluido,
-// red ausente = sin cobertura, y si hay lecturas, la mejor señal.
+// Calcula los puntos de medición de una red y banda; si es 6 GHz proyectada, estima a partir de 5 GHz y distancia al AP.
 function calcularPuntos(lecturas, red, banda) {
   const redBuscada = normalizar(red);
-  const bandaBuscada = normalizar(banda).replace(/\s/g, '');
+  const bandaReal = banda === 'solapado' ? (estado.bandas[0]?.clave || '5ghz') : normalizar(banda).replace(/\s/g, '');
   const numeros = [...new Set(lecturas.map(l => l.numero))].sort((a, b) => a - b);
+  const tiene6GhzReal = lecturas.some(l => l.banda === '6ghz');
+
+  if (bandaReal === '6ghz' && !tiene6GhzReal && estado.simular6Ghz) {
+    const base5 = calcularPuntos(lecturas, red, '5ghz');
+    return base5.map(p => {
+      if (p.tipo === 'excluido') return { ...p };
+      if (p.tipo === 'asignado') return { ...p, valor: estado.ajustes.sinCobertura };
+      // En 6 GHz la pérdida por espacio libre y obstáculos es mayor (~4 a 6 dB adicionales respecto a 5 GHz)
+      const caidaExtra = p.valor >= -55 ? 4 : p.valor >= -68 ? 6 : 8;
+      return { ...p, valor: Math.max(estado.ajustes.sinCobertura, p.valor - caidaExtra) };
+    });
+  }
 
   return numeros.map(numero => {
-    const deLaBanda = lecturas.filter(l => l.numero === numero && l.banda === bandaBuscada);
+    const deLaBanda = lecturas.filter(l => l.numero === numero && l.banda === bandaReal);
     const deLaRed = deLaBanda.filter(l => l.red === redBuscada);
     let tipo = 'medido';
     let valor = null;
@@ -945,35 +1337,278 @@ function calcularPuntos(lecturas, red, banda) {
 }
 
 /* ------------------------------------------------------------------
-   INTERPOLACIÓN IDW (Inverse Distance Weighting)
-   El valor de un lugar es el promedio de todas las mediciones, donde
-   cada una pesa 1 / distancia^potencia: las cercanas influyen más.
+   EXTRACCIÓN Y ORIENTACIÓN DE ROUTERS / APs SEGÚN EL EXCEL
    ------------------------------------------------------------------ */
-function idw(x, y, muestras, potencia) {
-  let sumaPesos = 0;
-  let sumaValores = 0;
-  let minimaDistancia2 = Infinity;
+// Detecta los Routers/APs a partir del archivo Excel (agrupando por raíz BSSID o por SSID y sus bandas 2.4/5/6 GHz).
+function extraerApsDelExcel(lecturas = estado.lecturas, redObjetivo = estado.red) {
+  if (!lecturas.length) return [];
+  const redNorm = normalizar(redObjetivo);
+  const deRed = lecturas.filter(l => l.red === redNorm);
+  const fuente = deRed.length ? deRed : lecturas;
 
-  for (const m of muestras) {
-    const dx = x - m.x;
-    const dy = y - m.y;
-    const distancia2 = dx * dx + dy * dy;
-    if (distancia2 === 0) return { valor: m.valor, distancia: 0 };
-    if (distancia2 < minimaDistancia2) minimaDistancia2 = distancia2;
-    const peso = 1 / Math.pow(distancia2, potencia / 2);
-    sumaPesos += peso;
-    sumaValores += peso * m.valor;
+  // Agrupa radios del mismo AP físico usando los primeros 4 bytes del BSSID (o la red si no hay columna BSSID)
+  const grupos = new Map();
+  for (const l of fuente) {
+    const raizMac = l.bssid ? l.bssid.toLowerCase().replace(/[^0-9a-f]/g, '').slice(0, 9) : '';
+    const clave = raizMac ? `${l.red}|${raizMac}` : `${l.red}|ap-principal`;
+    if (!grupos.has(clave)) {
+      grupos.set(clave, {
+        red: l.red,
+        redTexto: l.redTexto,
+        bssid: l.bssid || null,
+        bandas: new Set(),
+        canales: new Set(),
+        porPunto: new Map(),
+        maxDbmPorBanda: {},
+        mejorDbm: -Infinity,
+        mejorPunto: null
+      });
+    }
+    const g = grupos.get(clave);
+    g.bandas.add(l.banda);
+    if (l.canal) g.canales.add(l.canal);
+    const prev = g.porPunto.get(l.numero) ?? -Infinity;
+    if (l.dbm > prev) g.porPunto.set(l.numero, l.dbm);
+    if (l.dbm > (g.maxDbmPorBanda[l.banda] ?? -Infinity)) g.maxDbmPorBanda[l.banda] = l.dbm;
+    if (l.dbm > g.mejorDbm) { g.mejorDbm = l.dbm; g.mejorPunto = 'P' + l.numero; }
   }
-  return { valor: sumaValores / sumaPesos, distancia: Math.sqrt(minimaDistancia2) };
+
+  // Si hay demasiados micro-grupos de BSSID de la misma red, consolida los principales con mayor señal
+  const listaGrupos = [...grupos.values()].sort((a, b) => b.mejorDbm - a.mejorDbm).slice(0, 4);
+  return listaGrupos.map((g, idx) => {
+    // Calcula la ubicación estimada del AP ponderando hacia los puntos de mayor intensidad (dBm)
+    let sumaPesos = 0, sx = 0, sy = 0;
+    for (const [num, dbm] of g.porPunto.entries()) {
+      const id = 'P' + num;
+      const pos = estado.posiciones[id] || (estado.planoReconocido ? GUIA[id] : null);
+      if (!pos) continue;
+      // Peso exponencial: cada 6 dB más fuerte cuadruplica la cercanía al AP
+      const peso = Math.pow(10, (dbm + 85) / 14);
+      sx += pos.x * peso;
+      sy += pos.y * peso;
+      sumaPesos += peso;
+    }
+    const x = sumaPesos > 0 ? Math.min(0.92, Math.max(0.08, sx / sumaPesos + (idx * 0.025))) : 0.62 + idx * 0.06;
+    const y = sumaPesos > 0 ? Math.min(0.90, Math.max(0.08, sy / sumaPesos - 0.02)) : 0.34 + idx * 0.06;
+    const bandasArr = [...g.bandas].sort((a, b) => (parseFloat(a) || 0) - (parseFloat(b) || 0));
+    if (estado.simular6Ghz && !bandasArr.includes('6ghz')) bandasArr.push('6ghz');
+    return {
+      id: 'R' + (idx + 1),
+      x,
+      y,
+      nombre: g.bssid ? `${g.redTexto} (${g.bssid.slice(-5)})` : `${g.redTexto} · AP ${idx + 1}`,
+      red: g.red,
+      bandas: bandasArr,
+      canales: [...g.canales],
+      mejorPunto: g.mejorPunto,
+      mejorDbm: g.mejorDbm,
+      maxDbmPorBanda: g.maxDbmPorBanda,
+      origenExcel: true
+    };
+  });
+}
+
+// Carga o actualiza los APs detectados en el Excel conservando las posiciones que el usuario haya ajustado.
+function sincronizarApsDelExcel(reubicar = false) {
+  if (!estado.lecturas.length) return;
+  const detectados = extraerApsDelExcel(estado.lecturas, estado.red);
+  if (!detectados.length) return;
+  if (!estado.routers.length || reubicar) {
+    estado.routers = detectados;
+  } else {
+    // Actualiza posiciones de los APs auto-generados cuando se ubican nuevos puntos
+    for (const det of detectados) {
+      const existente = estado.routers.find(r => r.id === det.id && r.origenExcel);
+      if (existente && !existente.movidoManual) {
+        existente.x = det.x;
+        existente.y = det.y;
+        existente.bandas = det.bandas;
+        existente.mejorPunto = det.mejorPunto;
+        existente.mejorDbm = det.mejorDbm;
+        existente.maxDbmPorBanda = det.maxDbmPorBanda;
+      }
+    }
+  }
+}
+
+// Devuelve el Router/AP hacia el cual se orienta un punto de medición (el más cercano/fuerte de la red activa).
+function routerParaPunto(punto) {
+  if (!estado.routers.length || !estaUbicado(punto)) return null;
+  const candidatos = estado.routers.filter(r => !r.red || r.red === normalizar(estado.red));
+  const lista = candidatos.length ? candidatos : estado.routers;
+  let mejor = lista[0];
+  let menorDist = Infinity;
+  for (const r of lista) {
+    const d = Math.hypot(punto.x - r.x, punto.y - r.y);
+    if (d < menorDist) { menorDist = d; mejor = r; }
+  }
+  return mejor;
 }
 
 /* ------------------------------------------------------------------
-   VISTAS DEL MAPA (el Laboratorio puede cambiar de vista; la misión usa «senal»)
+   INTERPOLACIÓN IDW OPTIMIZADA (PRE-CÁLCULO + EJECUCIÓN POR LOTES)
    ------------------------------------------------------------------ */
+// Precalcula distancias, vectores unitarios y atenuaciones fijas entre cada Router/AP y cada muestra medida.
+function prepararContextoIdw(muestras, banda = estado.banda, vista = estado.vista) {
+  const ancho = estado.plano.naturalWidth;
+  const alto = estado.plano.naturalHeight;
+  const ppm = pixelesPorMetro();
+  const esVistaDbm = vista !== 'redes';
+  const claveBanda = banda === 'solapado' ? '5ghz' : banda;
+  const factorFrecuencia = claveBanda === '6ghz' ? 23 : claveBanda === '5ghz' ? 20.5 : 17.5;
+  asegurarGeometriaEstructuras();
+
+  const routersActivos = (estado.orientarRouter && esVistaDbm)
+    ? estado.routers.filter(r => !r.red || r.red === normalizar(estado.red)).map((r, idx) => ({
+         idx,
+        x: r.x,
+        y: r.y,
+        px: r.x * ancho,
+        py: r.y * alto,
+        potBase1m: (r.maxDbmPorBanda?.[claveBanda] ?? (claveBanda === '2.4ghz' ? -38 : claveBanda === '5ghz' ? -42 : -46))
+      }))
+    : [];
+
+  const muestrasPrep = muestras.map(m => {
+    const xNorm = m.x / ancho;
+    const yNorm = m.y / alto;
+    const porRouter = routersActivos.map(r => {
+      const dxR = m.x - r.px;
+      const dyR = m.y - r.py;
+      const distPx = Math.hypot(dxR, dyR) || 1;
+      return {
+        distM: Math.max(0.6, distPx / ppm),
+        atenDb: atenuacionPorEstructuras(r.x, r.y, xNorm, yNorm, claveBanda).db,
+        ux: dxR / distPx,
+        uy: dyR / distPx
+      };
+    });
+    return { x: m.x, y: m.y, xNorm, yNorm, valor: m.valor, porRouter };
+  });
+
+  return { ancho, alto, ppm, esVistaDbm, claveBanda, factorFrecuencia, routersActivos, muestrasPrep };
+}
+
+// Calcula la intensidad en (x, y) combinando las muestras medidas, la orientación hacia el AP/router y las paredes del plano.
+function idw(x, y, muestras, potencia, banda = estado.banda, vista = estado.vista, ctxPre = null) {
+  if (!muestras.length) return { valor: estado.ajustes.sinCobertura, distancia: Infinity, atenuacionDb: 0 };
+  const ctx = ctxPre || prepararContextoIdw(muestras, banda, vista);
+  const { ancho, alto, ppm, esVistaDbm, claveBanda, factorFrecuencia, routersActivos, muestrasPrep } = ctx;
+  const xNorm = x / ancho;
+  const yNorm = y / alto;
+
+  // Busca el router activo más favorable hacia la coordenada (x, y)
+  let routerRef = null;
+  let distRouterM = Infinity;
+  let atenRouterDestino = 0;
+  let uxCelda = 0, uyCelda = 0;
+  if (routersActivos.length) {
+    let mejorCosto = Infinity;
+    for (let i = 0; i < routersActivos.length; i++) {
+      const r = routersActivos[i];
+      const dxR = x - r.px;
+      const dyR = y - r.py;
+      const distPx = Math.hypot(dxR, dyR) || 1;
+      const dm = distPx / ppm;
+      const aten = atenuacionPorEstructuras(r.x, r.y, xNorm, yNorm, claveBanda).db;
+      const costo = dm + aten * 0.25;
+      if (costo < mejorCosto) {
+        mejorCosto = costo;
+        routerRef = r;
+        distRouterM = dm;
+        atenRouterDestino = aten;
+        uxCelda = dxR / distPx;
+        uyCelda = dyR / distPx;
+      }
+    }
+  }
+
+  let sumaPesos = 0;
+  let sumaValores = 0;
+  let minimaDistancia2 = Infinity;
+  const distCeldaRouterM = Math.max(0.5, distRouterM);
+  const nMuestras = muestrasPrep.length;
+
+  for (let i = 0; i < nMuestras; i++) {
+    const m = muestrasPrep[i];
+    const dx = x - m.x;
+    const dy = y - m.y;
+    const distancia2 = dx * dx + dy * dy;
+    if (distancia2 < 1) return { valor: m.valor, distancia: 0, atenuacionDb: atenRouterDestino };
+    if (distancia2 < minimaDistancia2) minimaDistancia2 = distancia2;
+
+    const atenMuestra = esVistaDbm
+      ? atenuacionPorEstructuras(m.xNorm, m.yNorm, xNorm, yNorm, claveBanda).db
+      : 0;
+
+    let valorAjustado = m.valor - atenMuestra * 0.65;
+    let factorDireccional = 1;
+
+    if (routerRef) {
+      const infoR = m.porRouter[routerRef.idx];
+      const deltaCaminoDb = factorFrecuencia * Math.log10(distCeldaRouterM / infoR.distM)
+        + (atenRouterDestino - infoR.atenDb) * 0.55;
+      valorAjustado = m.valor - deltaCaminoDb * 0.38 - atenMuestra * 0.45;
+      // Producto punto de vectores unitarios (equivale a cos(angCelda - angMuestra) sin usar atan2 ni cos)
+      const cosAng = uxCelda * infoR.ux + uyCelda * infoR.uy;
+      if (cosAng > 0) factorDireccional = 1 + cosAng * 0.65;
+    }
+
+    const penalizacionMuro = 1 / (1 + atenMuestra * 0.18);
+    const invDist = potencia === 2 ? (1 / distancia2) : (1 / Math.pow(distancia2, potencia / 2));
+    const peso = factorDireccional * penalizacionMuro * invDist;
+    sumaPesos += peso;
+    sumaValores += peso * valorAjustado;
+  }
+
+  let valorFinal = sumaValores / sumaPesos;
+
+  if (routerRef) {
+    const esperadoDesdeAp = Math.min(-32, routerRef.potBase1m + 3) - factorFrecuencia * Math.log10(Math.max(0.6, distRouterM)) - atenRouterDestino * 0.85;
+    const pesoAp = Math.exp(-distRouterM / 2.2) * 0.45;
+    valorFinal = valorFinal * (1 - pesoAp) + (valorFinal > esperadoDesdeAp ? valorFinal : esperadoDesdeAp) * pesoAp;
+    const distApPx = distRouterM * ppm;
+    if (distApPx * distApPx < minimaDistancia2) minimaDistancia2 = distApPx * distApPx;
+  }
+
+  return {
+    valor: valorFinal < -100 ? -100 : valorFinal > -25 ? -25 : valorFinal,
+    distancia: Math.sqrt(minimaDistancia2),
+    atenuacionDb: atenRouterDestino
+  };
+}
+
+/* ------------------------------------------------------------------
+   VISTAS DEL MAPA (incluye Solapamiento de bandas y Banda dominante)
+   ------------------------------------------------------------------ */
+const ESCALA_SOLAPAMIENTO = [
+  { desde: 3, color: '#0f9d8a', nombre: 'Solapamiento total (2.4 + 5 + 6 GHz)', rango: 'Las 3 bandas activas ≥ −70' },
+  { desde: 2, color: '#7c5cff', nombre: 'Doble banda (2.4 + 5 GHz)',            rango: '2 bandas superpuestas ≥ −70' },
+  { desde: 1, color: '#2f7fd6', nombre: 'Cobertura de 1 banda (2.4 GHz)',       rango: 'Solo llega 1 banda ≥ −75' },
+  { desde: 0, color: '#f59e0b', nombre: 'Señal marginal / borde',               rango: '−76 a −82 dBm' },
+  { desde: -Infinity, color: '#d7191c', nombre: 'Sin cobertura',                rango: 'menos de −82 dBm' }
+];
+
+const ESCALA_DOMINANTE = [
+  { desde: 3, color: '#0f9d8a', nombre: '6 GHz / Tribanda ultra rápida', rango: '6 GHz ≥ −67 dBm' },
+  { desde: 2, color: '#7c5cff', nombre: '5 GHz óptima (voz/video HD)',   rango: '5 GHz ≥ −67 dBm' },
+  { desde: 1, color: '#2f7fd6', nombre: '2.4 GHz dominante (mayor alcance)', rango: '2.4 GHz ≥ −72 dBm' },
+  { desde: 0, color: '#f59e0b', nombre: 'Respaldo débil 2.4 GHz',        rango: '−73 a −80 dBm' },
+  { desde: -Infinity, color: '#d7191c', nombre: 'Zona sin cobertura',    rango: 'menos de −80 dBm' }
+];
+
 const ESCALAS = {
   senal: {
     titulo: 'Calidad de la señal', unidad: 'dBm', items: ESCALA,
-    explicar: () => `Red: ${nombreRed()} ${nombreBanda()}. Los dBm miden la fuerza de la señal: entre más cerca de 0, mejor. Sin color: no hay mediciones cerca.`
+    explicar: () => `Red: ${nombreRed()} (${nombreBanda()}). Incluye orientación hacia el AP y atenuación de ${estado.estructuras.length} estructuras del plano.`
+  },
+  solapamiento: {
+    titulo: 'Solapamiento de bandas (2.4 / 5 / 6 GHz)', unidad: 'bandas', items: ESCALA_SOLAPAMIENTO,
+    explicar: () => `Red: ${nombreRed()}. Superpone las capas de ${bandasParaSolapar().map(b => TEXTO_BANDA[b]).join(', ')} y dibuja sus contornos de alcance (−67 dBm).`
+  },
+  dominante: {
+    titulo: 'Banda dominante en cada zona', unidad: 'banda', items: ESCALA_DOMINANTE,
+    explicar: () => `Red: ${nombreRed()}. Muestra dónde rinde mejor 6 GHz (esmeralda), 5 GHz (violeta) y dónde 2.4 GHz (azul) mantiene la conexión tras muros.`
   },
   requisitos: {
     titulo: 'Qué se puede hacer', unidad: 'dBm',
@@ -993,7 +1628,7 @@ const ESCALAS = {
       { desde: 15,        color: '#ffdf2e', nombre: 'Regular',   rango: '15 a 19 dB' },
       { desde: -Infinity, color: '#d7191c', nombre: 'Mala',      rango: 'menos de 15 dB' }
     ],
-    explicar: () => `SNR = señal − ruido. El ruido no se midió: se supone ${textoDbm(ruidoActual())} dBm, un valor típico en interiores para ${nombreBanda()}. Es una estimación.`
+    explicar: () => `SNR = señal − ruido. El ruido supuesto es ${textoDbm(ruidoActual())} dBm para ${nombreBanda()}.`
   },
   redes: {
     titulo: 'Redes que se oyen', unidad: 'redes',
@@ -1006,12 +1641,25 @@ const ESCALAS = {
     explicar: () => `Cuántas redes distintas se oyen en ${nombreBanda()} en cada lugar. Más redes en el aire significa más competencia por el canal.`
   }
 };
-const escalaActual = () => ESCALAS[estado.vista].items;
-const nombreBanda = (clave = estado.banda) => (estado.bandas.find(b => b.clave === clave) || {}).nombre || CONFIG.BANDA;
+const escalaActual = () => (ESCALAS[estado.vista] || ESCALAS.senal).items;
+const nombreBanda = (clave = estado.banda) => TEXTO_BANDA[clave] || (estado.bandas.find(b => b.clave === clave) || {}).nombre || CONFIG.BANDA;
 const nombreRed = () => estado.redes.find(r => normalizar(r) === normalizar(estado.red))
   || (normalizar(estado.red) === normalizar(CONFIG.RED) ? CONFIG.RED : estado.red);
-const ruidoActual = (banda = estado.banda) => estado.ajustes.ruido[banda] ?? -95;
-const contarRedes = (numero, banda) => new Set(estado.lecturas.filter(l => l.numero === numero && l.banda === banda).map(l => l.red)).size;
+const ruidoActual = (banda = estado.banda) => estado.ajustes.ruido[banda === 'solapado' ? '5ghz' : banda] ?? -95;
+const contarRedes = (numero, banda) => new Set(estado.lecturas.filter(l => l.numero === numero && l.banda === (banda === 'solapado' ? '5ghz' : banda)).map(l => l.red)).size;
+
+// Devuelve las bandas disponibles para solapar (2.4 GHz, 5 GHz y 6 GHz real o proyectada).
+function bandasDisponiblesSolapamiento() {
+  const claves = new Set(estado.bandas.map(b => b.clave));
+  if (estado.simular6Ghz && claves.size >= 1) claves.add('6ghz');
+  return ['2.4ghz', '5ghz', '6ghz'].filter(c => claves.has(c));
+}
+
+function bandasParaSolapar() {
+  const disp = bandasDisponiblesSolapamiento();
+  const activas = disp.filter(c => estado.bandasSolapadas.includes(c));
+  return activas.length ? activas : disp;
+}
 
 // Valor que aporta un punto según la vista elegida.
 function valorParaVista(p, banda = estado.banda, vista = estado.vista) {
@@ -1027,7 +1675,7 @@ function textoValorVista(valor, vista = estado.vista) {
 
 function clasificar(valor, escala = escalaActual()) {
   const redondeado = Math.round(valor);
-  return escala.find(banda => redondeado >= banda.desde);
+  return escala.find(banda => redondeado >= banda.desde) || escala[escala.length - 1];
 }
 
 function colorRGB(hex) {
@@ -1036,35 +1684,152 @@ function colorRGB(hex) {
 }
 
 const pixelesPorMetro = () => estado.pxPorMetro || (estado.plano.naturalWidth * CONFIG.FRACCION_ANCHO_PLANO) / CONFIG.ANCHO_LOCAL_M;
-const muestrasActuales = (puntos = puntosUsados(), banda = estado.banda, vista = estado.vista) =>
-  puntos.map(p => ({ x: p.x * estado.plano.naturalWidth, y: p.y * estado.plano.naturalHeight, valor: valorParaVista(p, banda, vista), id: p.id }));
 
-// Calcula una cuadrícula de colores del tamaño proporcional al plano.
-// Devuelve el lienzo y cuánta área quedó de cada color.
-function calcularMapa(muestras = muestrasActuales(), escala = escalaActual()) {
+// Obtiene las muestras ubicadas para cualquier banda específica ('2.4ghz', '5ghz', '6ghz').
+function muestrasDeBanda(claveBanda, vista = 'senal') {
+  const puntos = calcularPuntos(estado.lecturas, estado.red, claveBanda);
+  const ubicados = [];
+  for (const p of puntos) {
+    const pos = estado.posiciones[p.id];
+    if (pos && p.tipo !== 'excluido') {
+      ubicados.push({
+        x: pos.x * estado.plano.naturalWidth,
+        y: pos.y * estado.plano.naturalHeight,
+        valor: valorParaVista(p, claveBanda, vista),
+        id: p.id,
+        numero: p.numero
+      });
+    }
+  }
+  return ubicados;
+}
+
+const muestrasActuales = (puntos = puntosUsados(), banda = estado.banda, vista = estado.vista) =>
+  puntos.filter(estaUbicado).map(p => ({ x: p.x * estado.plano.naturalWidth, y: p.y * estado.plano.naturalHeight, valor: valorParaVista(p, banda, vista), id: p.id, numero: p.numero }));
+
+// Prepara el estado común para calcular el mapa de calor de forma síncrona o asíncrona por bloques.
+function crearCalculadorMapa(muestras = muestrasActuales(), escala = escalaActual(), opciones = {}) {
+  const vista = opciones.vista || estado.vista;
+  const banda = opciones.banda || estado.banda;
   const ancho = estado.plano.naturalWidth;
   const alto = estado.plano.naturalHeight;
-  const paso = Math.max(1, Math.round(Math.max(ancho, alto) / 600));
+  const paso = Math.max(2, Math.round(Math.max(ancho, alto) / 240));
   const columnas = Math.ceil(ancho / paso);
   const filas = Math.ceil(alto / paso);
   const radioMaximo = estado.ajustes.radio * pixelesPorMetro();
-  const colores = new Map(escala.map(b => [b, colorRGB(b.color)]));
-  const conteo = new Map(escala.map(b => [b, 0]));
-  let coloreados = 0;
 
   const lienzo = document.createElement('canvas');
   lienzo.width = columnas;
   lienzo.height = filas;
   const ctx = lienzo.getContext('2d');
   const imagen = ctx.createImageData(columnas, filas);
+  const esMultibanda = (vista === 'solapamiento' || vista === 'dominante') && !opciones.forzarSimple;
 
-  for (let fila = 0; fila < filas; fila++) {
+  if (esMultibanda) {
+    const bandasActivas = bandasParaSolapar();
+    const muestrasPorBanda = Object.fromEntries(bandasActivas.map(b => [b, muestrasDeBanda(b, 'senal')]));
+    const ctxPorBanda = Object.fromEntries(bandasActivas.map(b => [b, prepararContextoIdw(muestrasPorBanda[b], b, 'senal')]));
+    const escalaRef = vista === 'solapamiento' ? ESCALA_SOLAPAMIENTO : ESCALA_DOMINANTE;
+    const conteo = new Map(escalaRef.map(b => [b, 0]));
+    const coloresDominante = new Map(escalaRef.map(b => [b, colorRGB(b.color)]));
+    let coloreados = 0;
+    const matrices = {};
+    for (const b of bandasActivas) matrices[b] = new Float32Array(columnas * filas).fill(-120);
+    const inc24 = bandasActivas.includes('2.4ghz');
+    const inc5 = bandasActivas.includes('5ghz');
+    const inc6 = bandasActivas.includes('6ghz');
+    const pesoBanda = (v, umbral) => Math.max(0, Math.min(1, (v - (umbral - 12)) / 24));
+
+    const procesarFila = fila => {
+      const py = (fila + 0.5) * paso;
+      for (let columna = 0; columna < columnas; columna++) {
+        const px = (columna + 0.5) * paso;
+        const idx = fila * columnas + columna;
+        let v24 = -110, v5 = -110, v6 = -110;
+        let minDist = Infinity;
+
+        for (let k = 0; k < bandasActivas.length; k++) {
+          const b = bandasActivas[k];
+          const r = idw(px, py, muestrasPorBanda[b], CONFIG.POTENCIA_IDW, b, 'senal', ctxPorBanda[b]);
+          if (b === '2.4ghz') v24 = r.valor;
+          else if (b === '5ghz') v5 = r.valor;
+          else if (b === '6ghz') v6 = r.valor;
+          matrices[b][idx] = r.distancia <= radioMaximo ? r.valor : -120;
+          if (r.distancia < minDist) minDist = r.distancia;
+        }
+        if (minDist > radioMaximo) continue;
+
+        if (vista === 'solapamiento') {
+          let cuantas = 0;
+          if (v24 >= -74) cuantas++;
+          if (v5 >= -71) cuantas++;
+          if (v6 >= -69) cuantas++;
+          const mejorVal = Math.max(v24, v5, v6);
+          const nivel = cuantas >= 3 ? 3 : cuantas === 2 ? 2 : cuantas === 1 ? 1 : mejorVal >= -82 ? 0 : -1;
+          const cat = clasificar(nivel, ESCALA_SOLAPAMIENTO);
+          conteo.set(cat, (conteo.get(cat) || 0) + 1);
+          coloreados++;
+
+          const p24 = inc24 ? pesoBanda(v24, -74) : 0;
+          const p5 = inc5 ? pesoBanda(v5, -70) : 0;
+          const p6 = inc6 ? pesoBanda(v6, -68) : 0;
+          const sumaP = p24 + p5 + p6;
+          let rojo, verde, azul;
+          if (sumaP > 0.05) {
+            rojo  = Math.round((p24 * 47  + p5 * 124 + p6 * 15) / sumaP);
+            verde = Math.round((p24 * 127 + p5 * 92  + p6 * 157) / sumaP);
+            azul  = Math.round((p24 * 214 + p5 * 255 + p6 * 138) / sumaP);
+            if (cuantas >= 3) { rojo = 15; verde = 157; azul = 138; }
+          } else {
+            [rojo, verde, azul] = coloresDominante.get(cat);
+          }
+          const i = idx * 4;
+          imagen.data[i] = rojo;
+          imagen.data[i + 1] = verde;
+          imagen.data[i + 2] = azul;
+          imagen.data[i + 3] = 255;
+        } else {
+          let codigo = -1;
+          if (v6 >= -67) codigo = 3;
+          else if (v5 >= -67) codigo = 2;
+          else if (v24 >= -72) codigo = 1;
+          else if (Math.max(v24, v5, v6) >= -80) codigo = 0;
+          const cat = clasificar(codigo, ESCALA_DOMINANTE);
+          const [rojo, verde, azul] = coloresDominante.get(cat);
+          conteo.set(cat, (conteo.get(cat) || 0) + 1);
+          coloreados++;
+          const i = idx * 4;
+          imagen.data[i] = rojo;
+          imagen.data[i + 1] = verde;
+          imagen.data[i + 2] = azul;
+          imagen.data[i + 3] = 255;
+        }
+      }
+    };
+
+    const finalizar = () => {
+      estado.matricesBanda = { columnas, filas, paso, datos: matrices };
+      ctx.putImageData(imagen, 0, 0);
+      const resumen = escalaRef.map(b => ({ ...b, porcentaje: coloreados ? conteo.get(b) / coloreados * 100 : 0 }));
+      return { lienzo, resumen };
+    };
+    return { filas, procesarFila, finalizar };
+  }
+
+  // Modo de una banda individual (2.4 GHz, 5 GHz o 6 GHz)
+  const ctxIdw = prepararContextoIdw(muestras, banda, vista);
+  const colores = new Map(escala.map(b => [b, colorRGB(b.color)]));
+  const conteo = new Map(escala.map(b => [b, 0]));
+  let coloreados = 0;
+
+  const procesarFila = fila => {
+    const py = (fila + 0.5) * paso;
     for (let columna = 0; columna < columnas; columna++) {
-      const r = idw((columna + 0.5) * paso, (fila + 0.5) * paso, muestras, CONFIG.POTENCIA_IDW);
+      const r = idw((columna + 0.5) * paso, py, muestras, CONFIG.POTENCIA_IDW, banda, vista, ctxIdw);
       if (r.distancia > radioMaximo) continue;
-      const banda = clasificar(r.valor, escala);
-      const [rojo, verde, azul] = colores.get(banda);
-      conteo.set(banda, conteo.get(banda) + 1);
+      const itemEscala = clasificar(r.valor, escala);
+      const [rojo, verde, azul] = colores.get(itemEscala);
+      conteo.set(itemEscala, conteo.get(itemEscala) + 1);
       coloreados++;
       const i = (fila * columnas + columna) * 4;
       imagen.data[i] = rojo;
@@ -1072,17 +1837,290 @@ function calcularMapa(muestras = muestrasActuales(), escala = escalaActual()) {
       imagen.data[i + 2] = azul;
       imagen.data[i + 3] = 255;
     }
+  };
+
+  const finalizar = () => {
+    ctx.putImageData(imagen, 0, 0);
+    const resumen = escala.map(b => ({ ...b, porcentaje: coloreados ? conteo.get(b) / coloreados * 100 : 0 }));
+    return { lienzo, resumen };
+  };
+  return { filas, procesarFila, finalizar };
+}
+
+// Calcula el mapa de calor de forma síncrona (optimizada).
+function calcularMapa(muestras = muestrasActuales(), escala = escalaActual(), opciones = {}) {
+  const calc = crearCalculadorMapa(muestras, escala, opciones);
+  for (let fila = 0; fila < calc.filas; fila++) calc.procesarFila(fila);
+  return calc.finalizar();
+}
+
+// Calcula el mapa de calor de forma asíncrona por bloques, actualizando la pantalla de carga sin trabar el navegador.
+async function calcularMapaAsync(muestras = muestrasActuales(), escala = escalaActual(), opciones = {}, informarProgreso = null) {
+  const calc = crearCalculadorMapa(muestras, escala, opciones);
+  let tTrozo = performance.now();
+  for (let fila = 0; fila < calc.filas; fila++) {
+    calc.procesarFila(fila);
+    if (performance.now() - tTrozo > 12) {
+      if (informarProgreso) {
+        const pct = 12 + Math.round(((fila + 1) / calc.filas) * 82);
+        informarProgreso(`Calculando propagación y atenuación por muros (${pct} %)…`, pct);
+      }
+      await pintarFotograma();
+      tTrozo = performance.now();
+    }
   }
-  ctx.putImageData(imagen, 0, 0);
-  const resumen = escala.map(b => ({ ...b, porcentaje: coloreados ? conteo.get(b) / coloreados * 100 : 0 }));
-  return { lienzo, resumen };
+  return calc.finalizar();
 }
 
 /* ------------------------------------------------------------------
-   DIBUJO
+   DIBUJO DE ESTRUCTURAS, ONDAS DE PROPAGACIÓN, CONTORNOS Y MARCADORES
    ------------------------------------------------------------------ */
+// Dibuja en el plano las paredes, vidrios, puertas y estructuras reconocidas o trazadas por el usuario.
+function dibujarEstructuras(ctx, ancho, alto, radio) {
+  if (!estado.verEstructuras && !estado.trazoEstructura) return;
+  ctx.save();
+  ctx.lineCap = 'round';
+  const escalaGrosor = Math.max(1, radio / 14);
+  for (const e of estado.estructuras) {
+    const mat = MATERIALES_ESTRUCTURA[e.tipo] || MATERIALES_ESTRUCTURA.ladrillo;
+    const x1 = e.x1 * ancho, y1 = e.y1 * alto;
+    const x2 = e.x2 * ancho, y2 = e.y2 * alto;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.65)';
+    ctx.lineWidth = (mat.grosor + 2) * escalaGrosor;
+    ctx.setLineDash([]);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = mat.color;
+    ctx.lineWidth = mat.grosor * escalaGrosor;
+    ctx.setLineDash(mat.punteado.map(n => n * escalaGrosor));
+    ctx.stroke();
+  }
+  if (estado.trazoEstructura) {
+    const t = estado.trazoEstructura;
+    const mat = MATERIALES_ESTRUCTURA[estado.materialActual] || MATERIALES_ESTRUCTURA.ladrillo;
+    ctx.beginPath();
+    ctx.moveTo(t.x1 * ancho, t.y1 * alto);
+    ctx.lineTo(t.x2 * ancho, t.y2 * alto);
+    ctx.strokeStyle = mat.color;
+    ctx.lineWidth = (mat.grosor + 1.5) * escalaGrosor;
+    ctx.setLineDash([6 * escalaGrosor, 4 * escalaGrosor]);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Dibuja los contornos de alcance (−67 dBm) de cada banda cuando el modo de solapamiento está activo.
+function dibujarContornosSolapamiento(ctx, ancho, alto, radio) {
+  if (!estado.contornosBanda || (estado.vista !== 'solapamiento' && estado.vista !== 'dominante')) return;
+  const info = estado.matricesBanda;
+  if (!info || !info.datos) return;
+  const { columnas, filas, datos } = info;
+  const sx = ancho / columnas;
+  const sy = alto / filas;
+  const umbral = -68;
+  const colores = { '2.4ghz': '#0284c7', '5ghz': '#6d28d9', '6ghz': '#059669' };
+
+  ctx.save();
+  for (const banda of bandasParaSolapar()) {
+    const matriz = datos[banda];
+    if (!matriz) continue;
+    ctx.strokeStyle = colores[banda] || '#1e293b';
+    ctx.fillStyle = colores[banda] || '#1e293b';
+    ctx.lineWidth = Math.max(2, radio * 0.17);
+    ctx.setLineDash(banda === '2.4ghz' ? [9, 5] : banda === '5ghz' ? [] : [4, 4]);
+    ctx.beginPath();
+    let etiqX = null, etiqY = null;
+    for (let f = 1; f < filas - 1; f++) {
+      for (let c = 1; c < columnas - 1; c++) {
+        const idx = f * columnas + c;
+        if (matriz[idx] >= umbral) {
+          const borde = matriz[idx - 1] < umbral || matriz[idx + 1] < umbral ||
+                        matriz[idx - columnas] < umbral || matriz[idx + columnas] < umbral;
+          if (borde) {
+            const px = (c + 0.5) * sx;
+            const py = (f + 0.5) * sy;
+            ctx.moveTo(px, py);
+            ctx.lineTo(px + sx * 0.9, py + sy * 0.9);
+            if (etiqX === null && f > filas * 0.18 && c > columnas * 0.18) { etiqX = px; etiqY = py; }
+          }
+        }
+      }
+    }
+    ctx.stroke();
+    if (etiqX !== null) {
+      ctx.setLineDash([]);
+      const txt = `${TEXTO_BANDA[banda]} (−67 dBm)`;
+      ctx.font = `700 ${Math.max(10, radio * 0.68)}px "Segoe UI", Arial, sans-serif`;
+      const tw = ctx.measureText(txt).width + radio * 0.6;
+      const th = radio * 0.95;
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillRect(etiqX - tw / 2, etiqY - th / 2, tw, th);
+      ctx.strokeRect(etiqX - tw / 2, etiqY - th / 2, tw, th);
+      ctx.fillStyle = colores[banda];
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(txt, etiqX, etiqY);
+    }
+  }
+  ctx.restore();
+}
+
+// Tablas trigonométricas precalculadas para los 60 rayos de las ondas de propagación.
+const NUM_RAYOS_ONDA = 60;
+const COS_RAYOS = Float32Array.from({ length: NUM_RAYOS_ONDA }, (_, k) => Math.cos((k / NUM_RAYOS_ONDA) * Math.PI * 2));
+const SIN_RAYOS = Float32Array.from({ length: NUM_RAYOS_ONDA }, (_, k) => Math.sin((k / NUM_RAYOS_ONDA) * Math.PI * 2));
+
+// Dibuja gráficamente las ondas producidas por cada AP/red y cómo viajan y se deforman al cruzar estructuras.
+function dibujarOndasPropagacion(ctx, ancho, alto, radio, vista = estado.vista, banda = estado.banda) {
+  if (!estado.mapa || !estado.verOndas) return;
+  let routers = estado.ondasTodasRedes
+    ? estado.routers
+    : estado.routers.filter(r => !r.red || r.red === normalizar(estado.red));
+  if (!routers.length && estado.routers.length) routers = estado.routers;
+  if (!routers.length) return;
+
+  const bandasOnda = (vista === 'solapamiento' || vista === 'dominante' || banda === 'solapado')
+    ? bandasParaSolapar()
+    : [banda];
+  const coloresOnda = { '2.4ghz': [14, 165, 233], '5ghz': [124, 92, 255], '6ghz': [16, 185, 129] };
+  const alcanceMetros = { '2.4ghz': estado.ajustes.radio * 1.45, '5ghz': estado.ajustes.radio * 1.12, '6ghz': estado.ajustes.radio * 0.85 };
+  const anillosPorBanda = { '2.4ghz': 5, '5ghz': 6, '6ghz': 7 };
+  const ppm = pixelesPorMetro() * (ancho / estado.plano.naturalWidth);
+  const numRayos = NUM_RAYOS_ONDA;
+  const firmaGeometria = `${estado.versionEscena || 0}|${estado.estructuras.length}|${estado.ajustes.radio}|${estado.pxPorMetro || 0}`;
+
+  ctx.save();
+  for (const r of routers) {
+    const rx = r.x * ancho;
+    const ry = r.y * alto;
+    if (!r._cacheOndas || r._firmaOndas !== `${firmaGeometria}|${r.x}|${r.y}`) {
+      r._cacheOndas = {};
+      r._firmaOndas = `${firmaGeometria}|${r.x}|${r.y}`;
+    }
+
+    for (const bClave of bandasOnda) {
+      const rgb = coloresOnda[bClave] || [59, 31, 143];
+      const maxRadioPx = (alcanceMetros[bClave] || 5) * ppm;
+      const numAnillos = anillosPorBanda[bClave] || 5;
+      const desfaseBanda = bClave === '2.4ghz' ? 0 : bClave === '5ghz' ? 0.33 : 0.66;
+
+      // Usa caché de atenuación angular para no recalcular intersecciones en cada fotograma de la animación
+      let factorSuavizado = r._cacheOndas[bClave];
+      if (!factorSuavizado) {
+        const alcanceAngulo = new Float32Array(numRayos);
+        const radX = maxRadioPx / ancho;
+        const radY = maxRadioPx / alto;
+        for (let k = 0; k < numRayos; k++) {
+          const destX = Math.min(1, Math.max(0, r.x + COS_RAYOS[k] * radX));
+          const destY = Math.min(1, Math.max(0, r.y + SIN_RAYOS[k] * radY));
+          const aten = atenuacionPorEstructuras(r.x, r.y, destX, destY, bClave).db;
+          alcanceAngulo[k] = Math.max(0.22, 1 - aten / 42);
+        }
+        factorSuavizado = new Float32Array(numRayos);
+        for (let k = 0; k < numRayos; k++) {
+          const fPrev = alcanceAngulo[(k - 1 + numRayos) % numRayos];
+          const fAct = alcanceAngulo[k];
+          const fSig = alcanceAngulo[(k + 1) % numRayos];
+          factorSuavizado[k] = (fPrev + fAct * 2 + fSig) / 4;
+        }
+        r._cacheOndas[bClave] = factorSuavizado;
+      }
+
+      for (let a = 0; a < numAnillos; a++) {
+        const progreso = ((a + ((estado.faseOndas + desfaseBanda) % 1)) / numAnillos);
+        if (progreso <= 0.04 || progreso >= 0.99) continue;
+        const alfa = Math.max(0.08, (1 - progreso * 0.88) * 0.68);
+        ctx.beginPath();
+        for (let k = 0; k <= numRayos; k++) {
+          const idx = k % numRayos;
+          const factorObstaculo = factorSuavizado[idx];
+          const distPx = maxRadioPx * progreso * (1 - progreso * (1 - factorObstaculo) * 0.78);
+          const ox = rx + COS_RAYOS[idx] * distPx;
+          const oy = ry + SIN_RAYOS[idx] * distPx;
+          if (k === 0) ctx.moveTo(ox, oy);
+          else ctx.lineTo(ox, oy);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alfa.toFixed(2)})`;
+        ctx.lineWidth = Math.max(1.5, radio * (0.19 - progreso * 0.08));
+        ctx.setLineDash(bClave === '6ghz' ? [5, 4] : []);
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.restore();
+}
+
+// Dibuja los vectores de enlace y pulsos viajeros entre el Router/AP y cada punto de medición orientado.
+function dibujarEnlacesRouterPuntos(ctx, ancho, alto, radio, puntos) {
+  if (!estado.orientarRouter || !estado.routers.length) return;
+  const firmaBase = `${estado.versionEscena || 0}|${estado.estructuras.length}`;
+  ctx.save();
+  for (const p of puntos) {
+    if (!estaUbicado(p)) continue;
+    const r = routerParaPunto(p);
+    if (!r) continue;
+    const rx = r.x * ancho, ry = r.y * alto;
+    const px = p.x * ancho, py = p.y * alto;
+    const firmaEnlace = `${firmaBase}|${r.x}|${r.y}|${p.x}|${p.y}`;
+    if (p._firmaEnlace !== firmaEnlace) {
+      p._crucesEnlace = atenuacionPorEstructuras(r.x, r.y, p.x, p.y, estado.banda).cruces;
+      p._firmaEnlace = firmaEnlace;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(rx, ry);
+    ctx.lineTo(px, py);
+    ctx.strokeStyle = p._crucesEnlace > 0 ? 'rgba(180, 83, 9, 0.42)' : 'rgba(59, 31, 143, 0.36)';
+    ctx.lineWidth = Math.max(1.2, radio * 0.11);
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+
+    // Si el mapa está generado y las ondas están activas, dibuja un pulso viajando del AP al punto
+    if (estado.mapa && estado.verOndas) {
+      const t = (estado.faseOndas * 1.4 + (p.numero * 0.13)) % 1;
+      const vx = rx + (px - rx) * t;
+      const vy = ry + (py - ry) * t;
+      ctx.beginPath();
+      ctx.arc(vx, vy, Math.max(2.5, radio * 0.22), 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.lineWidth = Math.max(1.2, radio * 0.1);
+      ctx.strokeStyle = '#3b1f8f';
+      ctx.setLineDash([]);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+// Dibuja un marcador de punto (con flecha de orientación hacia su Router/AP y valores por banda).
 function dibujarMarcador(ctx, punto, cx, cy, radio, activo, conValor) {
   ctx.save();
+  // Si está orientado a un Router/AP, dibuja el puntero direccional apuntando hacia el AP
+  const router = estado.orientarRouter ? routerParaPunto(punto) : null;
+  if (router && estado.plano) {
+    const ang = Math.atan2(router.y * ctx.canvas.height - cy, router.x * ctx.canvas.width - cx);
+    const puntaDist = radio * 1.48;
+    const abertura = 0.46;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(ang) * puntaDist, cy + Math.sin(ang) * puntaDist);
+    ctx.lineTo(cx + Math.cos(ang - abertura) * (radio * 0.95), cy + Math.sin(ang - abertura) * (radio * 0.95));
+    ctx.lineTo(cx + Math.cos(ang + abertura) * (radio * 0.95), cy + Math.sin(ang + abertura) * (radio * 0.95));
+    ctx.closePath();
+    ctx.fillStyle = '#5b3cc4';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = radio * 0.12;
+    ctx.fill();
+    ctx.stroke();
+  }
+
   if (activo) {
     ctx.beginPath();
     ctx.arc(cx, cy, radio * 1.45, 0, Math.PI * 2);
@@ -1105,7 +2143,7 @@ function dibujarMarcador(ctx, punto, cx, cy, radio, activo, conValor) {
 
   if (conValor) {
     const texto = typeof conValor === 'string' ? conValor : textoDbm(punto.valor);
-    ctx.font = `700 ${radio * 0.78}px "Segoe UI", Arial, sans-serif`;
+    ctx.font = `700 ${radio * 0.74}px "Segoe UI", Arial, sans-serif`;
     const ancho = ctx.measureText(texto).width + radio * 0.6;
     const alto = radio * 1.05;
     const top = cy + radio * 1.08;
@@ -1122,7 +2160,30 @@ function dibujarMarcador(ctx, punto, cx, cy, radio, activo, conValor) {
   ctx.restore();
 }
 
-// Dibuja plano + mapa + marcadores. Las opciones permiten dibujar otra banda (para comparar).
+// Etiqueta compacta en caché para cada punto cuando se solapan múltiples bandas.
+function etiquetaPuntoEscena(punto, banda, vista) {
+  if (vista === 'solapamiento' || vista === 'dominante' || banda === 'solapado') {
+    const firma = `${estado.red}|${bandasParaSolapar().join(',')}|${estado.simular6Ghz}`;
+    if (!estado.cacheEtiquetas || estado.cacheEtiquetas.firma !== firma) {
+      const porBanda = {};
+      for (const b of bandasParaSolapar()) porBanda[b] = calcularPuntos(estado.lecturas, estado.red, b);
+      const mapaEtiq = new Map();
+      for (const p of estado.puntos) {
+        const partes = [];
+        for (const b of bandasParaSolapar()) {
+          const pb = porBanda[b].find(x => x.numero === p.numero);
+          if (pb && pb.tipo !== 'excluido') partes.push(`${b.replace('ghz', '')}:${textoDbm(pb.valor)}`);
+        }
+        mapaEtiq.set(p.numero, partes.join(' · ') || textoDbm(p.valor));
+      }
+      estado.cacheEtiquetas = { firma, mapaEtiq };
+    }
+    return estado.cacheEtiquetas.mapaEtiq.get(punto.numero) || textoDbm(punto.valor);
+  }
+  return textoValorVista(valorParaVista(punto, banda, vista), vista);
+}
+
+// Dibuja plano + mapa + estructuras + ondas + enlaces + routers + marcadores.
 function dibujarEscena(ctx, ancho, alto, radio, opciones = {}) {
   const { mapa = estado.mapa, puntos = puntosUsados(), banda = estado.banda, vista = estado.vista, activo = estado.activo } = opciones;
   ctx.drawImage(estado.plano, 0, 0, ancho, alto);
@@ -1131,15 +2192,24 @@ function dibujarEscena(ctx, ancho, alto, radio, opciones = {}) {
     ctx.globalCompositeOperation = 'multiply';
     ctx.globalAlpha = estado.ajustes.opacidad;
     ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(mapa, 0, 0, ancho, alto);
     ctx.restore();
   }
-  // Los routers van debajo: si coinciden con un punto, el dato medido queda visible.
+  dibujarEstructuras(ctx, ancho, alto, radio);
+  if (mapa && !opciones.sinContornos) dibujarContornosSolapamiento(ctx, ancho, alto, radio);
+  if (mapa) dibujarOndasPropagacion(ctx, ancho, alto, radio, vista, banda);
+  dibujarEnlacesRouterPuntos(ctx, ancho, alto, radio, puntos);
+
   for (const r of estado.routers) dibujarRouter(ctx, r, r.x * ancho, r.y * alto, radio);
-  const conAviso = new Set(revisarRouters(banda).map(a => a.punto.id));
+  const firmaAvisos = `${estado.versionEscena || 0}|${banda}|${estado.red}|${estado.routers.length}`;
+  if (!estado.cacheAvisos || estado.cacheAvisos.firma !== firmaAvisos) {
+    estado.cacheAvisos = { firma: firmaAvisos, set: new Set(revisarRouters(banda).map(a => a.punto.id)) };
+  }
+  const conAviso = estado.cacheAvisos.set;
   for (const p of puntos) {
     if (estaUbicado(p)) {
-      const etiqueta = mapa ? textoValorVista(valorParaVista(p, banda, vista), vista) : false;
+      const etiqueta = mapa ? etiquetaPuntoEscena(p, banda, vista) : false;
       dibujarMarcador(ctx, p, p.x * ancho, p.y * alto, radio, p === activo, etiqueta);
       if (conAviso.has(p.id)) dibujarAviso(ctx, p.x * ancho + radio * 0.85, p.y * alto - radio * 0.85, radio);
     }
@@ -1169,7 +2239,7 @@ function dibujarAviso(ctx, cx, cy, radio) {
   ctx.restore();
 }
 
-// Ícono de router: cuadro morado con ondas WiFi y su nombre debajo.
+// Ícono de router/AP: cuadro morado con ondas WiFi, su nombre y las bandas que emite debajo.
 function dibujarRouter(ctx, router, cx, cy, radio) {
   const lado = radio * 2.1;
   ctx.save();
@@ -1195,9 +2265,10 @@ function dibujarRouter(ctx, router, cx, cy, radio) {
   ctx.arc(cx, base, radio * 0.14, 0, Math.PI * 2);
   ctx.fillStyle = '#ffffff';
   ctx.fill();
-  // Nombre
-  const texto = router.nombre ? `${router.id} · ${router.nombre}` : router.id;
-  ctx.font = `700 ${radio * 0.72}px "Segoe UI", Arial, sans-serif`;
+  // Nombre y bandas del AP
+  const bandasTxt = router.bandas?.length ? ` [${router.bandas.map(b => b.replace('ghz', '')).join('/')}]` : '';
+  const texto = (router.nombre ? `${router.id} · ${router.nombre}` : router.id) + bandasTxt;
+  ctx.font = `700 ${radio * 0.68}px "Segoe UI", Arial, sans-serif`;
   const ancho = ctx.measureText(texto).width + radio * 0.7;
   const alto = radio * 1.05;
   const top = cy + lado / 2 + radio * 0.25;
@@ -1226,13 +2297,48 @@ function redibujar() {
   const anchoCss = Math.max(1, Math.floor(estado.plano.naturalWidth * escala));
   const altoCss = Math.max(1, Math.floor(estado.plano.naturalHeight * escala));
   const densidad = window.devicePixelRatio || 1;
+  const anchoPx = Math.round(anchoCss * densidad);
+  const altoPx = Math.round(altoCss * densidad);
 
-  lienzoPlano.style.width = anchoCss + 'px';
-  lienzoPlano.style.height = altoCss + 'px';
-  lienzoPlano.width = Math.round(anchoCss * densidad);
-  lienzoPlano.height = Math.round(altoCss * densidad);
+  if (lienzoPlano.width !== anchoPx || lienzoPlano.height !== altoPx) {
+    lienzoPlano.style.width = anchoCss + 'px';
+    lienzoPlano.style.height = altoCss + 'px';
+    lienzoPlano.width = anchoPx;
+    lienzoPlano.height = altoPx;
+  }
   dibujarEscena(lienzoPlano.getContext('2d'), lienzoPlano.width, lienzoPlano.height, 14 * densidad);
   ubicarObjetivo();
+}
+
+// Bucle de animación en vivo (~30 FPS) para mostrar cómo viajan las ondas sin sobrecargar el procesador.
+function actualizarBucleOndas() {
+  const debeAnimar = Boolean(estado.plano && estado.mapa && estado.verOndas && estado.animarOndas && estado.routers.length);
+  if (debeAnimar && !estado.rafOndas) {
+    let ultimo = performance.now();
+    const paso = ahora => {
+      if (!estado.plano || !estado.mapa || !estado.verOndas || !estado.animarOndas || !estado.routers.length) {
+        estado.rafOndas = null;
+        return;
+      }
+      if ($('pantallaCarga') && !$('pantallaCarga').hidden) {
+        ultimo = ahora;
+        estado.rafOndas = requestAnimationFrame(paso);
+        return;
+      }
+      const transcurrido = ahora - ultimo;
+      if (transcurrido >= 32) {
+        const dt = Math.min(0.1, transcurrido / 1000);
+        ultimo = ahora;
+        estado.faseOndas = (estado.faseOndas + dt * 0.42) % 1;
+        redibujar();
+      }
+      estado.rafOndas = requestAnimationFrame(paso);
+    };
+    estado.rafOndas = requestAnimationFrame(paso);
+  } else if (!debeAnimar && estado.rafOndas) {
+    cancelAnimationFrame(estado.rafOndas);
+    estado.rafOndas = null;
+  }
 }
 
 // Muestra el círculo amarillo sobre el lugar del punto activo (solo en la misión).
@@ -1254,7 +2360,9 @@ function ubicarObjetivo() {
    INTERFAZ
    ------------------------------------------------------------------ */
 const PISTAS_VISTA = {
-  senal: '¡Mapa listo! Pasa el mouse por el plano para ver la señal, o toca un punto para ver su detalle.',
+  senal: '¡Mapa listo! Las ondas muestran cómo viaja la señal desde el AP y cómo las paredes la atenúan.',
+  solapamiento: 'Solapamiento 2.4 / 5 / 6 GHz: mira cómo se superponen las bandas y pasa el mouse para comparar los dBm.',
+  dominante: 'Banda dominante: esmeralda = 6 GHz, violeta = 5 GHz, azul = 2.4 GHz sosteniendo la cobertura tras muros.',
   requisitos: 'Verde oscuro: ahí funcionan bien las llamadas y el video. Rojo: no sirve ni para navegar.',
   snr: 'SNR estimada: cuánto sobresale la señal sobre el ruido. Más de 25 dB es excelente.',
   redes: 'Entre más oscuro, más redes compiten en el aire en ese lugar.'
@@ -1267,8 +2375,16 @@ function textoInstruccion() {
       ? '📏 Ahora haz clic en el otro extremo de esa distancia.'
       : '📏 Calibrar escala: haz clic en un extremo de una distancia que conozcas (por ejemplo, el ancho de una pared).';
   }
-  if (estado.ubicandoRouter) return '📡 Haz clic en el plano donde está el router.';
-  if (!estado.puntos.length) return 'Muy bien. Ahora sube el archivo de Excel (paso 2).';
+  if (estado.modoEstructura === 'dibujar') {
+    return estado.trazoEstructura
+      ? '🧱 Suelta o haz clic en el extremo final de la pared o vidrio.'
+      : `🧱 Dibujar ${MATERIALES_ESTRUCTURA[estado.materialActual].nombre.toLowerCase()}: arrastra o haz clic de extremo a extremo sobre el plano.`;
+  }
+  if (estado.modoEstructura === 'borrar') {
+    return '🧹 Haz clic sobre cualquier pared, vidrio o estructura del plano para borrarla.';
+  }
+  if (estado.ubicandoRouter) return '📡 Haz clic en el plano donde está el Router / AP.';
+  if (!estado.puntos.length) return 'Plano cargado y estructuras detectadas. Ahora sube el archivo de Excel (paso 2).';
   if (estado.activo) {
     if (esMision()) return `Haz clic dentro del círculo amarillo para ubicar ${estado.activo.id}.`;
     return estaUbicado(estado.activo)
@@ -1276,12 +2392,10 @@ function textoInstruccion() {
       : `Haz clic en el plano donde se midió ${estado.activo.id}.`;
   }
   if (estado.mapa) {
-    return esMision()
-      ? '¡Listo! Verde es buena señal y rojo es falta de señal. Ya puedes descargar la imagen.'
-      : PISTAS_VISTA[estado.vista];
+    return PISTAS_VISTA[estado.vista] || PISTAS_VISTA.senal;
   }
-  if (estado.mapaVencido) return 'Moviste un punto. Oprime «Generar mapa» otra vez.';
-  return esMision() ? '¡Todos los puntos están en su lugar! Oprime «Generar mapa».' : 'Todos los puntos están ubicados. Oprime «Generar mapa».';
+  if (estado.mapaVencido) return 'Cambiaste puntos, routers o paredes. Oprime «Generar mapa» para actualizar.';
+  return '¡Todos los puntos están ubicados y orientados al AP! Oprime «Generar mapa».';
 }
 
 function pintarLista() {
@@ -1317,7 +2431,8 @@ function pintarLista() {
       marca.textContent = estaUbicado(p) ? '✓' : '○';
       const valor = document.createElement('span');
       valor.className = 'valor';
-      valor.textContent = textoDbm(p.valor) + ' dBm';
+      const routerRef = estaUbicado(p) && estado.orientarRouter ? routerParaPunto(p) : null;
+      valor.textContent = (routerRef ? `→${routerRef.id} ` : '') + textoDbm(p.valor) + ' dBm';
       boton.append(valor);
       if (p.tipo === 'asignado') boton.title = `${nombreRed()} no apareció aquí: se toma como sin cobertura`;
       boton.addEventListener('click', () => seleccionarPunto(p));
@@ -1354,12 +2469,13 @@ function actualizarInterfaz() {
     : faltantes.length ? 'Te faltan: ' + faltantes.map(p => p.id).join(', ')
     : '';
   const hayAvisosRouters = revisarRouters().length > 0;
-  $('botonDescargar').disabled = !estado.mapa || hayAvisosRouters;
+  $('cajaOndas').hidden = !estado.mapa;
+  $('botonDescargar').disabled = !estado.mapa;
   $('notaDescarga').hidden = !(estado.mapa && hayAvisosRouters);
 
   const instruccion = $('instruccion');
   instruccion.textContent = textoInstruccion();
-  instruccion.classList.toggle('exito', Boolean(estado.mapa) && !estado.activo);
+  instruccion.classList.toggle('exito', Boolean(estado.mapa) && !estado.activo && !estado.modoEstructura);
   instruccion.classList.toggle('alerta', estado.alerta);
   const guia = esMision() && estado.activo && !estaUbicado(estado.activo) ? GUIA[estado.activo.id] : null;
   if (guia && !estado.alerta) {
@@ -1383,17 +2499,18 @@ function actualizarInterfaz() {
 
   lienzoPlano.style.display = hayPlano ? 'block' : 'none';
   $('vacio').style.display = hayPlano ? 'none' : 'block';
-  lienzoPlano.style.cursor = (estado.calibrando || estado.ubicandoRouter) ? 'crosshair' : !listos ? 'not-allowed' : estado.activo ? 'crosshair' : 'default';
-  if (!esMision()) actualizarLaboratorio(listos);
+  lienzoPlano.style.cursor = (estado.calibrando || estado.ubicandoRouter || estado.modoEstructura) ? 'crosshair' : !listos ? 'default' : estado.activo ? 'crosshair' : 'default';
+  actualizarLaboratorio(listos);
   pintarLeyenda();
   redibujar();
+  actualizarBucleOndas();
   if (!hayPlano) $('objetivo').hidden = true;
 }
 
 function pintarLeyenda() {
   const leyenda = $('leyenda');
   leyenda.replaceChildren();
-  const vista = ESCALAS[estado.vista];
+  const vista = ESCALAS[estado.vista] || ESCALAS.senal;
   const titulo = document.createElement('strong');
   titulo.textContent = vista.titulo;
   leyenda.append(titulo);
@@ -1417,9 +2534,10 @@ function pintarLeyenda() {
 }
 
 /* ------------------------------------------------------------------
-   UBICAR Y MOVER PUNTOS
+   UBICAR Y MOVER PUNTOS, ROUTERS Y ESTRUCTURAS
    ------------------------------------------------------------------ */
 function invalidarMapa() {
+  invalidarCachesEscena();
   if (estado.mapa) {
     estado.mapa = null;
     estado.mapaVencido = true;
@@ -1427,9 +2545,11 @@ function invalidarMapa() {
 }
 
 function seleccionarPunto(punto) {
-  if (esMision() && estaUbicado(punto)) return; // en la misión los puntos ubicados quedan fijos
+  if (esMision() && estaUbicado(punto)) return;
   estado.aviso = '';
   estado.alerta = false;
+  estado.modoEstructura = null;
+  estado.ubicandoRouter = false;
   estado.activo = estado.activo === punto && estaUbicado(punto) ? siguientePendiente() : punto;
   actualizarInterfaz();
 }
@@ -1438,16 +2558,15 @@ function colocarPunto(punto, x, y) {
   punto.x = x;
   punto.y = y;
   estado.posiciones[punto.id] = { x, y };
+  sincronizarApsDelExcel(false);
   invalidarMapa();
   estado.activo = siguientePendiente();
   estado.aviso = '';
   estado.alerta = false;
-  // En el Laboratorio, si ya se había generado y este era el último punto, se recalcula solo.
-  if (!esMision() && estado.yaGenerado && !estado.activo) generarMapa();
   actualizarInterfaz();
-  // Mantiene a la vista lo que la persona debe hacer después.
   const destino = document.querySelector('.fila.activo') || $('paso4');
   destino.scrollIntoView({ block: 'nearest' });
+  if (!esMision() && estado.yaGenerado && !estado.activo) generarMapa('Actualizando mapa con el nuevo punto…');
 }
 
 function posicionEvento(evento) {
@@ -1474,7 +2593,6 @@ function marcadorEn(pos) {
   return mejor;
 }
 
-// Efectos sobre el plano: ✕ roja al fallar y onda verde al acertar.
 function efectoEnPlano(clase, pos, texto) {
   const e = document.createElement('span');
   e.className = clase;
@@ -1508,18 +2626,51 @@ function clicMision(pos) {
 lienzoPlano.addEventListener('pointerdown', evento => {
   if (!estado.plano) return;
   const pos = posicionEvento(evento);
-  if (estado.calibrando) { clicCalibrar(pos); return; } // se puede calibrar antes de subir el Excel
-  if (!esMision()) {
-    if (estado.ubicandoRouter) { agregarRouterEn(pos); return; }
-    const router = routerEn(pos);
-    if (router) {
-      estado.arrastre = { router, movido: false, inicioX: pos.cssX, inicioY: pos.cssY };
-      lienzoPlano.setPointerCapture(evento.pointerId);
-      return;
+  if (estado.calibrando) { clicCalibrar(pos); return; }
+
+  // Modo de dibujo o borrado manual de paredes, vidrios y estructuras
+  if (estado.modoEstructura === 'borrar') {
+    const est = estructuraEn(pos);
+    if (est) {
+      estado.estructuras = estado.estructuras.filter(x => x !== est);
+      estado.aviso = `Borraste ${MATERIALES_ESTRUCTURA[est.tipo]?.nombre || 'la estructura'}.`;
+      if (estado.mapa) generarMapa();
+      actualizarInterfaz();
+    } else {
+      estado.aviso = 'Haz clic justo encima de una pared o vidrio para borrarlo.';
+      actualizarInterfaz();
     }
+    return;
   }
-  if (!estado.puntos.length) return;
-  if (esMision()) { clicMision(pos); return; }
+  if (estado.modoEstructura === 'dibujar') {
+    if (!estado.trazoEstructura) {
+      estado.trazoEstructura = { x1: pos.x, y1: pos.y, x2: pos.x, y2: pos.y };
+      lienzoPlano.setPointerCapture(evento.pointerId);
+      redibujar();
+    } else {
+      finalizarTrazoEstructura(pos);
+    }
+    return;
+  }
+
+  if (estado.ubicandoRouter) { agregarRouterEn(pos); return; }
+  const router = routerEn(pos);
+  if (router) {
+    estado.arrastre = { router, movido: false, inicioX: pos.cssX, inicioY: pos.cssY };
+    lienzoPlano.setPointerCapture(evento.pointerId);
+    return;
+  }
+  if (!estado.puntos.length) {
+    // Si aún no hay puntos pero toca una estructura, permite cambiar su material al elegido
+    const est = estructuraEn(pos);
+    if (est) {
+      est.tipo = estado.materialActual;
+      estado.aviso = `Cambiaste esa estructura a ${MATERIALES_ESTRUCTURA[est.tipo].nombre}.`;
+      actualizarInterfaz();
+    }
+    return;
+  }
+  if (esMision() && estado.activo) { clicMision(pos); return; }
   const marcador = marcadorEn(pos);
 
   if (marcador && marcador !== estado.activo) {
@@ -1527,22 +2678,59 @@ lienzoPlano.addEventListener('pointerdown', evento => {
     lienzoPlano.setPointerCapture(evento.pointerId);
   } else if (estado.activo) {
     colocarPunto(estado.activo, pos.x, pos.y);
+  } else {
+    const est = estructuraEn(pos);
+    if (est) {
+      est.tipo = estado.materialActual;
+      estado.aviso = `Cambiaste esa estructura a ${MATERIALES_ESTRUCTURA[est.tipo].nombre}.`;
+      if (estado.mapa) generarMapa();
+      actualizarInterfaz();
+    }
   }
 });
 
+// Termina de agregar una pared o vidrio dibujado manualmente por el usuario.
+function finalizarTrazoEstructura(pos) {
+  const t = estado.trazoEstructura;
+  if (!t) return;
+  const distPx = Math.hypot((pos.x - t.x1) * pos.ancho, (pos.y - t.y1) * pos.alto);
+  if (distPx >= 8) {
+    const nuevoId = 'E' + (estado.estructuras.length + 1);
+    estado.estructuras.push({
+      id: nuevoId,
+      x1: +t.x1.toFixed(4),
+      y1: +t.y1.toFixed(4),
+      x2: +pos.x.toFixed(4),
+      y2: +pos.y.toFixed(4),
+      tipo: estado.materialActual,
+      origen: 'manual'
+    });
+    estado.trazoEstructura = null;
+    estado.aviso = `Agregaste ${MATERIALES_ESTRUCTURA[estado.materialActual].nombre}. Puedes dibujar otro o pulsar «Listo».`;
+    if (estado.mapa) generarMapa();
+    actualizarInterfaz();
+  }
+}
+
 lienzoPlano.addEventListener('pointermove', evento => {
-  if (esMision()) return;
   const pos = posicionEvento(evento);
+  if (estado.trazoEstructura) {
+    estado.trazoEstructura.x2 = pos.x;
+    estado.trazoEstructura.y2 = pos.y;
+    redibujar();
+    return;
+  }
   const arrastre = estado.arrastre;
   if (arrastre && arrastre.router) {
     if (Math.hypot(pos.cssX - arrastre.inicioX, pos.cssY - arrastre.inicioY) > 3) arrastre.movido = true;
     if (arrastre.movido) {
       arrastre.router.x = pos.x;
       arrastre.router.y = pos.y;
+      arrastre.router.movidoManual = true;
       $('tooltip').hidden = true;
       redibujar();
     }
-  } else if (arrastre) {
+  } else if (arrastre && arrastre.punto) {
     if (Math.hypot(pos.cssX - arrastre.inicioX, pos.cssY - arrastre.inicioY) > 3) arrastre.movido = true;
     if (arrastre.movido) {
       arrastre.punto.x = pos.x;
@@ -1555,7 +2743,7 @@ lienzoPlano.addEventListener('pointermove', evento => {
   } else if (estado.plano) {
     const router = routerEn(pos);
     const encima = !router && estado.puntos.length ? marcadorEn(pos) : null;
-    lienzoPlano.style.cursor = (router || encima) ? 'pointer' : (estado.activo || estado.calibrando || estado.ubicandoRouter) ? 'crosshair' : 'default';
+    lienzoPlano.style.cursor = (router || encima) ? 'pointer' : (estado.activo || estado.calibrando || estado.ubicandoRouter || estado.modoEstructura) ? 'crosshair' : 'default';
     if (router) mostrarTipRouter(pos, router);
     else if (estado.puntos.length) mostrarValorEn(pos, encima);
     else $('tooltip').hidden = true;
@@ -1563,17 +2751,26 @@ lienzoPlano.addEventListener('pointermove', evento => {
 });
 lienzoPlano.addEventListener('pointerleave', () => { $('tooltip').hidden = true; });
 
-function terminarArrastre() {
+function terminarArrastre(evento) {
+  if (estado.trazoEstructura) {
+    const pos = posicionEvento(evento);
+    if (Math.hypot((pos.x - estado.trazoEstructura.x1) * pos.ancho, (pos.y - estado.trazoEstructura.y1) * pos.alto) >= 12) {
+      finalizarTrazoEstructura(pos);
+    }
+    return;
+  }
   const arrastre = estado.arrastre;
   if (!arrastre) return;
   estado.arrastre = null;
   if (arrastre.router) {
-    estado.aviso = arrastre.movido ? `Moviste el router ${arrastre.router.id}.` : '';
+    estado.aviso = arrastre.movido ? `Moviste ${arrastre.router.id}. El mapa y las ondas se orientan a su nueva ubicación.` : '';
+    if (arrastre.movido && estado.mapa) generarMapa();
     actualizarInterfaz();
     return;
   }
   if (arrastre.movido) {
     estado.aviso = `Moviste ${arrastre.punto.id}.`;
+    if (estado.yaGenerado && !siguientePendiente()) generarMapa();
   } else if (estado.activo) {
     estado.aviso = `Ese lugar ya tiene ${arrastre.punto.id}. Haz clic un poco al lado.`;
   } else {
@@ -1590,8 +2787,6 @@ lienzoPlano.addEventListener('pointercancel', terminarArrastre);
    ------------------------------------------------------------------ */
 const hayPuntosUbicados = () => estado.puntos.some(estaUbicado);
 
-// "Huella" de una imagen: una miniatura en grises de 24 × 32 cuadros.
-// Sirve para reconocer el plano de la misión aunque se haya copiado o renombrado.
 function huella(imagen) {
   const c = document.createElement('canvas');
   c.width = 24;
@@ -1629,28 +2824,41 @@ $('inputPlano').addEventListener('change', evento => {
   }
   if (hayPuntosUbicados() && !confirm('Si cambias el plano se borrarán los puntos que ya ubicaste. ¿Continuar?')) return;
 
+  mostrarCarga('Cargando y analizando el plano…', 'Leyendo imagen y reconociendo paredes y estructuras…', 18);
   const imagen = new Image();
-  imagen.onload = () => {
-    const problema = errorPlanoMision(imagen);
-    if (esMision() && problema) { $('errorPlano').textContent = problema; return; }
-    estado.planoReconocido = !problema;
-    estado.plano = imagen;
-    estado.mapa = null;
-    estado.mapaVencido = false;
-    estado.yaGenerado = false;
-    estado.pxPorMetro = null;
-    estado.posiciones = {};
-    estado.routers = [];
-    estado.ubicandoRouter = false;
-    estado.aviso = '';
-    estado.alerta = false;
-    cerrarDetalle();
-    for (const p of estado.puntos) { p.x = null; p.y = null; }
-    estado.activo = siguientePendiente();
-    $('nombrePlano').textContent = '✓ ' + archivo.name;
-    actualizarInterfaz();
+  imagen.onload = async () => {
+    await ejecutarConCarga('Reconociendo paredes y estructuras…', 'Escaneando muros de concreto, ladrillo y vidrios del plano…', async informar => {
+      informar('Verificando proporciones del plano…', 35);
+      await pintarFotograma();
+      const problema = errorPlanoMision(imagen);
+      if (esMision() && problema) { $('errorPlano').textContent = problema; return; }
+      estado.planoReconocido = !problema;
+      estado.plano = imagen;
+      estado.mapa = null;
+      estado.mapaVencido = false;
+      estado.yaGenerado = false;
+      estado.pxPorMetro = null;
+      estado.posiciones = {};
+      estado.routers = [];
+      estado.ubicandoRouter = false;
+      estado.modoEstructura = null;
+      estado.trazoEstructura = null;
+      informar('Detectando automáticamente paredes, puertas y vidrios…', 68);
+      await pintarFotograma();
+      estado.estructuras = detectarEstructurasPlano(imagen);
+      invalidarCachesEscena();
+      if (estado.lecturas.length) sincronizarApsDelExcel(true);
+      estado.aviso = `Se reconocieron automáticamente ${estado.estructuras.length} paredes/estructuras en el plano. Puedes indicarlas o editarlas en el paso 1.`;
+      estado.alerta = false;
+      cerrarDetalle();
+      for (const p of estado.puntos) { p.x = null; p.y = null; }
+      estado.activo = siguientePendiente();
+      $('nombrePlano').textContent = `✓ ${archivo.name} (${estado.estructuras.length} estructuras reconocidas)`;
+      actualizarInterfaz();
+    });
   };
   imagen.onerror = () => {
+    ocultarCarga();
     $('errorPlano').textContent = 'No se pudo abrir esa imagen. Prueba con otro archivo JPG o PNG.';
   };
   imagen.src = URL.createObjectURL(archivo);
@@ -1662,79 +2870,99 @@ $('inputExcel').addEventListener('change', async evento => {
   if (!archivo) return;
   $('errorExcel').textContent = '';
 
-  const fallar = mensaje => { $('errorExcel').textContent = mensaje; };
+  const fallar = mensaje => { ocultarCarga(); $('errorExcel').textContent = mensaje; };
   if (typeof XLSX === 'undefined') {
     return fallar('Esta copia del programa está incompleta. Abre el archivo Maplify.html y vuelve a intentarlo.');
   }
-  let datos;
-  try {
-    datos = await archivo.arrayBuffer();
-  } catch (error) {
-    console.error(error);
-    return fallar('No se pudo abrir el archivo. Si lo tienes abierto en Excel, ciérralo y vuelve a subirlo.');
-  }
-  try {
-    const libro = XLSX.read(datos, { type: 'array' });
-    const tabla = buscarTabla(libro);
-    if (!tabla) return fallar('Este Excel no tiene las columnas de mediciones (Punto, Banda, SSID y Nivel Señal). Revisa que sea el archivo correcto o usa la plantilla de Maplify.');
-
-    const lecturas = extraerLecturas(tabla);
-    const eleccion = elegirRedYBanda(lecturas);
-    if (!eleccion) {
-      return fallar(esMision() ? `Este Excel no tiene mediciones de ${CONFIG.RED} en ${CONFIG.BANDA}.` : 'Este Excel no tiene mediciones de señal que se puedan usar.');
+  await ejecutarConCarga('Procesando archivo Excel…', 'Leyendo hojas de mediciones WiFi…', async informar => {
+    let datos;
+    try {
+      datos = await archivo.arrayBuffer();
+    } catch (error) {
+      console.error(error);
+      return fallar('No se pudo abrir el archivo. Si lo tienes abierto en Excel, ciérralo y vuelve a subirlo.');
     }
-    const puntos = calcularPuntos(lecturas, eleccion.red, eleccion.banda);
-    if (esMision() && puntos.some(p => p.tipo !== 'excluido' && !GUIA[p.id])) {
-      return fallar('Para la misión usa Relevamiento_WiFi_Limpio.xlsx. En el Laboratorio puedes usar otro Excel.');
-    }
+    try {
+      informar('Extrayendo redes, bandas (2.4 / 5 / 6 GHz) y niveles dBm…', 45);
+      await pintarFotograma();
+      const libro = XLSX.read(datos, { type: 'array' });
+      const tabla = buscarTabla(libro);
+      if (!tabla) return fallar('Este Excel no tiene las columnas de mediciones (Punto, Banda, SSID y Nivel Señal). Revisa que sea el archivo correcto o usa la plantilla de Maplify.');
 
-    estado.lecturas = lecturas;
-    estado.red = eleccion.red;
-    estado.banda = eleccion.banda;
-    estado.bandas = bandasDe(lecturas);
-    estado.redes = redesDe(lecturas);
-    // Si se vuelve a subir un Excel, se conservan los puntos ya ubicados.
-    recalcularPuntos();
-    estado.yaGenerado = false;
-    cerrarDetalle();
-    invalidarMapa();
-    estado.aviso = '';
-    estado.alerta = false;
-    estado.activo = siguientePendiente();
-    $('nombreExcel').textContent = `✓ ${archivo.name} (${estado.puntos.length} puntos)`;
-    actualizarInterfaz();
-  } catch (error) {
-    console.error(error);
-    fallar('No se pudo leer ese archivo. Revisa que sea un Excel .xlsx y que no esté dañado.');
-  }
+      const lecturas = extraerLecturas(tabla);
+      const eleccion = elegirRedYBanda(lecturas);
+      if (!eleccion) {
+        return fallar(esMision() ? `Este Excel no tiene mediciones de ${CONFIG.RED} en ${CONFIG.BANDA}.` : 'Este Excel no tiene mediciones de señal que se puedan usar.');
+      }
+      const puntos = calcularPuntos(lecturas, eleccion.red, eleccion.banda);
+      if (esMision() && puntos.some(p => p.tipo !== 'excluido' && !GUIA[p.id])) {
+        return fallar('Para la misión usa Relevamiento_WiFi_Limpio.xlsx. En el Laboratorio puedes usar otro Excel.');
+      }
+
+      informar('Detectando Routers/APs y orientando puntos…', 80);
+      await pintarFotograma();
+      estado.lecturas = lecturas;
+      estado.red = eleccion.red;
+      estado.banda = eleccion.banda;
+      estado.bandas = bandasDe(lecturas);
+      estado.bandasSolapadas = bandasDisponiblesSolapamiento();
+      estado.redes = redesDe(lecturas);
+      recalcularPuntos();
+      sincronizarApsDelExcel(true);
+      estado.yaGenerado = false;
+      cerrarDetalle();
+      invalidarMapa();
+      estado.aviso = `Excel cargado: se detectaron ${estado.routers.length} AP(s) y las bandas ${estado.bandas.map(b => b.nombre).join(', ')}.`;
+      estado.alerta = false;
+      estado.activo = siguientePendiente();
+      $('nombreExcel').textContent = `✓ ${archivo.name} (${estado.puntos.length} puntos · ${estado.routers.length} AP)`;
+      actualizarInterfaz();
+    } catch (error) {
+      console.error(error);
+      fallar('No se pudo leer ese archivo. Revisa que sea un Excel .xlsx y que no esté dañado.');
+    }
+  });
 });
 
 /* ------------------------------------------------------------------
-   GENERAR Y DESCARGAR
+   GENERAR Y DESCARGAR (ASÍNCRONO CON PANTALLA DE CARGA)
    ------------------------------------------------------------------ */
-function generarMapa() {
-  const r = calcularMapa();
-  estado.mapa = r.lienzo;
-  estado.resumen = r.resumen;
-  estado.mapaVencido = false;
+async function generarMapa(tituloCarga = 'Generando mapa y ondas de señal…', alTerminar = null) {
+  invalidarCachesEscena();
+  sincronizarApsDelExcel(false);
+  const detalleIni = (estado.vista === 'solapamiento' || estado.vista === 'dominante')
+    ? `Solapando bandas (${bandasParaSolapar().map(b => TEXTO_BANDA[b]).join(' + ')}) y evaluando muros…`
+    : `Calculando cobertura de ${nombreRed()} (${nombreBanda()})…`;
+  await ejecutarConCarga(tituloCarga, detalleIni, async informar => {
+    const r = await calcularMapaAsync(muestrasActuales(), escalaActual(), {}, informar);
+    estado.mapa = r.lienzo;
+    estado.resumen = r.resumen;
+    estado.mapaVencido = false;
+    invalidarCachesEscena();
+    actualizarInterfaz();
+    if (alTerminar) alTerminar();
+  });
 }
 
 $('botonGenerar').addEventListener('click', () => {
   estado.activo = null;
+  estado.modoEstructura = null;
   estado.aviso = '';
   estado.alerta = false;
-  generarMapa();
-  if (!esMision()) estado.yaGenerado = true;
-  actualizarInterfaz();
-  if (esMision()) setTimeout(celebrarMision, 700);
+  estado.yaGenerado = true;
+  generarMapa('Generando mapa de calor y ondas…', () => {
+    if (esMision()) setTimeout(celebrarMision, 500);
+  });
 });
 
 const tituloMapa = () => ({
-  senal: `Mapa de señal: ${nombreRed()} ${nombreBanda()}`,
-  requisitos: `Qué se puede hacer: ${nombreRed()} ${nombreBanda()}`,
-  snr: `SNR estimada (ruido supuesto ${textoDbm(ruidoActual())} dBm): ${nombreRed()} ${nombreBanda()}`,
+  senal: `Mapa de señal: ${nombreRed()} (${nombreBanda()})`,
+  solapamiento: `Solapamiento de bandas (${bandasParaSolapar().map(b => TEXTO_BANDA[b]).join(' + ')}): ${nombreRed()}`,
+  dominante: `Banda dominante por zona (2.4 / 5 / 6 GHz): ${nombreRed()}`,
+  requisitos: `Qué se puede hacer: ${nombreRed()} (${nombreBanda()})`,
+  snr: `SNR estimada (ruido supuesto ${textoDbm(ruidoActual())} dBm): ${nombreRed()} (${nombreBanda()})`,
   redes: `Cantidad de redes que se oyen en ${nombreBanda()}`
-})[estado.vista];
+})[estado.vista] || `Mapa WiFi: ${nombreRed()}`;
 
 function crearImagenFinal() {
   const ancho = estado.plano.naturalWidth;
@@ -1761,7 +2989,7 @@ function crearImagenFinal() {
   ctx.fillText(tituloMapa(), margen, alto + franja * 0.16);
 
   const escala = escalaActual();
-  const unidad = ESCALAS[estado.vista].unidad;
+  const unidad = (ESCALAS[estado.vista] || ESCALAS.senal).unidad;
   const anchoItem = (ancho - margen * 2) / escala.length;
   escala.forEach((banda, i) => {
     const x = margen + i * anchoItem;
@@ -1784,7 +3012,10 @@ function crearImagenFinal() {
   }
   ctx.font = fuente(400);
   ctx.fillStyle = '#566473';
-  if (estado.routers.length) ctx.fillText('R1, R2… = ubicación de los routers (referencia, no cambian el mapa)', margen, alto + franja * 0.9);
+  const infoExtra = [];
+  if (estado.routers.length) infoExtra.push(`${estado.routers.length} AP(s) orientados con ondas de propagación`);
+  if (estado.estructuras.length) infoExtra.push(`${estado.estructuras.length} estructuras/muros considerados`);
+  if (infoExtra.length) ctx.fillText(infoExtra.join(' · '), margen, alto + franja * 0.9);
   ctx.textAlign = 'right';
   ctx.font = fuente(700);
   ctx.fillStyle = '#5b3cc4';
@@ -1793,22 +3024,31 @@ function crearImagenFinal() {
   return lienzo;
 }
 
-$('botonDescargar').addEventListener('click', () => {
-  if (revisarRouters().length) return;   // con avisos de routers no se descarga
-  crearImagenFinal().toBlob(blob => {
-    const enlace = document.createElement('a');
-    enlace.href = URL.createObjectURL(blob);
-    const sufijo = `${nombreRed()}-${nombreBanda()}`.replace(/[^\wÁÉÍÓÚáéíóúñÑ.-]+/g, '');
-    enlace.download = estado.vista === 'senal' ? `maplify-senal-${sufijo}.png` : `maplify-${estado.vista}-${sufijo}.png`;
-    document.body.append(enlace);
-    enlace.click();
-    enlace.remove();
-    setTimeout(() => URL.revokeObjectURL(enlace.href), 10000);
-  }, 'image/png');
+$('botonDescargar').addEventListener('click', async () => {
+  if (!estado.mapa) return;
+  await ejecutarConCarga('Preparando imagen PNG…', 'Renderizando mapa de calor, ondas de propagación y leyenda…', async informar => {
+    informar('Dibujando escena en alta resolución…', 55);
+    await pintarFotograma();
+    const lienzo = crearImagenFinal();
+    informar('Codificando archivo PNG…', 88);
+    await new Promise(resolver => {
+      lienzo.toBlob(blob => {
+        const enlace = document.createElement('a');
+        enlace.href = URL.createObjectURL(blob);
+        const sufijo = `${nombreRed()}-${nombreBanda()}`.replace(/[^\wÁÉÍÓÚáéíóúñÑ.-]+/g, '');
+        enlace.download = estado.vista === 'senal' ? `maplify-senal-${sufijo}.png` : `maplify-${estado.vista}-${sufijo}.png`;
+        document.body.append(enlace);
+        enlace.click();
+        enlace.remove();
+        setTimeout(() => URL.revokeObjectURL(enlace.href), 10000);
+        resolver();
+      }, 'image/png');
+    });
+  });
 });
 
 /* ------------------------------------------------------------------
-   LABORATORIO: RED, BANDA Y UBICACIONES
+   RED, BANDA, SOLAPAMIENTO Y ESTRUCTURAS
    ------------------------------------------------------------------ */
 const numeroBanda = clave => parseFloat(clave) || 0;
 
@@ -1846,7 +3086,8 @@ function elegirRedYBanda(lecturas) {
 
 // Recalcula los valores para la red y banda elegidas, conservando dónde está cada punto.
 function recalcularPuntos() {
-  const puntos = calcularPuntos(estado.lecturas, estado.red, estado.banda);
+  const bandaRef = estado.banda === 'solapado' ? (estado.bandas[0]?.clave || '5ghz') : estado.banda;
+  const puntos = calcularPuntos(estado.lecturas, estado.red, bandaRef);
   for (const p of puntos) {
     const pos = estado.posiciones[p.id];
     if (pos && p.tipo !== 'excluido') { p.x = pos.x; p.y = pos.y; }
@@ -1857,6 +3098,7 @@ function recalcularPuntos() {
 function cambiarRedOBanda() {
   cerrarDetalle();
   recalcularPuntos();
+  sincronizarApsDelExcel(false);
   estado.activo = siguientePendiente();
   estado.aviso = '';
   if (estado.yaGenerado && !estado.activo) generarMapa();
@@ -1867,8 +3109,90 @@ function cambiarRedOBanda() {
   actualizarInterfaz();
 }
 
+// Actualiza la sección de reconocimiento y edición de estructuras (paredes, vidrios, puertas).
+function pintarEstructuras() {
+  const caja = $('cajaEstructuras');
+  caja.hidden = !estado.plano;
+  if (!estado.plano) return;
+  $('verEstructuras').checked = estado.verEstructuras;
+  $('selectorMaterial').value = estado.materialActual;
+  $('botonDibujarEstructura').classList.toggle('activo', estado.modoEstructura === 'dibujar');
+  $('botonDibujarEstructura').textContent = estado.modoEstructura === 'dibujar' ? '✓ Terminar dibujo' : '✏ Indicar pared/vidrio';
+  $('botonBorrarEstructura').classList.toggle('activo', estado.modoEstructura === 'borrar');
+  $('botonBorrarEstructura').textContent = estado.modoEstructura === 'borrar' ? '✓ Terminar borrado' : '🧹 Borrar uno';
+
+  const resumen = $('resumenEstructuras');
+  resumen.replaceChildren();
+  const conteo = {};
+  for (const e of estado.estructuras) conteo[e.tipo] = (conteo[e.tipo] || 0) + 1;
+  if (!estado.estructuras.length) {
+    const span = document.createElement('span');
+    span.style.color = 'var(--tinta-suave)';
+    span.textContent = 'Sin estructuras activas. Pulsa «Auto-detectar» o dibújalas en el plano.';
+    resumen.append(span);
+  } else {
+    for (const [tipo, cant] of Object.entries(conteo)) {
+      const mat = MATERIALES_ESTRUCTURA[tipo] || MATERIALES_ESTRUCTURA.ladrillo;
+      const tag = document.createElement('span');
+      tag.className = 'tag-estructura';
+      tag.innerHTML = `<i style="background:${mat.color}"></i><span>${mat.corto}: ${cant}</span>`;
+      resumen.append(tag);
+    }
+  }
+}
+
+$('verEstructuras').addEventListener('change', e => {
+  estado.verEstructuras = e.target.checked;
+  redibujar();
+});
+$('selectorMaterial').addEventListener('change', e => {
+  estado.materialActual = e.target.value;
+  if (estado.modoEstructura === 'dibujar') actualizarInterfaz();
+});
+$('botonDetectarEstructuras').addEventListener('click', async () => {
+  if (!estado.plano) return;
+  await ejecutarConCarga('Auto-detectando estructuras…', 'Escaneando paredes de ladrillo, concreto y vidrios en el plano…', async informar => {
+    informar('Analizando trazos del plano…', 55);
+    await pintarFotograma();
+    estado.estructuras = detectarEstructurasPlano(estado.plano);
+    invalidarCachesEscena();
+    estado.modoEstructura = null;
+    estado.trazoEstructura = null;
+    estado.aviso = `Se reconocieron ${estado.estructuras.length} estructuras en el plano.`;
+  });
+  if (estado.mapa) generarMapa('Actualizando mapa con las estructuras detectadas…');
+  else actualizarInterfaz();
+});
+$('botonDibujarEstructura').addEventListener('click', () => {
+  estado.modoEstructura = estado.modoEstructura === 'dibujar' ? null : 'dibujar';
+  estado.trazoEstructura = null;
+  estado.ubicandoRouter = false;
+  if (estado.modoEstructura) estado.activo = null;
+  else estado.activo = siguientePendiente();
+  estado.aviso = '';
+  actualizarInterfaz();
+});
+$('botonBorrarEstructura').addEventListener('click', () => {
+  estado.modoEstructura = estado.modoEstructura === 'borrar' ? null : 'borrar';
+  estado.trazoEstructura = null;
+  estado.ubicandoRouter = false;
+  if (estado.modoEstructura) estado.activo = null;
+  else estado.activo = siguientePendiente();
+  estado.aviso = '';
+  actualizarInterfaz();
+});
+$('botonLimpiarEstructuras').addEventListener('click', () => {
+  estado.estructuras = [];
+  estado.modoEstructura = null;
+  estado.trazoEstructura = null;
+  estado.aviso = 'Se quitaron todas las estructuras del plano.';
+  if (estado.mapa) generarMapa();
+  actualizarInterfaz();
+});
+
 function actualizarLaboratorio(listos) {
   pintarEscalaPlano();
+  pintarEstructuras();
   pintarRouters();
   const hayExcel = estado.lecturas.length > 0;
   $('selectores').hidden = !hayExcel;
@@ -1878,9 +3202,12 @@ function actualizarLaboratorio(listos) {
   $('paso5').classList.toggle('bloqueado', !conMapa);
   $('analisis').hidden = !conMapa;
   $('ayudaAnalizar').hidden = conMapa;
-  $('botonComparar').hidden = estado.bandas.length < 2;
+  $('botonComparar').hidden = estado.bandas.length < 2 && !estado.simular6Ghz;
   $('botonCanales').hidden = !estado.lecturas.some(l => l.canal);
   $('selectorVista').value = estado.vista;
+  $('checkVerOndas').checked = estado.verOndas;
+  $('checkAnimarOndas').checked = estado.animarOndas;
+  $('checkOndasTodasRedes').checked = estado.ondasTodasRedes;
   if (conMapa) pintarResumen();
 }
 
@@ -1890,73 +3217,170 @@ function pintarSelectores() {
     select.replaceChildren(...estado.redes.map(nombre => new Option(nombre, normalizar(nombre))));
   }
   select.value = estado.red;
+
+  // Botones de banda individual + botón de Solapamiento (2.4 + 5 + 6 GHz)
   const grupo = $('selectorBanda');
-  if (grupo.children.length !== estado.bandas.length) {
-    grupo.replaceChildren(...estado.bandas.map(b => {
-      const boton = document.createElement('button');
-      boton.type = 'button';
-      boton.dataset.banda = b.clave;
-      boton.textContent = b.nombre;
-      boton.addEventListener('click', () => { if (estado.banda !== b.clave) { estado.banda = b.clave; cambiarRedOBanda(); } });
-      return boton;
-    }));
+  const opcionesBanda = [...estado.bandas];
+  if (!opcionesBanda.some(b => b.clave === '6ghz') && estado.simular6Ghz) {
+    opcionesBanda.push({ clave: '6ghz', nombre: '6 GHz (proy.)' });
   }
-  for (const b of grupo.children) b.setAttribute('aria-pressed', String(b.dataset.banda === estado.banda));
+  opcionesBanda.push({ clave: 'solapado', nombre: '🔀 Solapar' });
+
+  grupo.replaceChildren(...opcionesBanda.map(b => {
+    const boton = document.createElement('button');
+    boton.type = 'button';
+    boton.dataset.banda = b.clave;
+    boton.textContent = b.nombre;
+    const presionado = (b.clave === 'solapado' && (estado.vista === 'solapamiento' || estado.vista === 'dominante' || estado.banda === 'solapado'))
+      || (b.clave === estado.banda && estado.vista !== 'solapamiento' && estado.vista !== 'dominante');
+    boton.setAttribute('aria-pressed', String(presionado));
+    boton.addEventListener('click', () => {
+      if (b.clave === 'solapado') {
+        estado.banda = 'solapado';
+        if (estado.vista !== 'solapamiento' && estado.vista !== 'dominante') estado.vista = 'solapamiento';
+        cambiarRedOBanda();
+      } else {
+        estado.banda = b.clave;
+        if (estado.vista === 'solapamiento' || estado.vista === 'dominante') estado.vista = 'senal';
+        cambiarRedOBanda();
+      }
+    });
+    return boton;
+  }));
+
+  // Panel de configuración de solapamiento de bandas (2.4 GHz, 5 GHz y 6 GHz)
+  const enSolapamiento = estado.banda === 'solapado' || estado.vista === 'solapamiento' || estado.vista === 'dominante';
+  const panelSolap = $('panelSolapamiento');
+  panelSolap.hidden = !enSolapamiento;
+  const tiene6Real = estado.bandas.some(b => b.clave === '6ghz');
+  $('filaSimular6Ghz').hidden = tiene6Real;
+  $('checkSimular6Ghz').checked = estado.simular6Ghz;
+  $('checkContornosBanda').checked = estado.contornosBanda;
+
+  const chipsCont = $('chipsBandasSolapadas');
+  chipsCont.replaceChildren();
+  for (const clave of ['2.4ghz', '5ghz', '6ghz']) {
+    if (clave === '6ghz' && !tiene6Real && !estado.simular6Ghz) continue;
+    if (clave !== '6ghz' && !estado.bandas.some(b => b.clave === clave)) continue;
+    const label = document.createElement('label');
+    label.className = 'chip-banda';
+    const check = document.createElement('input');
+    check.type = 'checkbox';
+    check.checked = estado.bandasSolapadas.includes(clave);
+    check.addEventListener('change', () => {
+      if (check.checked) {
+        if (!estado.bandasSolapadas.includes(clave)) estado.bandasSolapadas.push(clave);
+      } else if (estado.bandasSolapadas.length > 1) {
+        estado.bandasSolapadas = estado.bandasSolapadas.filter(c => c !== clave);
+      } else {
+        check.checked = true;
+        return;
+      }
+      if (estado.mapa) generarMapa();
+      actualizarInterfaz();
+    });
+    const dot = document.createElement('span');
+    dot.className = 'punto-banda';
+    dot.style.background = COLOR_BANDA[clave] || '#2f7fd6';
+    const txt = document.createElement('span');
+    txt.textContent = TEXTO_BANDA[clave] + (clave === '6ghz' && !tiene6Real ? ' (proy.)' : '');
+    label.append(check, dot, txt);
+    chipsCont.append(label);
+  }
+
   const excluidos = estado.puntos.filter(p => p.tipo === 'excluido').map(p => p.id);
   const asignados = estado.puntos.filter(p => p.tipo === 'asignado').map(p => p.id);
   const notas = [];
-  if (excluidos.length) notas.push(`Sin medición en ${nombreBanda()}: ${excluidos.join(', ')} (no entran al mapa).`);
-  if (asignados.length) notas.push(`${nombreRed()} no apareció en ${asignados.join(', ')}: se toma ${textoDbm(estado.ajustes.sinCobertura)} dBm.`);
+  if (enSolapamiento) {
+    notas.push(`Solapando ${bandasParaSolapar().map(b => TEXTO_BANDA[b]).join(' + ')} con orientación al AP.`);
+  } else {
+    if (excluidos.length) notas.push(`Sin medición en ${nombreBanda()}: ${excluidos.join(', ')} (no entran al mapa).`);
+    if (asignados.length) notas.push(`${nombreRed()} no apareció en ${asignados.join(', ')}: se toma ${textoDbm(estado.ajustes.sinCobertura)} dBm.`);
+  }
   $('notaBanda').textContent = notas.join(' ');
 }
+
+$('checkContornosBanda').addEventListener('change', e => {
+  estado.contornosBanda = e.target.checked;
+  redibujar();
+});
+$('checkSimular6Ghz').addEventListener('change', e => {
+  estado.simular6Ghz = e.target.checked;
+  if (estado.simular6Ghz && !estado.bandasSolapadas.includes('6ghz')) estado.bandasSolapadas.push('6ghz');
+  sincronizarApsDelExcel(false);
+  if (estado.mapa) generarMapa();
+  actualizarInterfaz();
+});
+$('checkVerOndas').addEventListener('change', e => {
+  estado.verOndas = e.target.checked;
+  actualizarBucleOndas();
+  redibujar();
+});
+$('checkAnimarOndas').addEventListener('change', e => {
+  estado.animarOndas = e.target.checked;
+  actualizarBucleOndas();
+  redibujar();
+});
+$('checkOndasTodasRedes').addEventListener('change', e => {
+  estado.ondasTodasRedes = e.target.checked;
+  redibujar();
+});
 
 $('selectorRed').addEventListener('change', e => {
   const anterior = estado.red;
   estado.red = e.target.value;
-  if (!tieneMedidas(estado.lecturas, estado.red, estado.banda)) {
+  const bandaVerif = estado.banda === 'solapado' ? (estado.bandas[0]?.clave || '5ghz') : estado.banda;
+  if (!tieneMedidas(estado.lecturas, estado.red, bandaVerif)) {
     const otra = estado.bandas.find(b => tieneMedidas(estado.lecturas, estado.red, b.clave));
     if (!otra) { estado.red = anterior; e.target.value = anterior; return; }
-    estado.banda = otra.clave;
+    if (estado.banda !== 'solapado') estado.banda = otra.clave;
   }
+  sincronizarApsDelExcel(true);
   cambiarRedOBanda();
 });
 
 $('autoUbicar').addEventListener('click', () => {
   for (const [id, g] of Object.entries(GUIA)) estado.posiciones[id] = { x: g.x, y: g.y };
   recalcularPuntos();
+  sincronizarApsDelExcel(true);
   estado.activo = siguientePendiente();
   if (estado.yaGenerado && !estado.activo) generarMapa();
   const estimadas = Object.entries(GUIA).filter(([, g]) => g.estimada).map(([id]) => id).join(', ');
-  estado.aviso = `Se ubicaron en las posiciones de referencia. ${estimadas} son ubicaciones estimadas.`;
+  estado.aviso = `Puntos ubicados y orientados hacia el AP (${estimadas} son ubicaciones estimadas).`;
   actualizarInterfaz();
 });
 
 $('selectorVista').addEventListener('change', e => {
   estado.vista = e.target.value;
+  if (estado.vista === 'solapamiento' || estado.vista === 'dominante') estado.banda = 'solapado';
+  else if (estado.banda === 'solapado') estado.banda = estado.bandas[0]?.clave || '5ghz';
   cerrarDetalle();
   if (estado.mapa) generarMapa();
   actualizarInterfaz();
 });
 
 /* ------------------------------------------------------------------
-   LABORATORIO: RESUMEN, VALOR AL PASAR EL MOUSE Y DETALLE
+   RESUMEN, VALOR MULTIBANDA AL PASAR EL MOUSE Y DETALLE
    ------------------------------------------------------------------ */
 const DESTACADO = {
   senal: { cuantos: 2, texto: 'tiene señal buena o excelente' },
+  solapamiento: { cuantos: 2, texto: 'cuenta con cobertura multibanda (2 o 3 bandas superpuestas)' },
+  dominante: { cuantos: 2, texto: 'permite alta velocidad en 5 GHz o 6 GHz' },
   requisitos: { cuantos: 1, texto: 'sirve para llamadas y video' },
   snr: { cuantos: 2, texto: 'tiene SNR buena o excelente' },
   redes: { cuantos: 2, texto: 'tiene congestión media o alta' }
 };
 const porcentajeDestacado = (resumen, vista = estado.vista) =>
-  resumen.slice(0, DESTACADO[vista].cuantos).reduce((s, b) => s + b.porcentaje, 0);
+  resumen.slice(0, (DESTACADO[vista] || DESTACADO.senal).cuantos).reduce((s, b) => s + b.porcentaje, 0);
 
 function pintarResumen() {
   const cont = $('resumen');
   cont.replaceChildren();
   if (!estado.resumen) return;
+  const infoDest = DESTACADO[estado.vista] || DESTACADO.senal;
   const destacado = document.createElement('p');
   destacado.className = 'destacado';
-  destacado.textContent = `El ${Math.round(porcentajeDestacado(estado.resumen))} % del área con datos ${DESTACADO[estado.vista].texto}.`;
+  destacado.textContent = `El ${Math.round(porcentajeDestacado(estado.resumen))} % del área con datos ${infoDest.texto}.`;
   const barra = document.createElement('div');
   barra.className = 'barra-apilada';
   barra.setAttribute('aria-hidden', 'true');
@@ -1978,34 +3402,54 @@ function pintarResumen() {
   cont.append(destacado, barra, lista);
 }
 
+// Muestra al pasar el mouse la señal de la vista actual y la comparativa simultánea de las bandas 2.4, 5 y 6 GHz.
 function mostrarValorEn(pos, encima) {
   const tip = $('tooltip');
-  if (esMision() || !estado.mapa || estado.calibrando) { tip.hidden = true; return; }
+  if (!estado.mapa || estado.calibrando) { tip.hidden = true; return; }
   const ancho = estado.plano.naturalWidth, alto = estado.plano.naturalHeight;
   const muestras = muestrasActuales();
+  if (!muestras.length) { tip.hidden = true; return; }
   const x = pos.x * ancho, y = pos.y * alto;
-  const r = idw(x, y, muestras, CONFIG.POTENCIA_IDW);
   let cercano = null, mejor = Infinity;
   for (const m of muestras) { const d = Math.hypot(m.x - x, m.y - y); if (d < mejor) { mejor = d; cercano = m; } }
   const metros = mejor / pixelesPorMetro();
   tip.replaceChildren();
   if (encima) {
-    tip.innerHTML = `<strong></strong><br>Toca para ver qué redes se midieron aquí`;
-    tip.firstChild.textContent = encima.id;
+    const rAp = routerParaPunto(encima);
+    tip.innerHTML = `<strong></strong><br><span></span>`;
+    tip.firstChild.textContent = encima.id + (rAp ? ` · orientado a ${rAp.id}` : '');
+    tip.lastChild.textContent = 'Toca para ver el detalle por banda y red';
   } else if (metros > estado.ajustes.radio) {
     tip.textContent = `Sin datos: a ${metros.toFixed(1)} m de la medición más cercana (${cercano.id})`;
   } else {
-    const banda = clasificar(r.valor);
-    tip.innerHTML = '<span class="muestra-color"></span><strong></strong> · <span></span><br><small></small>';
-    tip.children[0].style.background = banda.color;
-    tip.children[1].textContent = (estado.vista === 'redes' ? '≈ ' : '') + textoValorVista(r.valor) + (estado.vista === 'senal' || estado.vista === 'requisitos' ? ' dBm' : estado.vista === 'redes' ? ' redes' : '');
-    tip.children[2].textContent = banda.nombre;
-    tip.children[4].textContent = `Estimado · a ${metros.toFixed(1)} m de ${cercano.id}`;
+    const r = idw(x, y, muestras, CONFIG.POTENCIA_IDW);
+    // Usa la matriz precalculada en O(1) cuando está disponible para no recalcular en cada movimiento del mouse
+    const infoM = estado.matricesBanda;
+    const colM = infoM?.paso ? Math.min(infoM.columnas - 1, Math.max(0, Math.floor(x / infoM.paso))) : -1;
+    const filM = infoM?.paso ? Math.min(infoM.filas - 1, Math.max(0, Math.floor(y / infoM.paso))) : -1;
+    const idxM = filM >= 0 ? filM * infoM.columnas + colM : -1;
+
+    const compBandas = bandasParaSolapar().map(b => {
+      let valB = (idxM >= 0 && infoM.datos?.[b]) ? infoM.datos[b][idxM] : -120;
+      if (valB <= -115) {
+        const mb = muestrasDeBanda(b, 'senal');
+        valB = idw(x, y, mb, CONFIG.POTENCIA_IDW, b, 'senal').valor;
+      }
+      return `${TEXTO_BANDA[b]}: ${textoDbm(valB)} dBm`;
+    }).join(' · ');
+
+    const bandaCat = clasificar(r.valor, ESCALAS[estado.vista === 'solapamiento' || estado.vista === 'dominante' ? 'senal' : estado.vista].items);
+    const infoMuros = r.atenuacionDb > 0 ? ` · 🧱 −${Math.round(r.atenuacionDb)} dB por muros` : '';
+    tip.innerHTML = '<span class="muestra-color"></span><strong></strong> · <span></span><br><small></small><br><small style="color:#93c5fd"></small>';
+    tip.children[0].style.background = bandaCat.color;
+    tip.children[1].textContent = (estado.vista === 'redes' ? '≈ ' : '') + textoValorVista(r.valor) + (estado.vista === 'redes' ? ' redes' : estado.vista === 'snr' ? '' : ' dBm');
+    tip.children[2].textContent = bandaCat.nombre;
+    tip.children[4].textContent = `A ${metros.toFixed(1)} m de ${cercano.id}${infoMuros}`;
+    tip.children[6].textContent = compBandas;
   }
   tip.hidden = false;
   tip.style.left = (lienzoPlano.offsetLeft + pos.cssX) + 'px';
   tip.style.top = (lienzoPlano.offsetTop + pos.cssY) + 'px';
-  // Si se sale por la derecha, se muestra a la izquierda del cursor.
   const salir = lienzoPlano.offsetLeft + pos.cssX + tip.offsetWidth + 24 > $('lienzo').clientWidth;
   tip.style.transform = salir ? 'translate(calc(-100% - 14px), -50%)' : 'translate(14px, -50%)';
 }
@@ -2023,7 +3467,8 @@ function mostrarDetalle(punto) {
   cerrar.textContent = '✕';
   cerrar.addEventListener('click', cerrarDetalle);
   const titulo = document.createElement('h3');
-  titulo.textContent = punto.id + (GUIA[punto.id]?.estimada && estado.planoReconocido ? ' · ubicación estimada' : '');
+  const rAp = routerParaPunto(punto);
+  titulo.textContent = punto.id + (rAp ? ` → ${rAp.id}` : '') + (GUIA[punto.id]?.estimada && estado.planoReconocido ? ' · ubicación estimada' : '');
   const sub = document.createElement('p');
   sub.className = 'sub';
   sub.textContent = punto.tipo === 'asignado'
@@ -2031,7 +3476,6 @@ function mostrarDetalle(punto) {
     : `${nombreRed()} en ${nombreBanda()}: ${textoDbm(punto.valor)} dBm (${clasificar(punto.valor, ESCALA).nombre}).`;
   caja.append(cerrar, titulo, sub);
 
-  // Prueba de velocidad (solo si el Excel trae las columnas Descarga, Subida o Latencia)
   const prueba = delPunto.find(l => l.descarga || l.subida || l.latencia);
   if (prueba) {
     const conUnidad = (v, unidad) => {
@@ -2064,7 +3508,7 @@ function mostrarDetalle(punto) {
     tabla.innerHTML = `<thead><tr><th>Red</th>${hayCanal ? '<th>Canal</th>' : ''}<th class="cifra">Señal</th>${haySeguridad ? '<th>Seguridad</th>' : ''}</tr></thead><tbody></tbody>`;
     for (const l of [...filas.values()].sort((a, c) => c.dbm - a.dbm)) {
       const tr = document.createElement('tr');
-      if (l.red === normalizar(estado.red) && b.clave === estado.banda) tr.className = 'resaltada';
+      if (l.red === normalizar(estado.red) && (b.clave === estado.banda || estado.banda === 'solapado')) tr.className = 'resaltada';
       const celdas = [l.redTexto];
       if (hayCanal) celdas.push(l.canal ?? '—');
       celdas.push(textoDbm(l.dbm) + ' dBm');
@@ -2091,7 +3535,7 @@ function mostrarDetalle(punto) {
 function cerrarDetalle() { $('detalle').hidden = true; }
 
 /* ------------------------------------------------------------------
-   LABORATORIO: ROUTERS (solo referencia visual, no cambian el cálculo)
+   ROUTERS / APs ORIENTADOS SEGÚN EL EXCEL
    ------------------------------------------------------------------ */
 function routerEn(pos) {
   let mejor = null;
@@ -2104,20 +3548,33 @@ function routerEn(pos) {
 }
 
 function agregarRouterEn(pos) {
-  const numero = estado.routers.reduce((m, r) => Math.max(m, Number(r.id.slice(1))), 0) + 1;
-  const router = { id: 'R' + numero, x: pos.x, y: pos.y, nombre: '', red: '' };
+  const numero = estado.routers.reduce((m, r) => Math.max(m, Number(r.id.replace(/\D+/g, '')) || 0), 0) + 1;
+  const bandas = bandasDisponiblesSolapamiento();
+  const router = {
+    id: 'R' + numero,
+    x: pos.x,
+    y: pos.y,
+    nombre: nombreRed() ? `${nombreRed()} · AP ${numero}` : `AP ${numero}`,
+    red: normalizar(estado.red),
+    bandas,
+    movidoManual: true
+  };
   estado.routers.push(router);
   estado.ubicandoRouter = false;
   estado.activo = siguientePendiente();
-  estado.aviso = `Agregaste el router ${router.id}. Si quedó mal, arrástralo. Puedes ponerle nombre en la lista.`;
+  estado.aviso = `Agregaste el AP ${router.id} orientado a los puntos. Arrástralo cuando quieras.`;
+  if (estado.mapa) generarMapa();
   actualizarInterfaz();
 }
 
 function mostrarTipRouter(pos, router) {
   const tip = $('tooltip');
-  tip.innerHTML = '<strong></strong><br><span></span>';
-  tip.firstChild.textContent = '📡 ' + router.id + (router.nombre ? ' · ' + router.nombre : '');
-  tip.lastChild.textContent = 'Router (referencia). Arrástralo para moverlo.';
+  const bandasTxt = router.bandas?.length ? router.bandas.map(b => TEXTO_BANDA[b] || b).join(' + ') : '2.4 / 5 GHz';
+  const refPunto = router.mejorPunto ? ` · Máx en ${router.mejorPunto} (${textoDbm(router.mejorDbm)} dBm)` : '';
+  tip.innerHTML = '<strong></strong><br><span></span><br><small style="color:#c4b5fd"></small>';
+  tip.children[0].textContent = '📡 ' + router.id + (router.nombre ? ' · ' + router.nombre : '');
+  tip.children[2].textContent = `Bandas activas: ${bandasTxt}${refPunto}`;
+  tip.children[4].textContent = 'Origen de las ondas y orientación de puntos. Arrástralo para reubicarlo.';
   tip.hidden = false;
   tip.style.left = (lienzoPlano.offsetLeft + pos.cssX) + 'px';
   tip.style.top = (lienzoPlano.offsetTop + pos.cssY) + 'px';
@@ -2129,48 +3586,70 @@ function pintarRouters() {
   const caja = $('cajaRouters');
   caja.hidden = !estado.plano;
   if (!estado.plano) return;
+  $('checkOrientarRouter').checked = estado.orientarRouter;
+  $('cargarApsExcel').hidden = !estado.lecturas.length;
   const boton = $('agregarRouter');
-  boton.textContent = estado.ubicandoRouter ? 'Cancelar' : '+ Agregar router';
+  boton.textContent = estado.ubicandoRouter ? 'Cancelar' : '+ Agregar AP';
   const lista = $('listaRouters');
   const enfocado = document.activeElement?.dataset?.router;
   lista.replaceChildren(...estado.routers.map(r => {
     const li = document.createElement('li');
-    li.innerHTML = '<span class="icono-router" aria-hidden="true">📡</span><b></b><input type="text" maxlength="30" placeholder="Nombre (opcional)"><button type="button" title="Borrar este router">🗑</button>';
+    li.innerHTML = '<span class="icono-router" aria-hidden="true">📡</span><b></b><input type="text" maxlength="34" placeholder="Nombre del AP"><button type="button" title="Borrar este AP">🗑</button>';
     li.querySelector('b').textContent = r.id;
     const input = li.querySelector('input');
     input.value = r.nombre;
     input.dataset.router = r.id;
     input.setAttribute('aria-label', `Nombre del router ${r.id}`);
     input.addEventListener('input', () => { r.nombre = input.value.trim(); redibujar(); });
+
+    if (r.bandas?.length || r.mejorPunto) {
+      const meta = document.createElement('div');
+      meta.className = 'meta-router';
+      for (const b of (r.bandas || [])) {
+        const badge = document.createElement('span');
+        badge.className = 'badge-banda-ap';
+        badge.style.background = COLOR_BANDA[b] || '#3b1f8f';
+        badge.textContent = TEXTO_BANDA[b] || b;
+        meta.append(badge);
+      }
+      if (r.mejorPunto) {
+        const ref = document.createElement('span');
+        ref.textContent = `Pico en ${r.mejorPunto}: ${textoDbm(r.mejorDbm)} dBm`;
+        meta.append(ref);
+      }
+      li.append(meta);
+    }
+
     if (estado.redes.length) {
       const select = document.createElement('select');
       select.setAttribute('aria-label', `Red que emite el router ${r.id}`);
-      select.append(new Option('¿Qué red emite? (opcional)', ''));
-      for (const red of estado.redes) select.append(new Option('Emite: ' + red, normalizar(red)));
+      select.append(new Option('Emite todas las redes / general', ''));
+      for (const red of estado.redes) select.append(new Option('Red Excel: ' + red, normalizar(red)));
       select.value = r.red || '';
-      select.addEventListener('change', () => { r.red = select.value; actualizarInterfaz(); });
+      select.addEventListener('change', () => {
+        r.red = select.value;
+        if (estado.mapa) generarMapa();
+        actualizarInterfaz();
+      });
       li.append(select);
     }
     const borrar = li.querySelector('button');
     borrar.setAttribute('aria-label', `Borrar el router ${r.id}`);
     borrar.addEventListener('click', () => {
       estado.routers = estado.routers.filter(x => x !== r);
-      estado.aviso = `Borraste el router ${r.id}.`;
+      estado.aviso = `Borraste el AP ${r.id}.`;
+      if (estado.mapa) generarMapa();
       actualizarInterfaz();
     });
     return li;
   }));
   if (enfocado) lista.querySelector(`input[data-router="${enfocado}"]`)?.focus();
-  $('notaRouters').hidden = estado.routers.length > 0;
   pintarAvisosRouters();
 }
 
-/* ------------------------------------------------------------------
-   LABORATORIO: REVISIÓN DE COHERENCIA CON LOS ROUTERS
-   Un punto muy cerca de un router de su red no debería medir muy mal.
-   ------------------------------------------------------------------ */
 function revisarRouters(banda = estado.banda) {
-  if (esMision() || !estado.plano || !estado.routers.length || !estado.puntos.length) return [];
+  if (!estado.plano || !estado.routers.length || !estado.puntos.length) return [];
+  const claveBanda = banda === 'solapado' ? '5ghz' : banda;
   const w = estado.plano.naturalWidth, h = estado.plano.naturalHeight;
   const ppm = pixelesPorMetro();
   const avisos = [];
@@ -2180,7 +3659,8 @@ function revisarRouters(banda = estado.banda) {
       if (!estaUbicado(p) || p.valor === null || p.valor === undefined) continue;
       const metros = Math.hypot((p.x - r.x) * w, (p.y - r.y) * h) / ppm;
       if (metros > REVISION.RADIO_M) continue;
-      const esperado = (REVISION.ESPERADO_1M[banda] ?? -46) - 20 * Math.log10(Math.max(metros, 1));
+      const atenMuros = atenuacionPorEstructuras(r.x, r.y, p.x, p.y, claveBanda).db;
+      const esperado = (REVISION.ESPERADO_1M[claveBanda] ?? -46) - 20 * Math.log10(Math.max(metros, 1)) - atenMuros;
       if (p.valor <= esperado - REVISION.MARGEN_DB) avisos.push({ punto: p, router: r, metros, esperado });
     }
   }
@@ -2195,36 +3675,55 @@ function pintarAvisosRouters() {
     const li = document.createElement('li');
     const nombre = a.router.id + (a.router.nombre ? ' · ' + a.router.nombre : '');
     li.innerHTML = '<b></b> <span></span>';
-    li.firstChild.textContent = `⚠ ${a.punto.id} no cuadra con ${nombre}.`;
-    li.lastChild.textContent = `Está a ${a.metros.toFixed(1)} m y mide ${textoDbm(a.punto.valor)} dBm, pero ahí se esperaría al menos ${textoDbm(a.esperado)} dBm. `
-      + 'Revisa si el punto o el router están mal ubicados, o si el router es de otra red. Mientras el aviso esté, no se puede descargar la imagen.';
+    li.firstChild.textContent = `ℹ ${a.punto.id} mide bajo frente a ${nombre}.`;
+    li.lastChild.textContent = `Está a ${a.metros.toFixed(1)} m y mide ${textoDbm(a.punto.valor)} dBm (se esperaría cerca de ${textoDbm(a.esperado)} dBm). Si hay un muro entre ambos, indícalo en el paso 1 o ajusta la posición del AP.`;
     return li;
   }));
 }
 
+$('cargarApsExcel').addEventListener('click', () => {
+  sincronizarApsDelExcel(true);
+  for (const r of estado.routers) r.movidoManual = false;
+  estado.aviso = `Se ubicaron ${estado.routers.length} AP(s) según las intensidades de señal del archivo Excel.`;
+  if (estado.mapa) generarMapa();
+  actualizarInterfaz();
+});
+
+$('checkOrientarRouter').addEventListener('change', e => {
+  estado.orientarRouter = e.target.checked;
+  if (estado.mapa) generarMapa();
+  actualizarInterfaz();
+});
+
 $('agregarRouter').addEventListener('click', () => {
   estado.ubicandoRouter = !estado.ubicandoRouter;
+  estado.modoEstructura = null;
   cerrarDetalle();
   if (estado.ubicandoRouter) estado.activo = null;
   else estado.activo = siguientePendiente();
-  estado.aviso = estado.ubicandoRouter ? 'Oprime Esc o «Cancelar» si no quieres agregarlo.' : '';
+  estado.aviso = estado.ubicandoRouter ? 'Haz clic en el plano para colocar el AP, u oprime Esc para cancelar.' : '';
   actualizarInterfaz();
 });
 
 /* ------------------------------------------------------------------
-   LABORATORIO: COMPARAR BANDAS
+   COMPARAR BANDAS (2.4 GHz, 5 GHz y 6 GHz)
    ------------------------------------------------------------------ */
 function abrirCapa(id) { $(id).classList.add('abierta'); $(id).querySelector('.cerrar')?.focus(); }
 function cerrarCapas() { document.querySelectorAll('.capa.abierta:not(#capaMision)').forEach(c => c.classList.remove('abierta')); }
 document.querySelectorAll('[data-cerrar]').forEach(b => b.addEventListener('click', cerrarCapas));
 document.querySelectorAll('.capa').forEach(c => c.addEventListener('click', e => { if (e.target === c && c.id !== 'capaMision') cerrarCapas(); }));
 
-$('botonComparar').addEventListener('click', () => {
+$('botonComparar').addEventListener('click', async () => {
   const cuerpo = $('cuerpoComparar');
   cuerpo.replaceChildren();
-  const vista = estado.vista;
-  $('subComparar').textContent = `${nombreRed()} · ${ESCALAS[vista].titulo}. Mismos puntos y misma escala de colores en las dos bandas.`;
-  const datos = estado.bandas.map(b => {
+  const vista = (estado.vista === 'solapamiento' || estado.vista === 'dominante') ? 'senal' : estado.vista;
+  const listaBandas = [...estado.bandas];
+  if (!listaBandas.some(b => b.clave === '6ghz') && estado.simular6Ghz) {
+    listaBandas.push({ clave: '6ghz', nombre: '6 GHz (proyectada)' });
+  }
+  $('tituloComparar').textContent = `⇆ Comparativa por banda (${listaBandas.map(b => b.nombre).join(' vs ')})`;
+  $('subComparar').textContent = `${nombreRed()} · ${ESCALAS[vista].titulo}. Mismos puntos orientados al AP y atenuación por paredes en cada banda.`;
+  const datos = listaBandas.map(b => {
     const puntos = calcularPuntos(estado.lecturas, estado.red, b.clave);
     for (const p of puntos) { const pos = estado.posiciones[p.id]; if (pos && p.tipo !== 'excluido') { p.x = pos.x; p.y = pos.y; } }
     const usados = puntos.filter(p => p.tipo !== 'excluido');
@@ -2255,47 +3754,53 @@ $('botonComparar').addEventListener('click', () => {
     abrirCapa('capaComparar');
     return;
   }
-  const rejilla = document.createElement('div');
-  rejilla.className = 'comparacion';
-  const resultados = [];
-  for (const d of datos) {
-    const muestras = muestrasActuales(d.puntos, d.banda.clave, vista);
-    const r = calcularMapa(muestras, ESCALAS[vista].items);
-    resultados.push({ ...d, resumen: r.resumen });
-    // Se dibuja al tamaño en que se verá (por la densidad de la pantalla) para que el texto quede nítido.
-    const lienzo = document.createElement('canvas');
-    const anchoVisible = 500 * (window.devicePixelRatio || 1);
-    const escala = Math.min(1, anchoVisible / estado.plano.naturalWidth);
-    lienzo.width = Math.round(estado.plano.naturalWidth * escala);
-    lienzo.height = Math.round(estado.plano.naturalHeight * escala);
-    dibujarEscena(lienzo.getContext('2d'), lienzo.width, lienzo.height, lienzo.width * 0.026, { mapa: r.lienzo, puntos: d.puntos, banda: d.banda.clave, vista, activo: null });
-    const fig = document.createElement('figure');
-    const cap = document.createElement('figcaption');
-    cap.innerHTML = '<strong></strong><span></span>';
-    cap.firstChild.textContent = d.banda.nombre;
-    cap.lastChild.textContent = `${Math.round(porcentajeDestacado(r.resumen, vista))} % del área ${DESTACADO[vista].texto}. ${d.medidos} puntos medidos.`;
-    fig.append(lienzo, cap);
-    rejilla.append(fig);
-  }
-  cuerpo.append(rejilla, conclusionComparacion(resultados, vista));
-  abrirCapa('capaComparar');
+
+  await ejecutarConCarga('Comparando bandas (2.4 / 5 / 6 GHz)…', 'Calculando mapas en paralelo por banda…', async informar => {
+    const rejilla = document.createElement('div');
+    rejilla.className = 'comparacion';
+    const resultados = [];
+    for (let i = 0; i < datos.length; i++) {
+      const d = datos[i];
+      const basePct = Math.round((i / datos.length) * 85) + 10;
+      informar(`Calculando mapa de ${d.banda.nombre}…`, basePct);
+      await pintarFotograma();
+      const muestras = muestrasActuales(d.puntos, d.banda.clave, vista);
+      const r = await calcularMapaAsync(muestras, ESCALAS[vista].items, { vista, banda: d.banda.clave, forzarSimple: true });
+      resultados.push({ ...d, resumen: r.resumen });
+      const lienzo = document.createElement('canvas');
+      const anchoVisible = 500 * (window.devicePixelRatio || 1);
+      const escala = Math.min(1, anchoVisible / estado.plano.naturalWidth);
+      lienzo.width = Math.round(estado.plano.naturalWidth * escala);
+      lienzo.height = Math.round(estado.plano.naturalHeight * escala);
+      dibujarEscena(lienzo.getContext('2d'), lienzo.width, lienzo.height, lienzo.width * 0.026, { mapa: r.lienzo, puntos: d.puntos, banda: d.banda.clave, vista, activo: null, sinContornos: true });
+      const fig = document.createElement('figure');
+      const cap = document.createElement('figcaption');
+      cap.innerHTML = '<strong></strong><span></span>';
+      cap.firstChild.textContent = d.banda.nombre;
+      cap.lastChild.textContent = `${Math.round(porcentajeDestacado(r.resumen, vista))} % del área ${DESTACADO[vista].texto}. ${d.medidos} puntos.`;
+      fig.append(lienzo, cap);
+      rejilla.append(fig);
+    }
+    cuerpo.append(rejilla, conclusionComparacion(resultados, vista));
+    abrirCapa('capaComparar');
+  });
 });
 
 function conclusionComparacion(resultados, vista) {
   const caja = document.createElement('div');
   caja.className = 'conclusion';
   const textos = [];
-  const [a, b] = resultados;
+  const [a, b, c] = resultados;
   if (a && b) {
     const pa = porcentajeDestacado(a.resumen, vista), pb = porcentajeDestacado(b.resumen, vista);
     const mejor = pa >= pb ? a : b, peor = pa >= pb ? b : a;
     textos.push(`<strong>${mejor.banda.nombre}</strong> ${DESTACADO[vista].texto} en más área (${Math.round(Math.max(pa, pb))} % frente a ${Math.round(Math.min(pa, pb))} % en ${peor.banda.nombre}).`);
-    const soloEn = (x, y) => x.puntos.filter(p => !y.puntos.some(q => q.id === p.id)).map(p => p.id);
-    const soloA = soloEn(a, b), soloB = soloEn(b, a);
-    if (soloA.length) textos.push(`${soloA.join(', ')} solo se midió en ${a.banda.nombre}.`);
-    if (soloB.length) textos.push(`${soloB.join(', ')} solo se midió en ${b.banda.nombre}.`);
+    if (c) {
+      const pc = porcentajeDestacado(c.resumen, vista);
+      textos.push(`En <strong>${c.banda.nombre}</strong> la cobertura óptima alcanza el <strong>${Math.round(pc)} %</strong> del local, concentrada cerca del AP donde no hay muros gruesos.`);
+    }
   }
-  textos.push('Recuerda: 2.4 GHz llega más lejos y atraviesa mejor las paredes; 5 GHz es más rápida pero pierde más señal con la distancia y los muros.');
+  textos.push('Comportamiento físico: 2.4 GHz atraviesa mejor muros y vidrios; 5 GHz ofrece mayor velocidad pero sufre más atenuación; 6 GHz brinda máxima capacidad en línea de vista cercana al AP.');
   caja.innerHTML = textos.map(t => `<p>${t}</p>`).join('');
   return caja;
 }
@@ -2380,7 +3885,8 @@ function svgCalidadPorBanda(filas) {
 
 function datosGraficas() {
   const red = estado.red;
-  const bandas = estado.bandas;
+  const bandas = [...estado.bandas];
+  if (!bandas.some(b => b.clave === '6ghz') && estado.simular6Ghz) bandas.push({ clave: '6ghz', nombre: '6 GHz (proy.)' });
   const numeros = [...new Set(estado.lecturas.map(l => l.numero))].sort((a, b) => a - b);
   const porBanda = Object.fromEntries(bandas.map(b => [b.clave, calcularPuntos(estado.lecturas, red, b.clave)]));
   const senal = numeros.map(n => ({
@@ -2397,12 +3903,51 @@ function datosGraficas() {
       return [b.clave, cuantas ? { valor: cuantas, tipo: 'medido' } : null];
     }))
   }));
-  // Calidad del área (necesita los puntos ubicados en esa banda)
   const calidad = [];
-  for (const b of bandas) {
+  for (let i = 0; i < bandas.length; i++) {
+    const b = bandas[i];
     const puntos = porBanda[b.clave].filter(p => p.tipo !== 'excluido').map(p => ({ ...p, ...(estado.posiciones[p.id] || {}) }));
     if (!puntos.length || puntos.some(p => p.x === null || p.x === undefined)) continue;
-    const r = calcularMapa(muestrasActuales(puntos, b.clave, 'senal'), ESCALAS.senal.items);
+    const r = calcularMapa(muestrasActuales(puntos, b.clave, 'senal'), ESCALAS.senal.items, { vista: 'senal', banda: b.clave, forzarSimple: true });
+    calidad.push({ nombre: b.nombre, clave: b.clave, resumen: r.resumen });
+  }
+  return { bandas, senal, redes, calidad };
+}
+
+async function datosGraficasAsync() {
+  const red = estado.red;
+  const bandas = [...estado.bandas];
+  if (!bandas.some(b => b.clave === '6ghz') && estado.simular6Ghz) bandas.push({ clave: '6ghz', nombre: '6 GHz (proy.)' });
+  const numeros = [...new Set(estado.lecturas.map(l => l.numero))].sort((a, b) => a - b);
+  const porBanda = Object.fromEntries(bandas.map(b => [b.clave, calcularPuntos(estado.lecturas, red, b.clave)]));
+  const senal = numeros.map(n => ({
+    id: 'P' + n,
+    porBanda: Object.fromEntries(bandas.map(b => {
+      const pt = porBanda[b.clave].find(x => x.numero === n);
+      return [b.clave, pt && pt.tipo !== 'excluido' ? { valor: pt.valor, tipo: pt.tipo } : null];
+    }))
+  }));
+  const redes = numeros.map(n => ({
+    id: 'P' + n,
+    porBanda: Object.fromEntries(bandas.map(b => {
+      const cuantas = new Set(estado.lecturas.filter(l => l.numero === n && l.banda === b.clave).map(l => l.red)).size;
+      return [b.clave, cuantas ? { valor: cuantas, tipo: 'medido' } : null];
+    }))
+  }));
+  const calidad = [];
+  for (let i = 0; i < bandas.length; i++) {
+    const b = bandas[i];
+    const puntos = porBanda[b.clave].filter(p => p.tipo !== 'excluido').map(p => ({ ...p, ...(estado.posiciones[p.id] || {}) }));
+    if (!puntos.length || puntos.some(p => p.x === null || p.x === undefined)) continue;
+    const basePct = 15 + Math.round((i / bandas.length) * 70);
+    actualizarCarga('Generando gráficas multibanda…', `Evaluando calidad de cobertura en ${b.nombre}`, basePct);
+    await pintarFotograma();
+    const r = await calcularMapaAsync(
+      muestrasActuales(puntos, b.clave, 'senal'),
+      ESCALAS.senal.items,
+      { vista: 'senal', banda: b.clave, forzarSimple: true },
+      p => actualizarCarga('Generando gráficas multibanda…', `Evaluando calidad de cobertura en ${b.nombre}`, basePct + Math.round((p - 12) * 0.25))
+    );
     calidad.push({ nombre: b.nombre, clave: b.clave, resumen: r.resumen });
   }
   return { bandas, senal, redes, calidad };
@@ -2431,12 +3976,11 @@ function conclusionesGraficas({ bandas, senal, redes, calidad }) {
   return textos;
 }
 
-function construirGraficas() {
-  const d = datosGraficas();
+function construirGraficas(d = datosGraficas()) {
   const red = nombreRed();
   const secciones = [];
   secciones.push({
-    titulo: `Señal de ${red} en cada punto`,
+    titulo: `Señal de ${red} en cada punto (comparativa multibanda)`,
     ayuda: 'Barra más alta = mejor señal. Las líneas punteadas son los requisitos de uso. Barra clara: la red no apareció en ese punto.',
     svg: svgBarrasPorPunto({
       puntos: d.senal, bandas: d.bandas, minimo: -95, maximo: -30, unidad: 'dBm', formato: v => textoDbm(v),
@@ -2460,24 +4004,29 @@ function construirGraficas() {
 }
 
 $('botonGraficas').addEventListener('click', () => {
-  const { secciones, conclusiones } = construirGraficas();
-  $('subGraficas').textContent = `Los mismos datos del Excel, en gráficas sencillas. Red: ${nombreRed()}.`;
-  const cuerpo = $('cuerpoGraficas');
-  cuerpo.replaceChildren();
-  const cont = document.createElement('div');
-  cont.className = 'graficas';
-  for (const sec of secciones) {
-    const el = document.createElement('section');
-    el.innerHTML = `<h3></h3><p class="ayuda-grafica"></p>${sec.svg}`;
-    el.querySelector('h3').textContent = sec.titulo;
-    el.querySelector('.ayuda-grafica').textContent = sec.ayuda;
-    cont.append(el);
-  }
-  const conclusion = document.createElement('div');
-  conclusion.className = 'conclusion';
-  conclusion.innerHTML = conclusiones.map(t => `<p>${t}</p>`).join('');
-  cuerpo.append(cont, conclusion);
-  abrirCapa('capaGraficas');
+  ejecutarConCarga('Generando gráficas multibanda…', 'Analizando puntos de muestreo y cobertura', async () => {
+    const d = await datosGraficasAsync();
+    actualizarCarga('Generando gráficas multibanda…', 'Dibujando vectores SVG comparativos', 92);
+    await pintarFotograma();
+    const { secciones, conclusiones } = construirGraficas(d);
+    $('subGraficas').textContent = `Los mismos datos del Excel, en gráficas sencillas. Red: ${nombreRed()}.`;
+    const cuerpo = $('cuerpoGraficas');
+    cuerpo.replaceChildren();
+    const cont = document.createElement('div');
+    cont.className = 'graficas';
+    for (const sec of secciones) {
+      const el = document.createElement('section');
+      el.innerHTML = `<h3></h3><p class="ayuda-grafica"></p>${sec.svg}`;
+      el.querySelector('h3').textContent = sec.titulo;
+      el.querySelector('.ayuda-grafica').textContent = sec.ayuda;
+      cont.append(el);
+    }
+    const conclusion = document.createElement('div');
+    conclusion.className = 'conclusion';
+    conclusion.innerHTML = conclusiones.map(t => `<p>${t}</p>`).join('');
+    cuerpo.append(cont, conclusion);
+    abrirCapa('capaGraficas');
+  });
 });
 
 // Descarga: todas las gráficas en una sola imagen.
@@ -2522,7 +4071,7 @@ $('descargarGraficas').addEventListener('click', () => {
 /* ------------------------------------------------------------------
    LABORATORIO: ANÁLISIS DE CANALES
    ------------------------------------------------------------------ */
-const CANALES_LIBRES_24 = [1, 6, 11]; // los únicos que no se superponen en 2.4 GHz
+const CANALES_LIBRES_24 = [1, 6, 11];
 
 $('botonCanales').addEventListener('click', () => {
   const cuerpo = $('cuerpoCanales');
@@ -2589,7 +4138,6 @@ function textoEscala() {
     : `Sin calibrar: se supone que el plano mide unos ${anchoM.toFixed(1)} m de ancho (correcto para el plano del local). Si usas otro plano, calíbralo.`;
 }
 
-// Estado de la escala bajo el paso 1 (solo en el Laboratorio).
 function pintarEscalaPlano() {
   const caja = $('escalaPlano');
   caja.hidden = !estado.plano;
@@ -2630,7 +4178,7 @@ $('guardarAjustes').addEventListener('click', () => {
   const inicial = AJUSTES_INICIALES();
   aplicarAjustes({
     sinCobertura: numeroEn('ajSinCobertura', -110, -60, inicial.sinCobertura),
-    ruido: { '2.4ghz': numeroEn('ajRuido24', -110, -70, -90), '5ghz': numeroEn('ajRuido5', -110, -70, -95) },
+    ruido: { '2.4ghz': numeroEn('ajRuido24', -110, -70, -90), '5ghz': numeroEn('ajRuido5', -110, -70, -95), '6ghz': -96 },
     radio: numeroEn('ajRadio', 1, 30, inicial.radio),
     opacidad: numeroEn('ajOpacidad', 30, 100, 80) / 100
   });
@@ -2644,6 +4192,7 @@ $('botonCalibrar').addEventListener('click', () => {
   cerrarCapas();
   cerrarDetalle();
   estado.activo = null;
+  estado.modoEstructura = null;
   estado.calibrando = { primero: null };
   estado.aviso = 'Oprime Esc para cancelar.';
   actualizarInterfaz();
@@ -2683,11 +4232,13 @@ function clicCalibrar(pos) {
    MODOS Y PANTALLA DE INICIO
    ------------------------------------------------------------------ */
 function reiniciarTrabajo() {
+  if (estado.rafOndas) { cancelAnimationFrame(estado.rafOndas); estado.rafOndas = null; }
   Object.assign(estado, {
     plano: null, puntos: [], activo: null, mapa: null, mapaVencido: false, arrastre: null, aviso: '', alerta: false,
-    lecturas: [], red: normalizar(CONFIG.RED), banda: normalizar(CONFIG.BANDA).replace(/\s/g, ''), bandas: [], redes: [],
+    lecturas: [], red: normalizar(CONFIG.RED), banda: normalizar(CONFIG.BANDA).replace(/\s/g, ''), bandas: [],
+    bandasSolapadas: ['2.4ghz', '5ghz', '6ghz'], matricesBanda: {}, redes: [],
     posiciones: {}, vista: 'senal', resumen: null, yaGenerado: false, planoReconocido: false, pxPorMetro: null, calibrando: null,
-    routers: [], ubicandoRouter: false
+    routers: [], ubicandoRouter: false, estructuras: [], modoEstructura: null, trazoEstructura: null
   });
   for (const id of ['nombrePlano', 'errorPlano', 'nombreExcel', 'errorExcel']) $(id).textContent = '';
   $('selectorRed').replaceChildren();
@@ -2698,10 +4249,9 @@ function reiniciarTrabajo() {
 }
 
 function abrirModo(modo) {
-  if (modo === 'laboratorio' && !misionCumplida()) return;
   estado.modo = modo;
   reiniciarTrabajo();
-  if (modo === 'mision') estado.ajustes = AJUSTES_INICIALES(); // la misión siempre usa los valores del proyecto
+  if (modo === 'mision') estado.ajustes = AJUSTES_INICIALES();
   document.body.classList.toggle('modo-mision', modo === 'mision');
   document.body.classList.toggle('modo-laboratorio', modo === 'laboratorio');
   const t = TEXTOS[modo];
@@ -2720,12 +4270,12 @@ function pintarInicio() {
   $('selloMision').hidden = !cumplida;
   $('entrarMision').textContent = cumplida ? 'Repetir la misión →' : 'Empezar la misión →';
   const lab = $('tarjetaLab');
-  lab.classList.toggle('cerrado', !cumplida);
-  $('candadoLab').hidden = cumplida;
-  $('etiquetaLab').textContent = cumplida ? 'Desbloqueado' : 'Paso 2 · Cuando termines la misión';
+  lab.classList.remove('cerrado');
+  $('candadoLab').hidden = true;
+  $('etiquetaLab').textContent = 'Modo completo desbloqueado';
   const entrar = $('entrarLab');
-  entrar.textContent = cumplida ? 'Entrar al laboratorio →' : '🔒 Termina la misión para abrirlo';
-  entrar.setAttribute('aria-disabled', String(!cumplida));
+  entrar.textContent = 'Entrar al laboratorio →';
+  entrar.setAttribute('aria-disabled', 'false');
 }
 
 function irAlInicio() {
@@ -2766,11 +4316,7 @@ function confeti(cantidad) {
 }
 
 $('entrarMision').addEventListener('click', () => abrirModo('mision'));
-$('entrarLab').addEventListener('click', () => {
-  if (misionCumplida()) { abrirModo('laboratorio'); return; }
-  const tarjeta = $('tarjetaLab');
-  tarjeta.classList.remove('sacudir'); void tarjeta.offsetWidth; tarjeta.classList.add('sacudir');
-});
+$('entrarLab').addEventListener('click', () => abrirModo('laboratorio'));
 $('volverInicio').addEventListener('click', irAlInicio);
 $('verMapa').addEventListener('click', () => $('capaMision').classList.remove('abierta'));
 $('irLab').addEventListener('click', () => {
@@ -2789,6 +4335,13 @@ document.addEventListener('keydown', e => {
     estado.calibrando = null;
     document.querySelectorAll('.marca-calibracion').forEach(m => m.remove());
     estado.aviso = 'Calibración cancelada.';
+    actualizarInterfaz();
+  }
+  if (estado.modoEstructura) {
+    estado.modoEstructura = null;
+    estado.trazoEstructura = null;
+    estado.activo = siguientePendiente();
+    estado.aviso = 'Edición de estructuras cancelada.';
     actualizarInterfaz();
   }
   if (estado.ubicandoRouter) {
